@@ -11,19 +11,6 @@
 </head>
 <body>
 
-  <!-- Preloader -->
-  <div id="preloader">
-    <div class="preloader__core">
-      <div class="preloader__core-inner"></div>
-    </div>
-    <div class="preloader__bar-wrap">
-      <div class="preloader__bar" id="preloader-bar"></div>
-    </div>
-  </div>
-
-  <!-- Flash overlay for preloader exit -->
-  <div id="flash-overlay"></div>
-
   <!-- Custom cursor (desktop only) -->
   <div id="cursor-orb"></div>
   <div id="cursor-ring"></div>
@@ -53,12 +40,13 @@
     <div class="hero__vignette" aria-hidden="true"></div>
 
     <div class="hero__content">
+      <div class="hero__eyebrow">ETHEREUM · MEMECOIN · CULTURE</div>
       <div class="hero__headline-wrap" role="heading" aria-level="1">
         <div class="hero__headline-line-wrap">
           <span class="hero__headline-line" id="hero-line-1">SUPER</span>
         </div>
         <div class="hero__headline-line-wrap">
-          <span class="hero__headline-line" id="hero-line-2">SAIYAN</span>
+          <span class="hero__headline-line hero__headline-line--gold" id="hero-line-2">SAIYAN</span>
         </div>
       </div>
       <div class="hero__ca-bar" id="hero-ca-bar">
@@ -74,7 +62,7 @@
       </div>
     </div>
 
-    <div class="hero__scroll-hint" id="scroll-hint">
+    <div class="hero__scroll-hint" id="scroll-hint" aria-label="Scroll down">
       <span>SCROLL</span>
       <div class="hero__scroll-arrow">
         <span></span>
@@ -109,6 +97,12 @@
       </div>
     </div>
     <canvas id="about-particles" aria-hidden="true"></canvas>
+  </section>
+
+  <!-- ═══════════════ INFLECTION ═══════════════ -->
+  <section id="inflection" class="section section--inflection" aria-label="The Inflection Point">
+    <div class="inflection__overlay" aria-hidden="true"></div>
+    <h2 class="inflection__title">THE INFLECTION POINT.</h2>
   </section>
 
   <!-- ═══════════════ TOKENOMICS ═══════════════ -->
