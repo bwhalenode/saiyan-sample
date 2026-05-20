@@ -39,6 +39,7 @@ async function bootstrap() {
 }
 
 async function finishInit(lenis, scene) {
+  console.log('[main] finishInit called')
   // Start render loop BEFORE cinematic reveal so the dolly is visible
   function loop(ts) {
     scene.update(ts / 1000)

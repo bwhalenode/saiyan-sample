@@ -10,7 +10,6 @@ import crystalVert from './shaders/crystal.vert?raw'
 import crystalFrag from './shaders/crystal.frag?raw'
 
 import { Lightning } from './Lightning.js'
-import { Debris }    from './Debris.js'
 
 // WebP feature detection — resolves before textures load
 export const supportsWebP = await new Promise(resolve => {
@@ -38,6 +37,7 @@ export class HeroScene {
     this._auraMat     = null
     this._crystal     = null
     this._crystalMat  = null
+    this._lightning   = null
 
     this._initRenderer()
     this._initScene()
@@ -102,13 +102,12 @@ export class HeroScene {
     this._composer = new EffectComposer(this._renderer)
     this._composer.addPass(new RenderPass(this._scene, this._camera))
 
-    // Bloom: pull back from original 1.2/0.85/0.8 to prevent gold blow-out
     if (!isMobile()) {
       this._bloom = new UnrealBloomPass(
         new THREE.Vector2(window.innerWidth, window.innerHeight),
-        0.6,   // strength  — was 1.2
-        0.5,   // radius    — was 0.8
-        0.92,  // threshold — was 0.85
+        0.4,   // strength
+        0.4,   // radius
+        0.95,  // threshold
       )
       this._composer.addPass(this._bloom)
     }
@@ -117,7 +116,7 @@ export class HeroScene {
   }
 
   /* ── Async asset load — awaited by main.js before hiding preloader ── */
-  async load(onProgress) {
+  async load(onProgress = () => {}) {
     onProgress(0.05)
 
     // ── Texture ──
@@ -146,7 +145,6 @@ export class HeroScene {
     }
 
     this._lightning = new Lightning(this._scene)
-    this._debris    = new Debris(this._scene)
 
     const w = this._canvas.clientWidth  || this._canvas.offsetWidth  || window.innerWidth
     const h = this._canvas.clientHeight || this._canvas.offsetHeight || window.innerHeight
@@ -165,10 +163,11 @@ export class HeroScene {
     const geo = new THREE.PlaneGeometry(1, 1, 1, 1)
     const mat = new THREE.ShaderMaterial({
       uniforms: {
-        uTexture:    { value: tex },
-        uTime:       { value: 0 },
-        uMouseDist:  { value: 0 },
-        uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+        uTexture:      { value: tex },
+        uTime:         { value: 0 },
+        uMouseDist:    { value: 0 },
+        uAuraStrength: { value: 0.4 },
+        uResolution:   { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
       },
       vertexShader:   auraVert,
       fragmentShader: auraFrag,
@@ -206,9 +205,8 @@ export class HeroScene {
 
     this._plane.scale.set(planeW, planeH, 1)
 
-    // Shift right so character occupies right ~60 % of screen;
-    // left ~40 % stays dark for the title.
-    this._plane.position.x = visW * 0.22
+    // On mobile, shift left so the character (right portion of 21:9 art) is centered
+    this._plane.position.x = isMobile() ? -planeW * 0.2 : 0
     this._plane.position.y = 0
 
     if (this._auraMat) {
@@ -327,12 +325,6 @@ export class HeroScene {
       }
     }
 
-    // Debris
-    if (this._debris) {
-      this._debris.setMouse(this._mouseNorm.x, this._mouseNorm.y)
-      this._debris.update(t, dt)
-    }
-
     this._composer.render()
   }
 
@@ -343,7 +335,6 @@ export class HeroScene {
 
   dispose() {
     this._lightning?.dispose()
-    this._debris?.dispose()
     this._renderer.dispose()
   }
 }
