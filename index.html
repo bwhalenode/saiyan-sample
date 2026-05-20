@@ -14,13 +14,6 @@
   <!-- Three.js canvas -->
   <canvas id="hero-canvas"></canvas>
 
-  <!-- Desktop CA vertical strip (hidden on mobile) -->
-  <button id="ca-desktop" class="ca-desktop" aria-label="Contract address — click to copy">
-    <span class="ca-desktop__line" aria-hidden="true"></span>
-    <span class="ca-desktop__text">CA · 0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56 · CLICK TO COPY</span>
-    <span class="ca-desktop__line" aria-hidden="true"></span>
-  </button>
-
   <!-- ═══════════════ HERO ═══════════════ -->
   <section id="hero" class="section section--hero" data-section="hero">
     <nav class="nav">
@@ -33,9 +26,6 @@
         <li><a href="https://x.com/supersaiyancto" target="_blank" rel="noopener" data-cursor="hover">X</a></li>
         <li><a href="https://t.me/SAIYANonETHPortal" target="_blank" rel="noopener" data-cursor="hover">TELEGRAM</a></li>
       </ul>
-      <button class="nav__burger" id="nav-burger" aria-label="Toggle menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
     </nav>
 
     <!-- Cinematic overlays (sit above canvas, below text) -->
@@ -52,7 +42,18 @@
           <span class="hero__headline-line hero__headline-line--gold" id="hero-line-2">SAIYAN</span>
         </div>
       </div>
-      <div class="hero__ca-bar" id="hero-ca-bar">
+    </div>
+
+    <div class="hero__ca" id="hero-ca-bar">
+      <button
+        class="hero__ca-trigger"
+        id="ca-trigger"
+        data-cursor="hover"
+        aria-label="Show contract address"
+        aria-expanded="false"
+        aria-controls="ca-panel"
+      >CA</button>
+      <div class="hero__ca-panel" id="ca-panel" aria-hidden="true">
         <span class="hero__ca-label">CA</span>
         <span class="hero__ca-address" id="ca-address">0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56</span>
         <button class="hero__ca-copy" id="ca-copy" data-cursor="hover" aria-label="Copy contract address">

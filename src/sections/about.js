@@ -17,35 +17,39 @@ export function initAbout() {
 
   const tl = gsap.timeline()
 
-  // Eyebrow + rage-face slide in (scroll 0–30%)
-  tl.to(eyebrow, { opacity: 1, duration: 0.2 }, 0)
-  tl.fromTo(imgCol,
-    { x: '100%', opacity: 0 },
-    { x: '0%',   opacity: 1, duration: 0.3, ease: 'power2.out' },
+  // Eyebrow, text, and rage-face move as one beat so the section feels connected.
+  tl.fromTo(eyebrow,
+    { opacity: 0, y: 18 },
+    { opacity: 1, y: 0, duration: 0.18, ease: 'power2.out' },
     0
   )
-
-  // Text paragraphs reveal one at a time (scroll 20–70%)
-  tl.to(paras, {
+  tl.fromTo(imgCol,
+    { x: isMob() ? '18%' : '42%', y: isMob() ? 28 : 0, opacity: 0 },
+    { x: '0%', y: 0, opacity: 1, duration: 0.34, ease: 'power2.out' },
+    0
+  )
+  tl.fromTo(paras, {
+    opacity: 0,
+    y: 24,
+  }, {
     opacity: 1,
     y: 0,
-    duration: 0.1,
-    stagger: 0.1,
+    duration: 0.14,
+    stagger: 0.045,
     ease: 'power2.out',
-  }, 0.2)
+  }, 0.06)
 
-  // Rage-face exits up (scroll 70–100%)
-  tl.to(imgCol, { y: '-120%', opacity: 0, duration: 0.3, ease: 'power2.in' }, 0.7)
+  // Exit later, after the reveal has had a short readable hold.
+  tl.to(imgCol, { y: '-70%', opacity: 0, duration: 0.22, ease: 'power2.in' }, 0.78)
 
-  // Text + eyebrow fade out (scroll 80–100%)
-  tl.to([textEl, eyebrow], { opacity: 0, duration: 0.2 }, 0.8)
+  tl.to([textEl, eyebrow], { opacity: 0, duration: 0.16 }, 0.84)
 
   ScrollTrigger.create({
     trigger: section,
     start:   'top top',
-    end:     () => '+=' + (isMob() ? window.innerHeight : window.innerHeight * 1.5),
+    end:     () => '+=' + (isMob() ? window.innerHeight * 0.85 : window.innerHeight * 1.05),
     pin:     true,
-    scrub:   1,
+    scrub:   0.65,
     animation: tl,
   })
 
