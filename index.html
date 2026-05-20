@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="$SAIYAN — The moment hidden potential awakens. Super Saiyan memecoin on Ethereum." />
+  <title>$SAIYAN — Super Saiyan</title>
+
+  <!-- Google Fonts CDN (replace with self-hosted woff2 in /public/fonts/ for production) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Zen+Dots&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="preloader__core">
+      <div class="preloader__core-inner"></div>
+    </div>
+    <div class="preloader__bar-wrap">
+      <div class="preloader__bar" id="preloader-bar"></div>
+    </div>
+  </div>
+
+  <!-- Flash overlay for preloader exit -->
+  <div id="flash-overlay"></div>
+
+  <!-- Custom cursor (desktop only) -->
+  <div id="cursor-orb"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Three.js canvas -->
+  <canvas id="hero-canvas"></canvas>
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <section id="hero" class="section section--hero" data-section="hero">
+    <nav class="nav">
+      <a href="#hero" class="nav__brand" data-cursor="hover">$SAIYAN</a>
+      <ul class="nav__links" id="nav-links">
+        <li><a href="#hero" data-cursor="hover">HOME</a></li>
+        <li><a href="#about" data-cursor="hover">ABOUT</a></li>
+        <li><a href="#tokenomics" data-cursor="hover">TOKENOMICS</a></li>
+        <li><a href="#howtobuy" data-cursor="hover">BUY</a></li>
+        <li><a href="https://x.com/supersaiyancto" target="_blank" rel="noopener" data-cursor="hover">X</a></li>
+        <li><a href="https://t.me/SAIYANonETHPortal" target="_blank" rel="noopener" data-cursor="hover">TELEGRAM</a></li>
+      </ul>
+      <button class="nav__burger" id="nav-burger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+
+    <div class="hero__content">
+      <div class="hero__headline-wrap">
+        <h1 class="hero__headline" id="hero-headline">SUPER SAIYAN</h1>
+      </div>
+      <div class="hero__ca-bar">
+        <span class="hero__ca-label">CA</span>
+        <span class="hero__ca-address" id="ca-address">0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56</span>
+        <button class="hero__ca-copy" id="ca-copy" data-cursor="hover" aria-label="Copy contract address">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M2 10V2a1 1 0 011-1h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span class="hero__ca-copy-label">COPY</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="hero__scroll-hint" id="scroll-hint">
+      <span>SCROLL</span>
+      <div class="hero__scroll-arrow">
+        <span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ ABOUT ═══════════════ -->
+  <section id="about" class="section section--about" data-section="about">
+    <div class="about__inner">
+      <div class="about__text-col">
+        <div class="about__eyebrow">ORIGIN STORY</div>
+        <div class="about__text" id="about-text">
+          <p>"$SAIYAN is the moment hidden potential awakens.</p>
+          <p>The instant effort becomes acceleration.</p>
+          <p>Conviction compounds into unstoppable momentum.</p>
+          <p>This is the inflection point.</p>
+          <p><strong>Welcome to the next form."</strong></p>
+        </div>
+      </div>
+      <div class="about__image-col">
+        <div class="about__img-wrap" id="about-img">
+          <img
+            src="/images/rage-face.png"
+            alt="Saiyan rage face"
+            onerror="this.style.display='none'; this.parentElement.classList.add('about__img-wrap--placeholder')"
+          />
+        </div>
+      </div>
+    </div>
+    <canvas id="about-particles" aria-hidden="true"></canvas>
+  </section>
+
+  <!-- ═══════════════ TOKENOMICS ═══════════════ -->
+  <section id="tokenomics" class="section section--tokenomics" data-section="tokenomics">
+    <div class="tokenomics__glow" aria-hidden="true"></div>
+    <h2 class="tokenomics__title">POWER<br>LEVEL</h2>
+    <div class="tokenomics__cards">
+
+      <div class="token-card" data-cursor="hover" data-index="0">
+        <div class="token-card__inner">
+          <div class="token-card__corner token-card__corner--tl" aria-hidden="true"></div>
+          <div class="token-card__corner token-card__corner--br" aria-hidden="true"></div>
+          <div class="token-card__label">SUPPLY</div>
+          <div class="token-card__value">1,000,000</div>
+        </div>
+        <div class="token-card__shockwave" aria-hidden="true">
+          <svg viewBox="0 0 200 200" width="200" height="200" fill="none" aria-hidden="true">
+            <circle cx="100" cy="100" r="90" stroke="var(--gold)" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="token-card" data-cursor="hover" data-index="1">
+        <div class="token-card__inner">
+          <div class="token-card__corner token-card__corner--tl" aria-hidden="true"></div>
+          <div class="token-card__corner token-card__corner--br" aria-hidden="true"></div>
+          <div class="token-card__label">TAX</div>
+          <div class="token-card__value">0%</div>
+        </div>
+        <div class="token-card__shockwave" aria-hidden="true">
+          <svg viewBox="0 0 200 200" width="200" height="200" fill="none" aria-hidden="true">
+            <circle cx="100" cy="100" r="90" stroke="var(--gold)" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="token-card" data-cursor="hover" data-index="2">
+        <div class="token-card__inner">
+          <div class="token-card__corner token-card__corner--tl" aria-hidden="true"></div>
+          <div class="token-card__corner token-card__corner--br" aria-hidden="true"></div>
+          <div class="token-card__label">LIQUIDITY</div>
+          <div class="token-card__value">BURNED</div>
+        </div>
+        <div class="token-card__shockwave" aria-hidden="true">
+          <svg viewBox="0 0 200 200" width="200" height="200" fill="none" aria-hidden="true">
+            <circle cx="100" cy="100" r="90" stroke="var(--gold)" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="token-card" data-cursor="hover" data-index="3">
+        <div class="token-card__inner">
+          <div class="token-card__corner token-card__corner--tl" aria-hidden="true"></div>
+          <div class="token-card__corner token-card__corner--br" aria-hidden="true"></div>
+          <div class="token-card__label">OWNERSHIP</div>
+          <div class="token-card__value">RENOUNCED</div>
+        </div>
+        <div class="token-card__shockwave" aria-hidden="true">
+          <svg viewBox="0 0 200 200" width="200" height="200" fill="none" aria-hidden="true">
+            <circle cx="100" cy="100" r="90" stroke="var(--gold)" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════ HOW TO BUY ═══════════════ -->
+  <section id="howtobuy" class="section section--howtobuy" data-section="howtobuy">
+    <div class="htb__inner">
+      <h2 class="htb__section-title">HOW TO BUY</h2>
+
+      <div class="htb__steps-wrap">
+        <!-- SVG lightning connector line (desktop) -->
+        <svg class="htb__connector" viewBox="0 0 900 4" preserveAspectRatio="none" aria-hidden="true">
+          <path id="htb-line" d="M0 2 L900 2" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="900" stroke-dashoffset="900"/>
+        </svg>
+
+        <div class="htb__steps">
+
+          <div class="htb__step" data-step="01">
+            <div class="htb__step-bg-num" aria-hidden="true">01</div>
+            <div class="htb__step-icon" aria-hidden="true">
+              <!-- MetaMask Fox -->
+              <svg viewBox="0 0 100 100" width="56" height="56" fill="none">
+                <polygon points="50,8 85,25 85,65 50,90 15,65 15,25" fill="#E2761B" stroke="#E2761B" stroke-linejoin="round"/>
+                <polygon points="50,8 50,55 85,25" fill="#E4761B" stroke="#E4761B" stroke-linejoin="round"/>
+                <polygon points="50,8 15,25 50,55" fill="#F6851B" stroke="#F6851B" stroke-linejoin="round"/>
+                <polygon points="50,55 85,25 85,65" fill="#CD6116" stroke="#CD6116" stroke-linejoin="round"/>
+                <polygon points="50,55 15,65 15,25" fill="#E4761B" stroke="#E4761B" stroke-linejoin="round"/>
+                <polygon points="50,55 85,65 50,90" fill="#CD6116" stroke="#CD6116" stroke-linejoin="round"/>
+                <polygon points="50,55 15,65 50,90" fill="#E4761B" stroke="#E4761B" stroke-linejoin="round"/>
+                <circle cx="36" cy="44" r="5" fill="white"/>
+                <circle cx="64" cy="44" r="5" fill="white"/>
+              </svg>
+            </div>
+            <div class="htb__step-num">STEP 01</div>
+            <h3 class="htb__step-title">WALLET</h3>
+            <p class="htb__step-desc">Download MetaMask or your preferred Web3 wallet. Create your wallet and store your seed phrase somewhere safe — not online.</p>
+          </div>
+
+          <div class="htb__step" data-step="02">
+            <div class="htb__step-bg-num" aria-hidden="true">02</div>
+            <div class="htb__step-icon" aria-hidden="true">
+              <!-- Ethereum diamond -->
+              <svg viewBox="0 0 100 100" width="56" height="56" fill="none">
+                <polygon points="50,10 73,45 50,57 27,45" fill="#627EEA" stroke="#627EEA"/>
+                <polygon points="50,10 50,57 27,45" fill="#8EA4EE" stroke="#8EA4EE"/>
+                <polygon points="50,60 73,48 50,90 27,48" fill="#627EEA" stroke="#627EEA"/>
+                <polygon points="50,60 27,48 50,90" fill="#8EA4EE" stroke="#8EA4EE"/>
+              </svg>
+            </div>
+            <div class="htb__step-num">STEP 02</div>
+            <h3 class="htb__step-title">GET ETH</h3>
+            <p class="htb__step-desc">Buy ETH from an exchange like Coinbase or Binance. Send it to your MetaMask wallet address. You'll need ETH to swap.</p>
+          </div>
+
+          <div class="htb__step" data-step="03">
+            <div class="htb__step-bg-num" aria-hidden="true">03</div>
+            <div class="htb__step-icon" aria-hidden="true">
+              <!-- Uniswap unicorn simplified -->
+              <svg viewBox="0 0 100 100" width="56" height="56" fill="none">
+                <circle cx="50" cy="50" r="42" fill="#FF007A" opacity="0.15"/>
+                <path d="M35 70 Q50 30 65 70" stroke="#FF007A" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M42 55 Q50 20 58 55" stroke="#FF007A" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <circle cx="50" cy="32" r="6" fill="#FF007A"/>
+                <path d="M44 32 Q38 22 30 25" stroke="#FF007A" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M56 32 Q62 22 70 25" stroke="#FF007A" stroke-width="2" fill="none" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="htb__step-num">STEP 03</div>
+            <h3 class="htb__step-title">SWAP</h3>
+            <p class="htb__step-desc">Go to Uniswap, paste the $SAIYAN contract address, and swap your ETH. Set slippage to 1–2%. Welcome to the next form.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="htb__ca-repeat">
+        <span>CA: </span>
+        <a href="https://app.uniswap.org/swap?outputCurrency=0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56" target="_blank" rel="noopener" data-cursor="hover">0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FOOTER / CTA ═══════════════ -->
+  <section id="footer" class="section section--footer" data-section="footer">
+    <div class="footer__inner">
+      <h2 class="footer__cta">ASCEND.</h2>
+
+      <a
+        href="https://app.uniswap.org/swap?outputCurrency=0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56"
+        target="_blank"
+        rel="noopener"
+        class="footer__buy-btn"
+        data-cursor="hover"
+      >
+        <span class="footer__buy-btn-text">BUY ON UNISWAP</span>
+        <span class="footer__buy-btn-lightning" aria-hidden="true"></span>
+      </a>
+
+      <div class="footer__ca">
+        <span>0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56</span>
+      </div>
+
+      <div class="footer__socials">
+        <a href="https://x.com/supersaiyancto" target="_blank" rel="noopener" data-cursor="hover" aria-label="X / Twitter">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+        <a href="https://t.me/SAIYANonETHPortal" target="_blank" rel="noopener" data-cursor="hover" aria-label="Telegram">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+          </svg>
+        </a>
+        <a href="https://www.dextools.io/app/en/ether/pair-explorer/0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56" target="_blank" rel="noopener" data-cursor="hover" aria-label="Dextools">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </a>
+        <a href="https://dexscreener.com/ethereum/0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56" target="_blank" rel="noopener" data-cursor="hover" aria-label="Dexscreener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M3 3h18v18H3V3zm2 2v14h14V5H5zm2 2h4v4H7V7zm6 0h4v4h-4V7zM7 13h4v4H7v-4zm6 0h4v4h-4v-4z"/>
+          </svg>
+        </a>
+      </div>
+
+      <p class="footer__disclaimer">
+        $SAIYAN is a meme coin with no intrinsic value or expectation of financial return.
+        There is no formal team or roadmap. The coin is completely useless and for entertainment purposes only.
+        Crypto assets are highly speculative. Never invest more than you can afford to lose.
+      </p>
+    </div>
+  </section>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
