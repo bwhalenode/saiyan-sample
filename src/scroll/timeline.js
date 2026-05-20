@@ -4,6 +4,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 export function initTimeline(lenis, scene) {
+  const isMobile = window.innerWidth <= 900
+
   // Let Lenis proxy scroll for ScrollTrigger
   lenis.on('scroll', ScrollTrigger.update)
 
@@ -18,6 +20,18 @@ export function initTimeline(lenis, scene) {
       return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight }
     },
     pinType: document.body.style.transform ? 'transform' : 'fixed',
+  })
+
+  document.querySelectorAll('.nav__links a[href^="#"], .nav__brand[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+      const href = link.getAttribute('href')
+      const target = document.querySelector(href)
+      if (!target) return
+
+      e.preventDefault()
+      const visibleOffset = href === '#about' && !isMobile ? window.innerHeight * 0.24 : 0
+      lenis.scrollTo(target.offsetTop + visibleOffset)
+    })
   })
 
   /* ─── Canvas fade out as hero exits ─── */
@@ -90,7 +104,7 @@ export function initTimeline(lenis, scene) {
     ease: 'power3.out',
     scrollTrigger: {
       trigger: '#howtobuy',
-      start:   'top 75%',
+      start:   isMobile ? 'top 86%' : 'top 75%',
     },
   })
 
@@ -98,14 +112,32 @@ export function initTimeline(lenis, scene) {
   gsap.to('.htb__step', {
     opacity: 1,
     y: 0,
-    stagger: 0.18,
-    duration: 0.8,
+    stagger: isMobile ? 0.14 : 0.18,
+    duration: isMobile ? 0.72 : 0.8,
     ease: 'power3.out',
     scrollTrigger: {
       trigger: '#howtobuy',
-      start:   'top 65%',
+      start:   isMobile ? 'top 78%' : 'top 65%',
     },
   })
+
+  if (isMobile) {
+    gsap.fromTo('.htb__step-icon',
+      { opacity: 0, y: 12, scale: 0.92 },
+      {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        stagger: 0.12,
+        duration: 0.55,
+        ease: 'back.out(1.35)',
+        scrollTrigger: {
+          trigger: '#howtobuy',
+          start:   'top 74%',
+        },
+      },
+    )
+  }
 
   /* ─── HTB lightning connector line draw ─── */
   gsap.to('#htb-line', {
