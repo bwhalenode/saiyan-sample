@@ -1329,24 +1329,30 @@ ul { list-style: none; }
 
   .hero__scroll-hint {
     position: fixed;
-    left: 50%;
+    left: calc(6vw + 72px);
     right: auto;
-    bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(36px + env(safe-area-inset-bottom, 0px));
     z-index: 135;
+    width: min(58vw, 240px);
+    flex-direction: row;
     align-items: center;
-    gap: 9px;
+    gap: 10px;
     color: rgba(255, 210, 48, 0.74);
     text-shadow: 0 0 20px rgba(255, 210, 48, 0.32);
-    translate: -50% 0;
     animation: mobile-scroll-pulse 2.2s ease-in-out infinite;
   }
 
+  .hero__scroll-hint::before,
   .hero__scroll-hint::after {
     content: '';
-    width: 1px;
-    height: 32px;
-    background: linear-gradient(to bottom, rgba(255, 210, 48, 0.82), transparent);
-    box-shadow: 0 0 18px rgba(255, 210, 48, 0.32);
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 210, 48, 0.46);
+    box-shadow: 0 0 14px rgba(255, 210, 48, 0.22);
+  }
+
+  .hero__scroll-arrow {
+    display: none;
   }
 
   .hero__ca {
@@ -1377,6 +1383,134 @@ ul { list-style: none; }
   }
 
   .hero__ca-copy { justify-self: end; }
+}
+
+/* ════════════════════════════════════════
+   TABLET RESPONSIVE
+   ════════════════════════════════════════ */
+@media (min-width: 768px) and (max-width: 1180px) {
+  .nav {
+    padding: 22px 32px;
+  }
+
+  .nav__links {
+    display: none;
+  }
+
+  .section--hero {
+    min-height: 100svh;
+  }
+
+  .hero__content {
+    top: 43%;
+    left: 6vw;
+    max-width: 64vw;
+    gap: 18px;
+    z-index: 5;
+  }
+
+  .hero__headline-line {
+    font-size: clamp(86px, 13vw, 150px);
+    line-height: 0.82;
+  }
+
+  .hero__left-gradient {
+    background: linear-gradient(
+      to right,
+      #050306 0%,
+      rgba(5, 3, 6, 0.9) 28%,
+      rgba(5, 3, 6, 0.58) 58%,
+      rgba(5, 3, 6, 0.12) 100%
+    );
+  }
+
+  .hero__vignette {
+    opacity: 0.64;
+  }
+
+  .hero__scroll-hint {
+    display: none;
+  }
+
+  .hero__ca {
+    left: 6vw;
+    bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .hero__ca-trigger {
+    width: 60px;
+    height: 60px;
+  }
+
+  .hero__ca-panel {
+    width: min(58vw, 500px);
+  }
+
+  .about__inner {
+    padding: 80px 7vw 70px;
+  }
+
+  .about__text p {
+    font-size: clamp(28px, 3.4vw, 40px);
+  }
+
+  .about__image-col {
+    width: 48%;
+  }
+
+  .section--inflection,
+  .section--footer {
+    min-height: 100svh;
+  }
+
+  .section--tokenomics,
+  .section--howtobuy {
+    padding: 90px 6vw;
+  }
+
+  .tokenomics__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 760px;
+  }
+
+  .footer__inner {
+    gap: 34px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 900px) {
+  .hero__content {
+    top: 38%;
+    max-width: 78vw;
+  }
+
+  .about__inner {
+    padding: 84px 7vw 72px;
+    gap: 22px;
+  }
+
+  .about__image-col {
+    width: 100%;
+    height: min(44vh, 380px);
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1180px) {
+  .about__text-col {
+    max-width: 50%;
+  }
+
+  .about__image-col {
+    width: 48%;
+  }
+
+  .htb__steps {
+    gap: 24px;
+  }
+
+  .htb__step {
+    padding: 42px 24px 34px;
+  }
 }
 
 @keyframes mobile-scroll-pulse {

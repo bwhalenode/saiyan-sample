@@ -3,7 +3,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const isMob = () => window.innerWidth < 768
+const isMob = () => window.innerWidth <= 900
 
 export function initAbout() {
   const section = document.getElementById('about')
