@@ -209,7 +209,7 @@ export class HeroScene {
     this._plane.scale.set(planeW, planeH, 1)
 
     // On mobile, keep the title side open and let the character sit behind/right of it.
-    this._plane.position.x = isMobile() ? planeW * 0.08 : 0
+    this._plane.position.x = isMobile() ? planeW * 0.03 : 0
     this._plane.position.y = isMobile() ? -planeH * 0.04 : 0
 
     if (this._auraMat) {

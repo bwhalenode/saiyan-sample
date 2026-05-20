@@ -152,7 +152,7 @@ export function initTimeline(lenis, scene) {
     },
   })
 
-  gsap.to(['.footer__ca', '.footer__socials', '.footer__disclaimer'], {
+  gsap.to(['.footer__ca', '.footer__socials', '.footer__disclaimer', '.footer__rights'], {
     opacity: 1,
     stagger: 0.15,
     duration: 0.6,

@@ -49,6 +49,7 @@ export function initAbout() {
     })
 
     initParticles()
+    initAboutExit(section)
     return
   }
 
@@ -66,6 +67,21 @@ export function initAbout() {
   })
 
   initParticles()
+  initAboutExit(section)
+}
+
+function initAboutExit(section) {
+  gsap.to(section.querySelector('.about__inner'), {
+    opacity: 0,
+    y: -28,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#inflection',
+      start:   'top 92%',
+      end:     'top 58%',
+      scrub:   0.5,
+    },
+  })
 }
 
 function initParticles() {
