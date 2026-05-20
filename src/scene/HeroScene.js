@@ -20,6 +20,7 @@ export const supportsWebP = await new Promise(resolve => {
 })
 
 const isMobile = () => window.innerWidth < 900 || !window.matchMedia('(hover: hover)').matches
+const isLaptop = () => window.innerWidth >= 900 && window.innerWidth <= 1366
 
 // The camera rests at z=4 after the dolly; plane sizing is computed for this distance
 const FINAL_CAM_Z = 4
@@ -61,8 +62,6 @@ export class HeroScene {
     this._renderer.toneMappingExposure  = 1.0
     this._renderer.outputColorSpace    = THREE.SRGBColorSpace
     this._renderer.setClearColor(0x050306, 1)
-
-    console.log(`[HeroScene] renderer: ${window.innerWidth}×${window.innerHeight} @${Math.min(window.devicePixelRatio, 2)}x  webp=${supportsWebP}`)
   }
 
   /* ── Scene ── */
@@ -130,9 +129,6 @@ export class HeroScene {
     try {
       tex = await loader.loadAsync(texUrl)
       tex.colorSpace = THREE.SRGBColorSpace
-      const iw = tex.image?.naturalWidth  || tex.image?.width  || 0
-      const ih = tex.image?.naturalHeight || tex.image?.height || 0
-      console.log(`[HeroScene] texture OK: ${iw}×${ih}  url=${texUrl}`)
     } catch (err) {
       console.warn('[HeroScene] texture load failed, using placeholder:', err)
       tex = this._makePlaceholderTexture()
@@ -149,10 +145,6 @@ export class HeroScene {
 
     this._lightning = new Lightning(this._scene)
 
-    const w = this._canvas.clientWidth  || this._canvas.offsetWidth  || window.innerWidth
-    const h = this._canvas.clientHeight || this._canvas.offsetHeight || window.innerHeight
-    console.log(`[HeroScene] canvas client size: ${w}×${h}`)
-
     onProgress(1.0)
   }
 
@@ -161,7 +153,6 @@ export class HeroScene {
     const iw = tex.image?.naturalWidth  || tex.image?.width  || 512
     const ih = tex.image?.naturalHeight || tex.image?.height || 900
     this._imageAspect = iw / ih
-    console.log(`[HeroScene] image aspect ${this._imageAspect.toFixed(3)}  (${iw}×${ih})`)
 
     const geo = new THREE.PlaneGeometry(1, 1, 1, 1)
     const mat = new THREE.ShaderMaterial({
@@ -208,8 +199,10 @@ export class HeroScene {
 
     this._plane.scale.set(planeW, planeH, 1)
 
-    // On mobile, keep the title side open and let the character sit behind/right of it.
-    this._plane.position.x = isMobile() ? planeW * 0.03 : 0
+    // Keep the character balanced through the narrow desktop range before the
+    // full-width composition has enough room for the wider right-side crop.
+    const laptopShift = window.innerWidth <= 1180 ? -0.1 : -0.06
+    this._plane.position.x = isMobile() ? planeW * 0.03 : (isLaptop() ? planeW * laptopShift : 0)
     this._plane.position.y = isMobile() ? -planeH * 0.04 : 0
 
     if (this._auraMat) {
@@ -295,7 +288,6 @@ export class HeroScene {
 
   /* ── Main update ── */
   update(t) {
-    const dt = Math.min(t - this._prevTime, 0.05)
     this._prevTime = t
 
     if (!this._visible) return

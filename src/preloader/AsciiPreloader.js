@@ -90,7 +90,6 @@ export class AsciiPreloader {
     } else {
       this._revealDone = true
       this._stopGlitch()
-      console.log(`[preloader] reveal complete @ ${(performance.now() - this._startTime).toFixed(0)}ms`)
       this._checkGate()
     }
   }
@@ -180,17 +179,12 @@ export class AsciiPreloader {
       new Promise(r => setTimeout(r, capRemain)),
     ])
 
-    console.log(`[preloader] gate passed @ ${(performance.now() - this._startTime).toFixed(0)}ms`)
-
     // Brief hold — let the fully-revealed portrait register
     await new Promise(r => setTimeout(r, 120))
 
-    console.log(`[preloader] exit started @ ${(performance.now() - this._startTime).toFixed(0)}ms`)
     await this._exit()
 
-    console.log(`[preloader] removing DOM @ ${(performance.now() - this._startTime).toFixed(0)}ms`)
     this._el.remove()
-    console.log(`[preloader] DOM removed, calling onComplete`)
     this._onComplete()
   }
 

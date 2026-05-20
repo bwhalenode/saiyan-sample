@@ -1496,6 +1496,15 @@ ul { list-style: none; }
 }
 
 @media (min-width: 901px) and (max-width: 1180px) {
+  .hero__content {
+    left: 7vw;
+    max-width: 60vw;
+  }
+
+  .hero__headline-line {
+    font-size: clamp(96px, 13.4vw, 154px);
+  }
+
   .about__text-col {
     max-width: 50%;
   }
@@ -1510,6 +1519,27 @@ ul { list-style: none; }
 
   .htb__step {
     padding: 42px 24px 34px;
+  }
+}
+
+@media (min-width: 1181px) and (max-width: 1366px) {
+  .hero__content {
+    left: 6.2vw;
+    max-width: 52vw;
+  }
+
+  .hero__headline-line {
+    font-size: clamp(140px, 12.8vw, 176px);
+  }
+
+  .hero__left-gradient {
+    background: linear-gradient(
+      to right,
+      #050306 0%,
+      rgba(5, 3, 6, 0.86) 20%,
+      rgba(5, 3, 6, 0.42) 46%,
+      transparent 64%
+    );
   }
 }
 

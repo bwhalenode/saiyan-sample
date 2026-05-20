@@ -37,7 +37,6 @@ async function bootstrap() {
 }
 
 async function finishInit(lenis, scene) {
-  console.log('[main] finishInit called')
   // Start render loop BEFORE cinematic reveal so the dolly is visible
   function loop(ts) {
     scene.update(ts / 1000)
@@ -56,7 +55,7 @@ async function finishInit(lenis, scene) {
   initFooter()
 
   // Register all scroll-driven animations
-  initTimeline(lenis, scene)
+  initTimeline(lenis)
 }
 
 function preloadImages(srcs) {

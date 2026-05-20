@@ -3,7 +3,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-export function initTimeline(lenis, scene) {
+export function initTimeline(lenis) {
   const isMobile = window.innerWidth <= 900
 
   // Let Lenis proxy scroll for ScrollTrigger
