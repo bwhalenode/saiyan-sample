@@ -4,7 +4,19 @@
       "Bash(git init *)",
       "Bash(git add *)",
       "Bash(git commit -m 'init: project scaffolding *)",
-      "Bash(git commit -m 'fix: move images to public/images and update .jpg references *)"
+      "Bash(git commit -m 'fix: move images to public/images and update .jpg references *)",
+      "Bash(curl -s -A 'Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/124.0.0.0 Safari/537.36' 'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Zen+Dots&family=JetBrains+Mono:wght@400;700&display=swap')",
+      "Bash(curl -sL \"https://fonts.gstatic.com/s/bebasneue/v16/JTUSjIg69CK48gW7PXoo9Wlhyw.woff2\" -o bebas-neue-400.woff2)",
+      "Bash(curl -sL \"https://fonts.gstatic.com/s/zendots/v14/XRXX3ICfm00IGoesQdaDRs4.woff2\" -o zen-dots-400.woff2)",
+      "Bash(curl -sL \"https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2\" -o jetbrains-mono-400.woff2)",
+      "Bash(curl -sL \"https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbv2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKwBNntkaToggR7BYRbKPxDcwg.woff2\" -o jetbrains-mono-700.woff2)",
+      "Bash(wait)",
+      "Bash(curl -sI http://localhost:5173/fonts/bebas-neue-400.woff2)",
+      "Bash(curl -sI http://localhost:5173/fonts/zen-dots-400.woff2)",
+      "Bash(curl -sI http://localhost:5173/fonts/jetbrains-mono-400.woff2)",
+      "Bash(curl -sI http://localhost:5173/fonts/jetbrains-mono-700.woff2)",
+      "Bash(pkill -f \"vite --port 5173\")",
+      "Bash(git commit -m 'self-host fonts, remove google fonts cdn *)"
     ]
   }
 }
