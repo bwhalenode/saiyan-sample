@@ -14,87 +14,75 @@ import { initFooter }    from './sections/footer.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
-/* ── prefers-reduced-motion guard ── */
-const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
 async function bootstrap() {
-  /* ── Init Lenis smooth scroll ── */
-  const lenis = initLenis()
-
-  /* ── Init custom cursor ── */
+  const lenis  = initLenis()
   initCursor()
 
-  /* ── Boot Three.js scene ── */
   const canvas = document.getElementById('hero-canvas')
   const scene  = new HeroScene(canvas)
+  const bar    = document.getElementById('preloader-bar')
 
-  /* ── Preloader ── */
-  const bar = document.getElementById('preloader-bar')
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   if (prefersReduced) {
-    // Skip animated preloader for reduced-motion
     document.getElementById('preloader').style.display = 'none'
     finishInit(lenis, scene)
     return
   }
 
-  // Simulate loading with texture load progress
+  // Kick off rage-face preload in parallel so About section is instant
+  preloadImages(['/images/rage-face.webp', '/images/rage-face.jpg'])
+
+  // Load textures + build scene; await so preloader waits for real readiness
   await scene.load((progress) => {
     if (bar) bar.style.width = (progress * 100) + '%'
   })
 
-  // Brief pause so 100% is visible
-  await sleep(300)
+  // Brief pause so 100% is visible before exit animation
+  await sleep(280)
 
-  /* ── Preloader exit: flash white → reveal ── */
+  // Preloader exit: fade out → white flash → reveal
   const preloader = document.getElementById('preloader')
   const flash     = document.getElementById('flash-overlay')
 
   await new Promise(resolve => {
     gsap.timeline({ onComplete: resolve })
-      .to(preloader, {
-        opacity: 0,
-        duration: 0.4,
-        ease: 'power2.in',
-      })
+      .to(preloader, { opacity: 0, duration: 0.35, ease: 'power2.in' })
       .set(preloader, { display: 'none' })
-      .to(flash, {
-        opacity: 1,
-        duration: 0.08,
-      })
-      .to(flash, {
-        opacity: 0,
-        duration: 0.55,
-        ease: 'power2.out',
-      })
+      .to(flash, { opacity: 1, duration: 0.08 })
+      .to(flash, { opacity: 0, duration: 0.5, ease: 'power2.out' })
   })
 
   finishInit(lenis, scene)
 }
 
 async function finishInit(lenis, scene) {
-  /* ── Hero reveal ── */
-  await revealHero()
+  // Hero cinematic reveal (dolly + staggered title wipe)
+  await revealHero(scene)
 
-  /* ── Init sections ── */
+  // Boot sections
   initHero()
   initAbout()
   initTokenomics()
   initHowToBuy()
   initFooter()
 
-  /* ── Scroll timeline ── */
+  // Register all scroll-driven animations
   initTimeline(lenis, scene)
 
-  /* ── Render loop ── */
-  let last = 0
+  // Render loop
   function loop(ts) {
-    const t = ts / 1000
-    scene.update(t)
-    last = t
+    scene.update(ts / 1000)
     requestAnimationFrame(loop)
   }
   requestAnimationFrame(loop)
+}
+
+function preloadImages(srcs) {
+  srcs.forEach(src => {
+    const img = new Image()
+    img.src = src
+  })
 }
 
 function sleep(ms) {
@@ -103,7 +91,6 @@ function sleep(ms) {
 
 bootstrap().catch(err => {
   console.error('[SAIYAN] Init error:', err)
-  // Fail gracefully: hide preloader and show page
   document.getElementById('preloader')?.remove()
   document.getElementById('flash-overlay')?.remove()
 })

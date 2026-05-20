@@ -248,8 +248,8 @@ ul { list-style: none; }
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   z-index: 0;
   pointer-events: none;
 }
@@ -362,36 +362,79 @@ ul { list-style: none; }
   min-height: 100vh;
   z-index: 1;
   pointer-events: none;
+  /* Needed so absolute children + vignette respect this stacking context */
+  isolation: isolate;
 }
 
+/* Left-to-right dark ramp — keeps title readable against the lit character */
+.hero__left-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    #050306 0%,
+    rgba(5, 3, 6, 0.82) 18%,
+    rgba(5, 3, 6, 0.42) 38%,
+    transparent 58%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Radial vignette — darkens edges, preserves center clarity */
+.hero__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 68% 50%,
+    transparent 28%,
+    rgba(5, 3, 6, 0.55) 100%
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Title sits left-center; character canvas fills right ⅔ */
 .hero__content {
   position: absolute;
-  bottom: 100px;
-  left: 0;
-  right: 0;
+  top: 50%;
+  left: 5vw;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 24px;
+  align-items: flex-start;
+  gap: 28px;
   pointer-events: all;
+  z-index: 3;
+  max-width: 46vw;
 }
 
 .hero__headline-wrap {
-  overflow: hidden;
-  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
 }
 
-.hero__headline {
+.hero__headline-line-wrap {
+  overflow: hidden;
+  /* height matches line-height so clipping works */
+  line-height: 0.85;
+}
+
+.hero__headline-line {
+  display: block;
   font-family: var(--font-display);
-  font-size: clamp(72px, 12vw, 180px);
-  line-height: 0.9;
+  font-size: clamp(80px, 12vw, 220px);
+  line-height: 0.85;
   letter-spacing: 0.02em;
   color: var(--ink);
-  text-align: center;
-  clip-path: inset(0 0 100% 0);
+  text-align: left;
+  /* Hidden initial state — GSAP animates from 110% to 0 */
+  transform: translateY(110%);
   text-shadow:
-    0 0 60px rgba(255, 245, 194, 0.15),
-    0 2px 40px rgba(255, 210, 48, 0.08);
+    0 0 50px rgba(255, 245, 194, 0.12),
+    0 2px 30px rgba(255, 210, 48, 0.06);
 }
 
 .hero__ca-bar {
@@ -403,8 +446,12 @@ ul { list-style: none; }
   border-radius: 4px;
   padding: 10px 16px;
   backdrop-filter: blur(8px);
-  max-width: 90vw;
+  -webkit-backdrop-filter: blur(8px);
+  max-width: min(480px, 90vw);
   pointer-events: all;
+  /* Hidden until after title reveal */
+  opacity: 0;
+  transform: translateY(16px);
 }
 
 .hero__ca-label {
@@ -975,7 +1022,8 @@ ul { list-style: none; }
     transition-duration: 0.001ms !important;
   }
 
-  .hero__headline { clip-path: none !important; }
+  .hero__headline-line { transform: none !important; }
+  .hero__ca-bar { opacity: 1 !important; transform: none !important; }
   .about__text .word-inner { transform: none !important; }
 }
 
@@ -1041,8 +1089,31 @@ ul { list-style: none; }
     display: none;
   }
 
+  /* Mobile hero: title stacks at top, character fills below */
+  .hero__content {
+    top: 48px;
+    transform: none;
+    max-width: 92vw;
+    gap: 20px;
+  }
+
+  .hero__headline-line {
+    font-size: clamp(64px, 18vw, 120px);
+  }
+
+  /* On mobile the gradient comes from top-down so title has contrast */
+  .hero__left-gradient {
+    background: linear-gradient(
+      to bottom,
+      #050306 0%,
+      rgba(5, 3, 6, 0.88) 28%,
+      rgba(5, 3, 6, 0.45) 52%,
+      transparent 72%
+    );
+  }
+
   .hero__ca-address {
-    max-width: 30vw;
+    max-width: 44vw;
   }
 }
 
@@ -1054,6 +1125,10 @@ ul { list-style: none; }
   .hero__ca-bar {
     flex-wrap: wrap;
     justify-content: center;
+  }
+
+  .hero__headline-line {
+    font-size: clamp(60px, 20vw, 100px);
   }
 
   .hero__ca-address {

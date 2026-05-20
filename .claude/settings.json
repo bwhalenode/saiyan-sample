@@ -17,7 +17,8 @@
       "Bash(curl -sI http://localhost:5173/fonts/jetbrains-mono-700.woff2)",
       "Bash(pkill -f \"vite --port 5173\")",
       "Bash(git commit -m 'self-host fonts, remove google fonts cdn *)",
-      "Bash(git commit -m 'compress images, add webp with jpg fallback *)"
+      "Bash(git commit -m 'compress images, add webp with jpg fallback *)",
+      "Bash(git commit -m 'hero: full-bleed character, left-aligned title, fix bloom, fix mobile texture load, add camera dolly *)"
     ]
   }
 }

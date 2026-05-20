@@ -48,11 +48,20 @@
       </button>
     </nav>
 
+    <!-- Cinematic overlays (sit above canvas, below text) -->
+    <div class="hero__left-gradient" aria-hidden="true"></div>
+    <div class="hero__vignette" aria-hidden="true"></div>
+
     <div class="hero__content">
-      <div class="hero__headline-wrap">
-        <h1 class="hero__headline" id="hero-headline">SUPER SAIYAN</h1>
+      <div class="hero__headline-wrap" role="heading" aria-level="1">
+        <div class="hero__headline-line-wrap">
+          <span class="hero__headline-line" id="hero-line-1">SUPER</span>
+        </div>
+        <div class="hero__headline-line-wrap">
+          <span class="hero__headline-line" id="hero-line-2">SAIYAN</span>
+        </div>
       </div>
-      <div class="hero__ca-bar">
+      <div class="hero__ca-bar" id="hero-ca-bar">
         <span class="hero__ca-label">CA</span>
         <span class="hero__ca-address" id="ca-address">0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56</span>
         <button class="hero__ca-copy" id="ca-copy" data-cursor="hover" aria-label="Copy contract address">
