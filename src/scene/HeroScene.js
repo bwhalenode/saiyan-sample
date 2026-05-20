@@ -1,4 +1,12 @@
 import * as THREE from 'three'
+
+// WebP feature detection — resolved before any texture loads
+const supportsWebP = await new Promise(resolve => {
+  const img = new Image()
+  img.onload  = () => resolve(img.width === 1)
+  img.onerror = () => resolve(false)
+  img.src = 'data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAQAcJZQCdAEO/gHOAAA='
+})
 import { EffectComposer }  from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass }      from 'three/addons/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
@@ -119,7 +127,7 @@ export class HeroScene {
 
       // Hero character plane
       loader.load(
-        '/images/hero-1.jpg',
+        supportsWebP ? '/images/hero-1.webp' : '/images/hero-1.jpg',
         (tex) => {
           tex.colorSpace = THREE.SRGBColorSpace
           this._buildCharacterPlane(tex)
