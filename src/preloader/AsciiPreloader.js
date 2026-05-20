@@ -108,9 +108,10 @@ export class AsciiPreloader {
 
   _tick(now) {
     const elapsed  = now - this._startTime
-    const duration = IS_MOB() ? 2800 : 4000
+    const duration = IS_MOB() ? 1800 : 2400
     const t        = Math.min(elapsed / duration, 1)
-    const p        = 1 - Math.pow(1 - t, 4)   // easeOutQuart — fast start, slow top
+    // easeInOutCubic — gradual start, faster through the middle, eases off at top
+    const p        = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
 
     this._p = p
     this._applyReveal(p)
@@ -202,12 +203,12 @@ export class AsciiPreloader {
     await document.fonts.ready
 
     const elapsed = performance.now() - this._startTime
-    if (elapsed < 3000) {
-      await new Promise(r => setTimeout(r, 3000 - elapsed))
+    if (elapsed < 800) {
+      await new Promise(r => setTimeout(r, 800 - elapsed))
     }
 
-    // Hold fully-revealed image for 500ms — let the user see the face
-    await new Promise(r => setTimeout(r, 500))
+    // Brief hold so the fully-revealed portrait registers
+    await new Promise(r => setTimeout(r, 220))
 
     await this._exit()
     this._el.remove()
