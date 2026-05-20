@@ -119,7 +119,7 @@ export class HeroScene {
 
       // Hero character plane
       loader.load(
-        '/images/hero-1.png',
+        '/images/hero-1.jpg',
         (tex) => {
           tex.colorSpace = THREE.SRGBColorSpace
           this._buildCharacterPlane(tex)
