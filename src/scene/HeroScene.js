@@ -208,9 +208,9 @@ export class HeroScene {
 
     this._plane.scale.set(planeW, planeH, 1)
 
-    // On mobile, shift left so the character (right portion of 21:9 art) is centered
-    this._plane.position.x = isMobile() ? -planeW * 0.2 : 0
-    this._plane.position.y = 0
+    // On mobile, keep the title side open and let the character sit behind/right of it.
+    this._plane.position.x = isMobile() ? planeW * 0.08 : 0
+    this._plane.position.y = isMobile() ? -planeH * 0.04 : 0
 
     if (this._auraMat) {
       this._auraMat.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight)

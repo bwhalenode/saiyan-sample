@@ -1,6 +1,7 @@
 import gsap from 'gsap'
 
 const CA = '0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56'
+const isMob = () => window.innerWidth < 900
 
 export function initHero() {
   /* Hero CA reveal + copy */
@@ -14,6 +15,7 @@ export function initHero() {
   if (addrEl) addrEl.textContent = CA
 
   trigger?.addEventListener('click', () => {
+    if (!caWrap) return
     const open = !caWrap.classList.contains('is-open')
     caWrap.classList.toggle('is-open', open)
     trigger.setAttribute('aria-expanded', String(open))
@@ -59,11 +61,14 @@ export function revealHero(scene) {
       ease: 'power2.out',
     }, 0)
 
+    const mobile = isMob()
+    const lineStart = mobile ? 0.45 : 1.4
+
     /* Camera dolly: from z=4.8 → z=4 */
     if (cam) {
       tl.to(cam.position, {
         z: 4,
-        duration: 2,
+        duration: mobile ? 1.35 : 2,
         ease: 'power3.out',
       }, 0)
     }
@@ -73,7 +78,7 @@ export function revealHero(scene) {
       y: 0,
       duration: 0.9,
       ease: 'power4.out',
-    }, 1.4)
+    }, lineStart)
 
     /* "SAIYAN" — 0.2 s after SUPER starts */
     tl.to('#hero-line-2', {

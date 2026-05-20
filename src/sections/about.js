@@ -39,15 +39,27 @@ export function initAbout() {
     ease: 'power2.out',
   }, 0.06)
 
-  // Exit later, after the reveal has had a short readable hold.
-  tl.to(imgCol, { y: '-70%', opacity: 0, duration: 0.22, ease: 'power2.in' }, 0.78)
+  if (isMob()) {
+    ScrollTrigger.create({
+      trigger: section,
+      start:   'top 74%',
+      end:     'bottom 42%',
+      scrub:   0.55,
+      animation: tl,
+    })
 
+    initParticles()
+    return
+  }
+
+  // Exit later on desktop, after the reveal has had a short readable hold.
+  tl.to(imgCol, { y: '-70%', opacity: 0, duration: 0.22, ease: 'power2.in' }, 0.78)
   tl.to([textEl, eyebrow], { opacity: 0, duration: 0.16 }, 0.84)
 
   ScrollTrigger.create({
     trigger: section,
     start:   'top top',
-    end:     () => '+=' + (isMob() ? window.innerHeight * 0.85 : window.innerHeight * 1.05),
+    end:     () => '+=' + window.innerHeight * 0.95,
     pin:     true,
     scrub:   0.65,
     animation: tl,
