@@ -121,7 +121,10 @@ export class HeroScene {
 
     // ── Texture ──
     const loader = new THREE.TextureLoader()
-    const texUrl = supportsWebP ? '/images/hero-1.webp' : '/images/hero-1.jpg'
+    const mob    = isMobile()
+    const texUrl = mob
+      ? (supportsWebP ? '/images/hero-1-mobile.webp' : '/images/hero-1.jpg')
+      : (supportsWebP ? '/images/hero-1.webp'        : '/images/hero-1.jpg')
 
     let tex
     try {

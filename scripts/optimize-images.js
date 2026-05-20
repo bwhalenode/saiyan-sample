@@ -46,6 +46,20 @@ async function optimise(filePath) {
   await pipeline.clone().webp(webpOpts).toFile(outWebp)
   const { size: afterWebp } = await stat(outWebp)
   console.log(`    WebP ${' '.repeat(9)}   ${fmtKB(afterWebp).padStart(9)}  (${Math.round((1 - afterWebp / before) * 100)}% vs original)`)
+
+  // Mobile crop: right 60% of hero-1 as a separate WebP for mobile viewports
+  if (name === 'hero-1') {
+    const meta = await sharp(filePath).metadata()
+    const cropLeft  = Math.floor(meta.width * 0.4)
+    const cropWidth = meta.width - cropLeft
+    const outMobile = join(INPUT_DIR, 'hero-1-mobile.webp')
+    await sharp(filePath)
+      .extract({ left: cropLeft, top: 0, width: cropWidth, height: meta.height })
+      .webp({ quality: WEBP_Q })
+      .toFile(outMobile)
+    const { size: mobileSize } = await stat(outMobile)
+    console.log(`    Mobile WebP ${' '.repeat(2)}   ${fmtKB(mobileSize).padStart(9)}  (right 60% crop for mobile)`)
+  }
 }
 
 async function run() {

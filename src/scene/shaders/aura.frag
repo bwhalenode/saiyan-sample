@@ -1,6 +1,7 @@
 uniform sampler2D uTexture;
 uniform float uTime;
 uniform float uMouseDist;
+uniform float uAuraStrength;
 uniform vec2 uResolution;
 
 varying vec2 vUv;
@@ -47,9 +48,9 @@ void main() {
   // Gold rim glow at alpha edges
   float edgeFactor = smoothstep(0.04, 0.35, tex.a) * (1.0 - smoothstep(0.5, 1.0, tex.a));
 
-  // Animated intensity — base rim plus mouse proximity boost
+  // Animated intensity — base rim plus mouse proximity boost, scaled by aura strength
   float rimBase = 0.6 + 0.4 * sin(uTime * 1.8 + uv.y * 3.0);
-  float rimIntensity = rimBase * (0.4 + uMouseDist * 1.4);
+  float rimIntensity = rimBase * (0.4 + uMouseDist * 1.4) * uAuraStrength;
   rimIntensity = clamp(rimIntensity, 0.0, 2.5);
 
   vec3 goldColor    = vec3(1.0,   0.82, 0.19);  // --gold

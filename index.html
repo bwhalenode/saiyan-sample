@@ -11,12 +11,15 @@
 </head>
 <body>
 
-  <!-- Custom cursor (desktop only) -->
-  <div id="cursor-orb"></div>
-  <div id="cursor-ring"></div>
-
   <!-- Three.js canvas -->
   <canvas id="hero-canvas"></canvas>
+
+  <!-- Desktop CA vertical strip (hidden on mobile) -->
+  <button id="ca-desktop" class="ca-desktop" aria-label="Contract address — click to copy">
+    <span class="ca-desktop__line" aria-hidden="true"></span>
+    <span class="ca-desktop__text">CA · 0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56 · CLICK TO COPY</span>
+    <span class="ca-desktop__line" aria-hidden="true"></span>
+  </button>
 
   <!-- ═══════════════ HERO ═══════════════ -->
   <section id="hero" class="section section--hero" data-section="hero">
@@ -73,8 +76,12 @@
   <!-- ═══════════════ ABOUT ═══════════════ -->
   <section id="about" class="section section--about" data-section="about">
     <div class="about__inner">
+      <div class="about__left-line" aria-hidden="true"></div>
       <div class="about__text-col">
-        <div class="about__eyebrow">ORIGIN STORY</div>
+        <div class="about__eyebrow">
+          ORIGIN STORY
+          <span class="about__eyebrow-line" aria-hidden="true"></span>
+        </div>
         <div class="about__text" id="about-text">
           <p>"$SAIYAN is the moment hidden potential awakens.</p>
           <p>The instant effort becomes acceleration.</p>
@@ -84,16 +91,16 @@
         </div>
       </div>
       <div class="about__image-col">
-        <div class="about__img-wrap" id="about-img">
-          <picture>
-            <source srcset="/images/rage-face.webp" type="image/webp" />
-            <img
-              src="/images/rage-face.jpg"
-              alt="Saiyan rage face"
-              onerror="this.style.display='none'; this.parentElement.classList.add('about__img-wrap--placeholder')"
-            />
-          </picture>
-        </div>
+        <picture>
+          <source srcset="/images/rage-face.webp" type="image/webp" />
+          <img
+            class="about__rage-face"
+            src="/images/rage-face.jpg"
+            alt="Saiyan rage transformation"
+            onload="console.log('[about] rage-face loaded')"
+            onerror="console.error('[about] rage-face failed to load')"
+          />
+        </picture>
       </div>
     </div>
     <canvas id="about-particles" aria-hidden="true"></canvas>

@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-const BOLT_COUNT    = 5
+const BOLT_COUNT    = 2
 const BOLT_LIFETIME = 200  // ms
 const BOLT_DEPTH    = 5    // recursion depth for jagged effect
 
@@ -46,10 +46,11 @@ export class Lightning {
   }
 
   _randomArcPoint(radius = 1.2) {
-    const angle = Math.random() * Math.PI * 2
+    // Right-side only: angle constrained to [-π/3, π/3] (positive-x arc)
+    const angle = (Math.random() - 0.5) * (Math.PI * 0.67)
     const r     = radius * (0.6 + Math.random() * 0.6)
     return new THREE.Vector3(
-      Math.cos(angle) * r,
+      Math.abs(Math.cos(angle)) * r,
       (Math.random() - 0.3) * r * 1.4,
       (Math.random() - 0.5) * 0.3,
     )

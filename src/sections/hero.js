@@ -1,15 +1,32 @@
 import gsap from 'gsap'
 
+const CA = '0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56'
+
 export function initHero() {
-  /* Contract address copy */
+  /* Mobile CA bar copy */
   const btn    = document.getElementById('ca-copy')
   const addrEl = document.getElementById('ca-address')
   const label  = btn?.querySelector('.hero__ca-copy-label')
 
   btn?.addEventListener('click', () => {
-    navigator.clipboard.writeText(addrEl.textContent.trim()).then(() => {
+    navigator.clipboard.writeText(CA).then(() => {
       if (label) label.textContent = 'COPIED!'
       setTimeout(() => { if (label) label.textContent = 'COPY' }, 2000)
+    })
+  })
+
+  /* Desktop CA vertical strip copy */
+  const caDesktop     = document.getElementById('ca-desktop')
+  const caDesktopText = caDesktop?.querySelector('.ca-desktop__text')
+  const CA_DEFAULT    = `CA · ${CA} · CLICK TO COPY`
+  const CA_COPIED     = `CA · ${CA} · COPIED`
+
+  caDesktop?.addEventListener('click', () => {
+    navigator.clipboard.writeText(CA).then(() => {
+      if (caDesktopText) caDesktopText.textContent = CA_COPIED
+      setTimeout(() => {
+        if (caDesktopText) caDesktopText.textContent = CA_DEFAULT
+      }, 1200)
     })
   })
 
@@ -47,9 +64,9 @@ export function revealHero(scene) {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     if (prefersReduced) {
-      // Skip all animation, just show everything
       gsap.set(['#hero-line-1', '#hero-line-2'], { y: 0 })
       gsap.set('#hero-ca-bar', { opacity: 1, y: 0 })
+      gsap.set('#ca-desktop', { opacity: 1 })
       resolve()
       return
     }
@@ -89,13 +106,20 @@ export function revealHero(scene) {
       ease: 'power4.out',
     }, '+=0.2')
 
-    /* CA bar — 0.4 s after SAIYAN animation finishes */
+    /* Mobile CA bar — 0.4 s after SAIYAN animation finishes */
     tl.to('#hero-ca-bar', {
       opacity: 1,
       y: 0,
       duration: 0.7,
       ease: 'power3.out',
     }, '+=0.4')
+
+    /* Desktop CA strip — same beat */
+    tl.to('#ca-desktop', {
+      opacity: 1,
+      duration: 0.7,
+      ease: 'power3.out',
+    }, '<')
 
     /* Scroll hint fades in alongside CA bar */
     tl.from('#scroll-hint', {

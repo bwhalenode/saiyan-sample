@@ -31,14 +31,15 @@ export function initTimeline(lenis, scene) {
     },
   })
 
-  /* ─── About section: image parallax ─── */
-  gsap.to('#about-img', {
-    x: '-30%',
+  /* ─── Inflection title reveal ─── */
+  gsap.to('.inflection__title', {
+    opacity: 1,
+    y: 0,
+    duration: 1.2,
+    ease: 'power3.out',
     scrollTrigger: {
-      trigger:  '#about',
-      start:    'top bottom',
-      end:      'bottom top',
-      scrub:    1.5,
+      trigger: '#inflection',
+      start:   'top 65%',
     },
   })
 

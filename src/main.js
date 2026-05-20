@@ -4,7 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 import { AsciiPreloader }  from './preloader/AsciiPreloader.js'
 import { initLenis }       from './scroll/lenis.js'
-import { initCursor }      from './cursor/EnergyCursor.js'
 import { HeroScene }       from './scene/HeroScene.js'
 import { initTimeline }    from './scroll/timeline.js'
 import { initHero, revealHero } from './sections/hero.js'
@@ -17,7 +16,6 @@ gsap.registerPlugin(ScrollTrigger)
 
 async function bootstrap() {
   const lenis  = initLenis()
-  initCursor()
 
   const canvas = document.getElementById('hero-canvas')
 
