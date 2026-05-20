@@ -101,6 +101,6 @@ export function revealHero(scene) {
       y: 8,
       duration: 0.6,
       ease: 'power2.out',
-    }, '<')
+    }, mobile ? lineStart + 0.25 : '<')
   })
 }

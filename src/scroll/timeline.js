@@ -45,6 +45,20 @@ export function initTimeline(lenis, scene) {
     },
   })
 
+  if (isMobile) {
+    gsap.to('#scroll-hint', {
+      opacity: 0,
+      y: 10,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#hero',
+        start:   'top top',
+        end:     'bottom 70%',
+        scrub:   0.4,
+      },
+    })
+  }
+
   /* ─── Inflection title reveal ─── */
   gsap.to('.inflection__title', {
     opacity: 1,
