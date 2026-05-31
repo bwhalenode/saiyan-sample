@@ -318,6 +318,8 @@ ul { list-style: none; }
   color: rgba(255, 210, 48, 0.5);
 }
 
+.disclaimer-bar__text--short { display: none; }
+
 /* ════════════════════════════════════════
    NAV
    ════════════════════════════════════════ */
@@ -631,7 +633,10 @@ ul { list-style: none; }
 .hero__scroll-hint {
   position: absolute;
   bottom: 32px;
-  left: 5vw;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: max-content;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -772,6 +777,11 @@ ul { list-style: none; }
 }
 
 .about__text p strong {
+  color: var(--gold);
+}
+
+/* The $SAIYAN token name is always highlighted gold within the body copy */
+.about__token {
   color: var(--gold);
 }
 
@@ -1234,6 +1244,20 @@ ul { list-style: none; }
   opacity: 0;
 }
 
+.footer__copyright {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer__copyright .footer__brand-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(255, 210, 48, 0.14));
+  opacity: 0.85;
+}
+
 .footer__maker {
   display: inline-flex;
   align-items: center;
@@ -1297,15 +1321,31 @@ ul { list-style: none; }
   }
 
   #hero-canvas {
-    opacity: 0.78;
+    opacity: 1;
   }
 
   .section--inflection {
     background-attachment: scroll;
   }
 
+  /* Header stack: disclaimer strip on its own row, nav clearly below it */
+  .disclaimer-bar {
+    padding: 6px 12px;
+    min-height: 0;
+  }
+
+  .disclaimer-bar__text {
+    font-size: 9px;
+    line-height: 1.35;
+    letter-spacing: 0.04em;
+  }
+
+  .disclaimer-bar__text--full  { display: none; }
+  .disclaimer-bar__text--short { display: inline; }
+
   .nav {
-    padding: 20px 24px;
+    top: 38px;
+    padding: 14px 24px;
   }
 
   .nav__links {

@@ -42,16 +42,18 @@ export function initAbout() {
     0
   )
 
-  // ── Paragraph carousel: one line at a time, fully tied to scroll ──
-  // Each paragraph fades + slides in, holds, then fades out as the next
-  // arrives — so only 1 (briefly 2, during the crossfade) is ever visible.
+  // ── Paragraph carousel: strictly ONE line at a time ──
+  // Each paragraph fades+slides in, holds, then fully fades out. The next one
+  // only begins after a gap — so the previous line is at opacity 0 before the
+  // next appears. The segments never overlap, so two are never visible at once.
   gsap.set(paras, { opacity: 0, y: 44 })
 
   const tl   = gsap.timeline()
   const dIn  = 0.5
-  const hold = 0.7
+  const hold = 0.8
   const dOut = 0.5
-  const step = dIn + hold
+  const gap  = 0.3                       // empty beat between paragraphs
+  const step = dIn + hold + dOut + gap   // full, non-overlapping segment
 
   paras.forEach((p, i) => {
     const t = i * step
@@ -69,7 +71,7 @@ export function initAbout() {
   ScrollTrigger.create({
     trigger:   section,
     start:     'top top',
-    end:       () => '+=' + window.innerHeight * (paras.length * (mob ? 0.55 : 0.62)),
+    end:       () => '+=' + window.innerHeight * (paras.length * (mob ? 0.6 : 0.7)),
     pin:       true,
     scrub:     mob ? 0.8 : 0.7,
     animation: tl,
