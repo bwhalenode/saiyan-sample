@@ -202,7 +202,7 @@ export class HeroScene {
       const planeW     = planeH * this._imageAspect
       this._plane.scale.set(planeW, planeH, 1)
 
-      this._plane.position.x = -planeW * 0.065   // character-anchored shift
+      this._plane.position.x = planeW * 0.03     // nudge right toward the right side
       this._plane.position.y = -visH * 0.07      // slight drop, head below title
     } else {
       // Desktop: fit by HEIGHT (landscape art always covers width), then pin the
