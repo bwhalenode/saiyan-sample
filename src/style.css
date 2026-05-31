@@ -1093,13 +1093,13 @@ ul { list-style: none; }
 
 /* ── 3D ring carousel ── */
 .team__stage {
-  --team-card-w: clamp(196px, 18vw, 248px);
+  --team-card-w: clamp(248px, 23vw, 340px);
   --team-card-h: calc(var(--team-card-w) * 1.26);
   position: relative;
   z-index: 1;
   width: 100%;
-  height: clamp(440px, 58vh, 600px);
-  perspective: 1200px;
+  height: clamp(500px, 66vh, 720px);
+  perspective: 1300px;
   perspective-origin: 50% 47%;
   user-select: none;
   touch-action: pan-y;
@@ -1213,11 +1213,16 @@ ul { list-style: none; }
 
 /* ── Expanded profile: enlarge the card art (it carries each member's bio) ── */
 .team-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;              /* dead-centre the fit-content box on screen */
+  width: fit-content;
+  height: fit-content;
+  max-width: 96vw;
+  max-height: 96vh;
   border: none;
   padding: 0;
   background: transparent;
-  max-width: 96vw;
-  max-height: 96vh;
   color: var(--ink);
   overflow: visible;
 }
@@ -1233,7 +1238,9 @@ ul { list-style: none; }
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 16px;
+  margin: 0 auto;
   animation: team-dialog-in 0.42s var(--ease-out-expo);
 }
 
@@ -1744,8 +1751,8 @@ ul { list-style: none; }
   }
 
   .team__stage {
-    --team-card-w: clamp(158px, 46vw, 206px);
-    height: clamp(380px, 52vh, 470px);
+    --team-card-w: clamp(200px, 60vw, 270px);
+    height: clamp(420px, 58vh, 540px);
     perspective: 900px;
   }
 
