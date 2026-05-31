@@ -9,6 +9,7 @@ import { initTimeline }    from './scroll/timeline.js'
 import { initHero, revealHero } from './sections/hero.js'
 import { initAbout }       from './sections/about.js'
 import { initTokenomics }  from './sections/tokenomics.js'
+import { initTeam }        from './sections/team.js'
 import { initHowToBuy }    from './sections/howtobuy.js'
 import { initFooter }      from './sections/footer.js'
 
@@ -51,6 +52,7 @@ async function finishInit(lenis, scene) {
   initHero()
   initAbout()
   initTokenomics()
+  initTeam()
   initHowToBuy()
   initFooter()
 

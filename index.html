@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="$SAIYAN — Awaken your power. The awakening of untapped potential. A community-driven memecoin and mindset for everyday warriors on Ethereum." />
+  <meta name="description" content="$SAIYAN - Awaken your power. The awakening of untapped potential. A community-driven memecoin and mindset for everyday warriors on Ethereum." />
   <meta name="theme-color" content="#050306" />
   <meta name="application-name" content="$SAIYAN" />
-  <meta property="og:title" content="$SAIYAN — Awaken Your Power" />
+  <meta property="og:title" content="$SAIYAN - Awaken Your Power" />
   <meta property="og:description" content="The moment you stop surviving and start transforming — turning pain into power, struggle into strength, and limits into history." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="/images/og-logo.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="$SAIYAN — Awaken Your Power" />
+  <meta name="twitter:title" content="$SAIYAN - Awaken Your Power" />
   <meta name="twitter:description" content="The moment you stop surviving and start transforming — turning pain into power, struggle into strength, and limits into history." />
   <meta name="twitter:image" content="/images/og-logo.jpg" />
   <title>$SAIYAN — Awaken Your Power</title>
@@ -38,6 +38,11 @@
   <!-- Three.js canvas -->
   <canvas id="hero-canvas"></canvas>
 
+  <!-- Scroll indicator (top-level so it isn't trapped in the hero stacking context) -->
+  <div class="hero__scroll-hint" id="scroll-hint" aria-label="Scroll down">
+    <span>SCROLL</span>
+  </div>
+
   <!-- ═══════════════ HERO ═══════════════ -->
   <section id="hero" class="section section--hero" data-section="hero">
     <nav class="nav">
@@ -49,10 +54,23 @@
         <li><a href="#hero" data-cursor="hover">HOME</a></li>
         <li><a href="#about" data-cursor="hover">ABOUT</a></li>
         <li><a href="#tokenomics" data-cursor="hover">TOKENOMICS</a></li>
+        <li><a href="#team" data-cursor="hover">TEAM</a></li>
         <li><a href="https://app.uniswap.org/swap?outputCurrency=0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56" target="_blank" rel="noopener noreferrer" data-cursor="hover">BUY</a></li>
         <li><a href="https://x.com/supersaiyancto" target="_blank" rel="noopener noreferrer" data-cursor="hover">X</a></li>
         <li><a href="https://t.me/SAIYANonETHPortal" target="_blank" rel="noopener noreferrer" data-cursor="hover">TELEGRAM</a></li>
       </ul>
+      <div class="nav__socials" aria-label="Social links">
+        <a href="https://x.com/supersaiyancto" target="_blank" rel="noopener noreferrer" data-cursor="hover" aria-label="X / Twitter">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+        <a href="https://t.me/SAIYANonETHPortal" target="_blank" rel="noopener noreferrer" data-cursor="hover" aria-label="Telegram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+          </svg>
+        </a>
+      </div>
     </nav>
 
     <!-- Cinematic overlays (sit above canvas, below text) -->
@@ -68,13 +86,6 @@
         <div class="hero__headline-line-wrap">
           <span class="hero__headline-line hero__headline-line--gold" id="hero-line-2">SAIYAN</span>
         </div>
-      </div>
-    </div>
-
-    <div class="hero__scroll-hint" id="scroll-hint" aria-label="Scroll down">
-      <span>SCROLL</span>
-      <div class="hero__scroll-arrow">
-        <span></span>
       </div>
     </div>
   </section>
@@ -208,6 +219,141 @@
       </div>
 
     </div>
+  </section>
+
+  <!-- ═══════════════ TEAM ═══════════════ -->
+  <section id="team" class="section section--team" data-section="team" aria-labelledby="team-title">
+    <div class="team__glow" aria-hidden="true"></div>
+    <div class="team__header">
+      <div class="team__eyebrow">THE ASCENDED</div>
+      <h2 class="team__title" id="team-title">MEET THE TEAM</h2>
+    </div>
+
+    <p class="team__hint">Drag to spin · tap a member to read their story</p>
+
+    <div class="team__stage" tabindex="0" aria-roledescription="carousel" aria-label="$SAIYAN team members">
+      <button class="team__arrow team__arrow--prev" type="button" aria-label="Rotate to previous member" data-team-direction="-1">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="team__ring" id="team-ring">
+        <article class="team-card" tabindex="0" role="button"
+          data-name="MEEK" data-role="LEAD"
+          data-bio="The first to ascend. Meek steers $SAIYAN with a steady hand and reminds the squad that real power is forged under pressure."
+          aria-label="Open MEEK team profile">
+          <div class="team-card__image-wrap"><img src="/New%20folder/team/team-meekro.jpg" alt="Meek" loading="lazy" /></div>
+          <div class="team-card__meta"><h3>MEEK</h3><span>LEAD</span></div>
+          <span class="team-card__expand" aria-hidden="true">+</span>
+        </article>
+
+        <article class="team-card" tabindex="0" role="button"
+          data-name="ATREYU" data-role="STRATEGY"
+          data-bio="Reads the battlefield three moves ahead. Atreyu turns chaos into a plan and never blinks when the charts turn red."
+          aria-label="Open ATREYU team profile">
+          <div class="team-card__image-wrap"><img src="/New%20folder/team/team-atreyu.jpg" alt="Atreyu" loading="lazy" /></div>
+          <div class="team-card__meta"><h3>ATREYU</h3><span>STRATEGY</span></div>
+          <span class="team-card__expand" aria-hidden="true">+</span>
+        </article>
+
+        <article class="team-card" tabindex="0" role="button"
+          data-name="BILLI" data-role="COMMUNITY"
+          data-bio="The heartbeat of the portal. Billi welcomes every new warrior and keeps the energy high around the clock."
+          aria-label="Open BILLI team profile">
+          <div class="team-card__image-wrap"><img src="/New%20folder/team/team-billi.jpg" alt="Billi" loading="lazy" /></div>
+          <div class="team-card__meta"><h3>BILLI</h3><span>COMMUNITY</span></div>
+          <span class="team-card__expand" aria-hidden="true">+</span>
+        </article>
+
+        <article class="team-card" tabindex="0" role="button"
+          data-name="GANBARE" data-role="DESIGN"
+          data-bio="Shapes the look of the legend. Ganbare gives every pixel its glow and every drop its edge."
+          aria-label="Open GANBARE team profile">
+          <div class="team-card__image-wrap"><img src="/New%20folder/team/team-ganbare.jpg" alt="Ganbare" loading="lazy" /></div>
+          <div class="team-card__meta"><h3>GANBARE</h3><span>DESIGN</span></div>
+          <span class="team-card__expand" aria-hidden="true">+</span>
+        </article>
+
+        <article class="team-card" tabindex="0" role="button"
+          data-name="KID" data-role="DEV"
+          data-bio="Builds what others say can't be done. Kid ships the contracts, the site, and the tools that keep us moving."
+          aria-label="Open KID team profile">
+          <div class="team-card__image-wrap"><img src="/New%20folder/team/team-kid.jpg" alt="Kid" loading="lazy" /></div>
+          <div class="team-card__meta"><h3>KID</h3><span>DEV</span></div>
+          <span class="team-card__expand" aria-hidden="true">+</span>
+        </article>
+
+        <article class="team-card" tabindex="0" role="button"
+          data-name="LB" data-role="MARKETING"
+          data-bio="Megaphone of the movement. LB makes sure the whole arena hears the $SAIYAN roar."
+          aria-label="Open LB team profile">
+          <div class="team-card__image-wrap"><img src="/New%20folder/team/team-lb.jpg" alt="LB" loading="lazy" /></div>
+          <div class="team-card__meta"><h3>LB</h3><span>MARKETING</span></div>
+          <span class="team-card__expand" aria-hidden="true">+</span>
+        </article>
+
+        <article class="team-card" tabindex="0" role="button"
+          data-name="MOTHER" data-role="MODERATION"
+          data-bio="Guardian of the community. Mother keeps the space safe, fair, and locked on the mission."
+          aria-label="Open MOTHER team profile">
+          <div class="team-card__image-wrap"><img src="/New%20folder/team/team-mother.jpg" alt="Mother" loading="lazy" /></div>
+          <div class="team-card__meta"><h3>MOTHER</h3><span>MODERATION</span></div>
+          <span class="team-card__expand" aria-hidden="true">+</span>
+        </article>
+
+        <article class="team-card" tabindex="0" role="button"
+          data-name="PAPI" data-role="OPERATIONS"
+          data-bio="Keeps the engine running. Papi handles the behind-the-scenes so the team can stay on offense."
+          aria-label="Open PAPI team profile">
+          <div class="team-card__image-wrap"><img src="/New%20folder/team/team-papi.jpg" alt="Papi" loading="lazy" /></div>
+          <div class="team-card__meta"><h3>PAPI</h3><span>OPERATIONS</span></div>
+          <span class="team-card__expand" aria-hidden="true">+</span>
+        </article>
+
+        <article class="team-card" tabindex="0" role="button"
+          data-name="SNEAKY" data-role="RAIDS"
+          data-bio="First in, last out. Sneaky leads the raids and turns every callout into a wave."
+          aria-label="Open SNEAKY team profile">
+          <div class="team-card__image-wrap"><img src="/New%20folder/team/team-sneaky.jpg" alt="Sneaky" loading="lazy" /></div>
+          <div class="team-card__meta"><h3>SNEAKY</h3><span>RAIDS</span></div>
+          <span class="team-card__expand" aria-hidden="true">+</span>
+        </article>
+
+        <article class="team-card" tabindex="0" role="button"
+          data-name="WISE" data-role="MEMES"
+          data-bio="Lore-keeper and meme-smith. Wise translates the grind into the culture that fuels it."
+          aria-label="Open WISE team profile">
+          <div class="team-card__image-wrap"><img src="/New%20folder/team/team-wise.jpg" alt="Wise" loading="lazy" /></div>
+          <div class="team-card__meta"><h3>WISE</h3><span>MEMES</span></div>
+          <span class="team-card__expand" aria-hidden="true">+</span>
+        </article>
+      </div>
+
+      <button class="team__arrow team__arrow--next" type="button" aria-label="Rotate to next member" data-team-direction="1">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <dialog class="team-dialog" id="team-dialog" aria-labelledby="team-dialog-title">
+      <div class="team-dialog__body">
+        <button class="team-dialog__close" type="button" aria-label="Close team profile">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <div class="team-dialog__image-wrap">
+          <img class="team-dialog__image" src="" alt="" />
+        </div>
+        <div class="team-dialog__meta">
+          <span class="team-dialog__role"></span>
+          <h3 class="team-dialog__name" id="team-dialog-title"></h3>
+          <p class="team-dialog__bio"></p>
+        </div>
+      </div>
+    </dialog>
   </section>
 
   <!-- ═══════════════ HOW TO BUY ═══════════════ -->
