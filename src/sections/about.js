@@ -17,7 +17,7 @@ export function initAbout() {
 
   const tl = gsap.timeline()
 
-  // Eyebrow, text, and rage-face move as one beat so the section feels connected.
+  // Eyebrow, text, and logo move as one beat so the section feels connected.
   tl.fromTo(eyebrow,
     { opacity: 0, y: 18 },
     { opacity: 1, y: 0, duration: 0.18, ease: 'power2.out' },

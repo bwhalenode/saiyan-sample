@@ -3,28 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="$SAIYAN — The moment hidden potential awakens. Super Saiyan memecoin on Ethereum." />
+  <meta name="description" content="$SAIYAN — Awaken your power. The awakening of untapped potential. A community-driven memecoin and mindset for everyday warriors on Ethereum." />
   <meta name="theme-color" content="#050306" />
   <meta name="application-name" content="$SAIYAN" />
-  <meta property="og:title" content="$SAIYAN — Super Saiyan" />
-  <meta property="og:description" content="The moment hidden potential awakens. Super Saiyan memecoin on Ethereum." />
+  <meta property="og:title" content="$SAIYAN — Awaken Your Power" />
+  <meta property="og:description" content="The moment you stop surviving and start transforming — turning pain into power, struggle into strength, and limits into history." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="/images/pre-loader.webp" />
+  <meta property="og:image" content="/images/og-logo.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="$SAIYAN — Super Saiyan" />
-  <meta name="twitter:description" content="The moment hidden potential awakens. Super Saiyan memecoin on Ethereum." />
-  <meta name="twitter:image" content="/images/pre-loader.webp" />
-  <title>$SAIYAN — Super Saiyan</title>
+  <meta name="twitter:title" content="$SAIYAN — Awaken Your Power" />
+  <meta name="twitter:description" content="The moment you stop surviving and start transforming — turning pain into power, struggle into strength, and limits into history." />
+  <meta name="twitter:image" content="/images/og-logo.jpg" />
+  <title>$SAIYAN — Awaken Your Power</title>
 
-  <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="/images/logo.png" />
+  <link rel="apple-touch-icon" href="/images/logo.png" />
   <link rel="manifest" href="/site.webmanifest" />
 
   <link rel="stylesheet" href="/src/style.css" />
 </head>
 <body>
+
+  <!-- ═══════════════ DISCLAIMER STRIP ═══════════════ -->
+  <div class="disclaimer-bar" role="note">
+    <span class="disclaimer-bar__text">
+      Not affiliated with Dragon Ball, Toei Animation, or Akira Toriyama — original, community-driven art &amp; concepts. Invest responsibly.
+    </span>
+  </div>
 
   <!-- Three.js canvas -->
   <canvas id="hero-canvas"></canvas>
@@ -32,7 +37,10 @@
   <!-- ═══════════════ HERO ═══════════════ -->
   <section id="hero" class="section section--hero" data-section="hero">
     <nav class="nav">
-      <a href="#hero" class="nav__brand" data-cursor="hover">$SAIYAN</a>
+      <a href="#hero" class="nav__brand" data-cursor="hover">
+        <img class="nav__logo" src="/images/logo.png" alt="" aria-hidden="true" />
+        <span>$SAIYAN</span>
+      </a>
       <ul class="nav__links" id="nav-links">
         <li><a href="#hero" data-cursor="hover">HOME</a></li>
         <li><a href="#about" data-cursor="hover">ABOUT</a></li>
@@ -48,7 +56,7 @@
     <div class="hero__vignette" aria-hidden="true"></div>
 
     <div class="hero__content">
-      <div class="hero__eyebrow">ETHEREUM · MEMECOIN · CULTURE</div>
+      <div class="hero__eyebrow">AWAKEN YOUR POWER</div>
       <div class="hero__headline-wrap" role="heading" aria-level="1">
         <div class="hero__headline-line-wrap">
           <span class="hero__headline-line" id="hero-line-1">SUPER</span>
@@ -106,20 +114,20 @@
           <span class="about__eyebrow-line" aria-hidden="true"></span>
         </div>
         <div class="about__text" id="about-text">
-          <p>"$SAIYAN is the moment hidden potential awakens.</p>
-          <p>The instant effort becomes acceleration.</p>
-          <p>Conviction compounds into unstoppable momentum.</p>
-          <p>This is the inflection point.</p>
-          <p><strong>Welcome to the next form."</strong></p>
+          <p>Inside every person lies untapped potential — buried under pressure, doubt, and setbacks.</p>
+          <p>$SAIYAN is the awakening of that power. It's the moment you stop surviving and start transforming — turning pain into power, struggle into strength, and limits into history.</p>
+          <p>This is more than a token. It's a mindset. It's a movement for the everyday warriors. Those who get knocked down and rise stronger. Those who choose discipline over comfort. Those who were counted out — but never gave up. Those who choose execution over excuses.</p>
+          <p>$SAIYAN is your reminder that the next version of you is always within reach.</p>
+          <p><strong>Awaken Your Power. Build Your Legacy.</strong></p>
         </div>
       </div>
       <div class="about__image-col">
         <picture>
-          <source srcset="/images/rage-face.webp" type="image/webp" />
+          <source srcset="/images/logo.webp" type="image/webp" />
           <img
             class="about__rage-face"
-            src="/images/rage-face.jpg"
-            alt="Saiyan rage transformation"
+            src="/images/logo.png"
+            alt="$SAIYAN logo"
           />
         </picture>
       </div>
@@ -320,14 +328,16 @@
       </div>
 
       <p class="footer__disclaimer">
-        $SAIYAN is a meme coin with no intrinsic value or expectation of financial return.
-        There is no formal team or roadmap. The coin is completely useless and for entertainment purposes only.
-        Crypto assets are highly speculative. Never invest more than you can afford to lose.
+        $SAIYAN is a fully independent, community-driven memecoin created for entertainment, culture, and speculative investment.
+        It is not affiliated with, endorsed by, or connected to Dragon Ball, Toei Animation, Akira Toriyama, or any related intellectual property.
+        All artwork and concepts are original creations inspired by universal themes of resilience, personal growth, and overcoming adversity.
+        Always invest responsibly. Only risk what you can afford to lose.
       </p>
 
       <div class="footer__rights">
         <p>© 2026 $SAIYAN. All rights reserved.</p>
         <div class="footer__maker">
+          <img class="footer__brand-logo" src="/images/logo.png" alt="$SAIYAN" />
           <img src="/images/B_Whale-logo.png" alt="BWhaleNode" />
           <span>Made by BWhaleNode.</span>
         </div>

@@ -60,7 +60,7 @@ export class AsciiPreloader {
 
     // Pre-load hero textures into browser cache so HeroScene is instant on mount
     ;['/images/hero-1.webp', '/images/hero-1.jpg', '/images/hero-1-mobile.webp',
-      '/images/rage-face.webp', '/images/mid-page.webp'].forEach(src => {
+      '/images/logo.webp', '/images/mid-page.webp'].forEach(src => {
       const img = new Image(); img.src = src
     })
 

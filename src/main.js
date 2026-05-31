@@ -32,7 +32,7 @@ async function bootstrap() {
   preloader.start()
 
   // Kick off assets in the background — DefaultLoadingManager fires events
-  preloadImages(['/images/rage-face.webp', '/images/rage-face.jpg'])
+  preloadImages(['/images/logo.webp', '/images/logo.png'])
   scene.load().catch(err => console.error('[SAIYAN] Scene load error:', err))
 }
 

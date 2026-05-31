@@ -14,7 +14,7 @@ function fmtKB(bytes) {
 }
 
 // Files whose PNG source has an alpha channel — skip JPG output, preserve alpha in WebP
-const ALPHA_NAMES = ['pre-loader']
+const ALPHA_NAMES = ['pre-loader', 'logo']
 
 async function optimise(filePath) {
   const ext       = extname(filePath).toLowerCase()
