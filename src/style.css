@@ -724,6 +724,7 @@ ul { list-style: none; }
   position: relative;
   z-index: 2;
   max-width: 46%;
+  width: 100%;
 }
 
 .about__eyebrow {
@@ -746,19 +747,28 @@ ul { list-style: none; }
   flex-shrink: 0;
 }
 
+/* Stage: paragraphs are stacked + vertically centered; only one shows at a
+   time (driven by the scroll-scrubbed carousel in about.js). Fixed height
+   keeps every line inside the viewport — nothing overflows top or bottom. */
 .about__text {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  height: 56vh;
 }
 
 .about__text p {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
   font-family: var(--font-display);
-  font-size: clamp(22px, 2.8vw, 42px);
-  line-height: 1.1;
+  font-size: clamp(20px, 2.2vw, 34px);
+  line-height: 1.18;
   color: var(--ink);
   letter-spacing: 0.02em;
   opacity: 0;
+  will-change: transform, opacity;
 }
 
 .about__text p strong {
@@ -1239,6 +1249,17 @@ ul { list-style: none; }
   opacity: 0.78;
 }
 
+.footer__maker-link {
+  color: var(--gold);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s, text-shadow 0.2s;
+}
+
+.footer__maker-link:hover {
+  border-bottom-color: var(--gold);
+  text-shadow: 0 0 12px rgba(255, 210, 48, 0.45);
+}
+
 /* ════════════════════════════════════════
    REDUCED MOTION
    ════════════════════════════════════════ */
@@ -1252,8 +1273,19 @@ ul { list-style: none; }
   .hero__headline-line { transform: none !important; }
   .hero__ca { opacity: 1 !important; transform: none !important; }
   .about__eyebrow { opacity: 1 !important; }
-  .about__text p { opacity: 1 !important; }
   .about__image-col { transform: none !important; opacity: 1 !important; }
+
+  /* No carousel — show the copy as a normal, fully readable stack */
+  .about__inner { height: auto !important; min-height: auto !important; overflow: visible !important; }
+  .about__text { position: static !important; height: auto !important; }
+  .about__text p {
+    position: static !important;
+    inset: auto !important;
+    opacity: 1 !important;
+    transform: none !important;
+    display: block !important;
+    margin-bottom: 18px;
+  }
 }
 
 /* ════════════════════════════════════════
@@ -1284,11 +1316,11 @@ ul { list-style: none; }
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    min-height: auto;
-    height: auto;
+    min-height: 100svh;
+    height: 100svh;
     padding: 72px 6vw 64px;
     gap: 18px;
-    overflow: visible;
+    overflow: hidden;
   }
 
   .about__text-col {
@@ -1300,7 +1332,8 @@ ul { list-style: none; }
   }
 
   .about__text {
-    gap: 11px;
+    height: 40vh;
+    max-width: 100%;
   }
 
   .about__image-col {
@@ -1318,7 +1351,7 @@ ul { list-style: none; }
   }
 
   .about__text p {
-    font-size: clamp(20px, 5vw, 32px);
+    font-size: clamp(17px, 4.4vw, 24px);
   }
 
   .tokenomics__cards {
@@ -1333,19 +1366,20 @@ ul { list-style: none; }
     display: none;
   }
 
-  /* Mobile hero: title sits left-middle while character fills the frame */
+  /* Mobile hero: title sits in the upper portion with breathing room while
+     the character silhouette fills the lower half of the frame. */
   .hero__content {
-    top: 33%;
+    top: 15%;
     left: 6vw;
-    transform: translateY(-50%);
-    max-width: 84vw;
-    gap: 12px;
+    transform: none;
+    max-width: 88vw;
+    gap: 14px;
     z-index: 5;
   }
 
   .hero__headline-line {
-    font-size: clamp(66px, 19vw, 116px);
-    line-height: 0.82;
+    font-size: clamp(60px, 17vw, 104px);
+    line-height: 0.84;
   }
 
   /* On mobile the gradient comes from top-down so title has contrast */
@@ -1491,7 +1525,7 @@ ul { list-style: none; }
   }
 
   .about__text p {
-    font-size: clamp(28px, 3.4vw, 40px);
+    font-size: clamp(22px, 2.8vw, 32px);
   }
 
   .about__image-col {
@@ -1520,7 +1554,8 @@ ul { list-style: none; }
 
 @media (min-width: 768px) and (max-width: 900px) {
   .hero__content {
-    top: 38%;
+    top: 16%;
+    transform: none;
     max-width: 78vw;
   }
 

@@ -45,19 +45,19 @@ export function initTimeline(lenis) {
     },
   })
 
-  if (isMobile) {
-    gsap.to('#scroll-hint', {
-      opacity: 0,
-      y: 10,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '#hero',
-        start:   'top top',
-        end:     'bottom 70%',
-        scrub:   0.4,
-      },
-    })
-  }
+  /* ─── Scroll indicator only lives near the top — fade it out once the
+         hero is scrolled past, on every viewport ─── */
+  gsap.to('#scroll-hint', {
+    opacity: 0,
+    y: 10,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#hero',
+      start:   'top top',
+      end:     'bottom 80%',
+      scrub:   0.4,
+    },
+  })
 
   /* ─── Inflection title reveal ─── */
   gsap.to('.inflection__title', {

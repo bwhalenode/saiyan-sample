@@ -20,7 +20,6 @@ export const supportsWebP = await new Promise(resolve => {
 })
 
 const isMobile = () => window.innerWidth < 900 || !window.matchMedia('(hover: hover)').matches
-const isLaptop = () => window.innerWidth >= 900 && window.innerWidth <= 1366
 
 // The camera rests at z=4 after the dolly; plane sizing is computed for this distance
 const FINAL_CAM_Z = 4
@@ -186,24 +185,31 @@ export class HeroScene {
     const viewAspect = window.innerWidth / window.innerHeight
     const visW       = visH * viewAspect
 
-    let planeW, planeH
-    if (this._imageAspect > viewAspect) {
-      // Image wider than viewport — scale to fill height, crop width
-      planeH = visH * 1.1
-      planeW = planeH * this._imageAspect
+    if (isMobile()) {
+      // Portrait: fit the character crop by WIDTH and anchor it to the lower
+      // portion of the hero so the title can sit in the empty space above.
+      const planeW = visW * 1.3
+      const planeH = planeW / this._imageAspect
+      this._plane.scale.set(planeW, planeH, 1)
+
+      // Right-align so the ETH crystal (far right of the crop) stays visible,
+      // cropping the left negative space instead.
+      this._plane.position.x = -(planeW - visW) / 2
+      // Bottom-anchor with a small lift off the very bottom edge.
+      this._plane.position.y = -(visH - planeH) / 2 + visH * 0.05
     } else {
-      // Image taller than viewport — scale to fill width, crop height
-      planeW = visW * 1.1
-      planeH = planeW / this._imageAspect
+      // Desktop: fit by HEIGHT with a light overscale, then right-align so the
+      // full figure + ETH crystal show on the right and only the left negative
+      // space (where the title lives) is cropped.
+      const OVERSCALE  = 1.04
+      const planeH     = visH * OVERSCALE
+      const planeW     = planeH * this._imageAspect
+      this._plane.scale.set(planeW, planeH, 1)
+
+      const rightInset = visW * 0.015
+      this._plane.position.x = -(planeW - visW) / 2 - rightInset
+      this._plane.position.y = 0
     }
-
-    this._plane.scale.set(planeW, planeH, 1)
-
-    // Keep the character balanced through the narrow desktop range before the
-    // full-width composition has enough room for the wider right-side crop.
-    const laptopShift = window.innerWidth <= 1180 ? -0.1 : -0.06
-    this._plane.position.x = isMobile() ? planeW * 0.03 : (isLaptop() ? planeW * laptopShift : 0)
-    this._plane.position.y = isMobile() ? -planeH * 0.04 : 0
 
     if (this._auraMat) {
       this._auraMat.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight)

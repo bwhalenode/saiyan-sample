@@ -14,74 +14,68 @@ export function initAbout() {
   if (!section || !textEl) return
 
   const paras = Array.from(textEl.querySelectorAll('p'))
+  const mob   = isMob()
 
-  const tl = gsap.timeline()
-
-  // Eyebrow, text, and logo move as one beat so the section feels connected.
-  tl.fromTo(eyebrow,
-    { opacity: 0, y: 18 },
-    { opacity: 1, y: 0, duration: 0.18, ease: 'power2.out' },
-    0
-  )
-  tl.fromTo(imgCol,
-    { x: isMob() ? '18%' : '42%', y: isMob() ? 28 : 0, opacity: 0 },
-    { x: '0%', y: 0, opacity: 1, duration: 0.34, ease: 'power2.out' },
-    0
-  )
-  tl.fromTo(paras, {
-    opacity: 0,
-    y: 24,
-  }, {
-    opacity: 1,
-    y: 0,
-    duration: 0.14,
-    stagger: 0.045,
-    ease: 'power2.out',
-  }, 0.06)
-
-  if (isMob()) {
-    ScrollTrigger.create({
-      trigger: section,
-      start:   'top 74%',
-      end:     'bottom 42%',
-      scrub:   0.55,
-      animation: tl,
-    })
-
+  // Reduced motion: skip the pinned carousel; CSS shows the copy as a normal
+  // readable stack. Just kick off the ambient particles.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     initParticles()
-    initAboutExit(section)
     return
   }
 
-  // Exit later on desktop, after the reveal has had a short readable hold.
-  tl.to(imgCol, { y: '-70%', opacity: 0, duration: 0.22, ease: 'power2.in' }, 0.78)
-  tl.to([textEl, eyebrow], { opacity: 0, duration: 0.16 }, 0.84)
+  // ── Frame: eyebrow + logo fade/slide in once and stay for the section ──
+  const intro = gsap.timeline({
+    scrollTrigger: {
+      trigger: section,
+      start:   'top 78%',
+      toggleActions: 'play none none reverse',
+    },
+  })
+  intro.fromTo(eyebrow,
+    { opacity: 0, y: 18 },
+    { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
+    0
+  )
+  intro.fromTo(imgCol,
+    { opacity: 0, x: mob ? '0%' : '34%', y: mob ? 26 : 0 },
+    { opacity: 1, x: '0%', y: 0, duration: 0.7, ease: 'power3.out' },
+    0
+  )
+
+  // ── Paragraph carousel: one line at a time, fully tied to scroll ──
+  // Each paragraph fades + slides in, holds, then fades out as the next
+  // arrives — so only 1 (briefly 2, during the crossfade) is ever visible.
+  gsap.set(paras, { opacity: 0, y: 44 })
+
+  const tl   = gsap.timeline()
+  const dIn  = 0.5
+  const hold = 0.7
+  const dOut = 0.5
+  const step = dIn + hold
+
+  paras.forEach((p, i) => {
+    const t = i * step
+    tl.fromTo(p,
+      { opacity: 0, y: 44 },
+      { opacity: 1, y: 0, duration: dIn, ease: 'power2.out' },
+      t
+    )
+    // Keep the final line on screen as the section is scrolled past.
+    if (i < paras.length - 1) {
+      tl.to(p, { opacity: 0, y: -44, duration: dOut, ease: 'power2.in' }, t + dIn + hold)
+    }
+  })
 
   ScrollTrigger.create({
-    trigger: section,
-    start:   'top top',
-    end:     () => '+=' + window.innerHeight * 0.95,
-    pin:     true,
-    scrub:   0.65,
+    trigger:   section,
+    start:     'top top',
+    end:       () => '+=' + window.innerHeight * (paras.length * (mob ? 0.55 : 0.62)),
+    pin:       true,
+    scrub:     mob ? 0.8 : 0.7,
     animation: tl,
   })
 
   initParticles()
-  initAboutExit(section)
-}
-
-function initAboutExit(section) {
-  gsap.to(section.querySelector('.about__inner'), {
-    opacity: 0,
-    y: -28,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#inflection',
-      start:   'top 92%',
-      end:     'top 58%',
-      scrub:   0.5,
-    },
-  })
 }
 
 function initParticles() {
