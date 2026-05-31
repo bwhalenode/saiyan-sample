@@ -630,64 +630,54 @@ ul { list-style: none; }
 
 .hero__ca-copy-label { font-family: var(--font-mono); }
 
-/* One consistent scroll indicator across all breakpoints: fixed bottom-centre,
-   fades out once the footer scrolls into view (toggled via .is-hidden in JS). */
+/* One consistent scroll indicator on EVERY breakpoint: thin gold lines flanking
+   the word SCROLL, fixed along the bottom row (level with the CA button), and
+   faded out only when the footer scrolls into view (.is-hidden toggled in JS). */
 .hero__scroll-hint {
   position: fixed;
-  bottom: 32px;
+  bottom: 34px;
   left: 0;
   right: 0;
   margin: 0 auto;
-  width: max-content;
+  width: min(62vw, 280px);
   z-index: 130;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 12px;
   font-family: var(--font-mono);
   font-size: 10px;
-  letter-spacing: 0.2em;
-  color: rgba(255, 247, 224, 0.4);
-  animation: scroll-hint-bob 2s ease-in-out infinite;
+  letter-spacing: 0.3em;
+  color: rgba(255, 210, 48, 0.72);
+  text-shadow: 0 0 18px rgba(255, 210, 48, 0.28);
   pointer-events: none;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.45s ease;
+  animation: scroll-hint-bob 2.6s ease-in-out infinite;
 }
+
+.hero__scroll-hint span { white-space: nowrap; }
+
+.hero__scroll-hint::before,
+.hero__scroll-hint::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 210, 48, 0.4);
+  box-shadow: 0 0 12px rgba(255, 210, 48, 0.2);
+}
+
+/* The vertical chevron from the old design is unused in the line layout */
+.hero__scroll-arrow { display: none; }
 
 .hero__scroll-hint.is-hidden {
   opacity: 0;
 }
 
-.hero__scroll-arrow {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-}
-
-.hero__scroll-arrow span,
-.hero__scroll-arrow span::before,
-.hero__scroll-arrow span::after {
-  display: block;
-  width: 8px;
-  height: 8px;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  transform: rotate(45deg);
-}
-
-.hero__scroll-arrow span { position: relative; }
-.hero__scroll-arrow span::before,
-.hero__scroll-arrow span::after {
-  content: '';
-  position: absolute;
-  left: 0;
-}
-.hero__scroll-arrow span::before { top: -6px; opacity: 0.4; }
-.hero__scroll-arrow span::after  { top: 6px; opacity: 0.7; }
-
+/* Transform-based bob — keeps opacity free for the footer fade (.is-hidden) */
 @keyframes scroll-hint-bob {
   0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(6px); }
+  50%      { transform: translateY(4px); }
 }
 
 /* ════════════════════════════════════════
@@ -1642,11 +1632,6 @@ ul { list-style: none; }
       transparent 64%
     );
   }
-}
-
-@keyframes mobile-scroll-pulse {
-  0%, 100% { opacity: 0.62; transform: translateY(0); }
-  50%      { opacity: 1; transform: translateY(6px); }
 }
 
 @media (max-width: 540px) {
