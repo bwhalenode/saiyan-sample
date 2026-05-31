@@ -186,16 +186,15 @@ export class HeroScene {
     const visW       = visH * viewAspect
 
     if (isMobile()) {
-      // Portrait: COVER the full viewport height and right-align so the
-      // character silhouette + ETH crystal fill the screen and stay in frame;
-      // the left (negative space) crops off. Mirrors object-fit: cover with
-      // object-position: right — the hero reads full and powerful on load.
-      const planeH = visH * 1.05
+      // Portrait: fill the viewport HEIGHT with the tight character crop so the
+      // silhouette is large and dominant, biased slightly right so the whole
+      // figure shows with the ETH crystal's glow at the right edge. The empty
+      // left of the source crops off. (object-fit: cover, anchored on the figure.)
+      const planeH = visH * 1.04
       const planeW = planeH * this._imageAspect
       this._plane.scale.set(planeW, planeH, 1)
 
-      const rightInset = visW * 0.04
-      this._plane.position.x = -(planeW - visW) / 2 - rightInset
+      this._plane.position.x = -planeW * 0.065
       this._plane.position.y = 0
     } else {
       // Desktop: fit by HEIGHT with a light overscale, then right-align so the
