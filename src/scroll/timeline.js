@@ -45,19 +45,16 @@ export function initTimeline(lenis) {
     },
   })
 
-  /* ─── Scroll indicator only lives near the top — fade it out once the
-         hero is scrolled past, on every viewport ─── */
-  gsap.to('#scroll-hint', {
-    opacity: 0,
-    y: 10,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#hero',
-      start:   'top top',
-      end:     'bottom 80%',
-      scrub:   0.4,
-    },
-  })
+  /* ─── Scroll indicator: one consistent component on every viewport. Visible
+         from the top, fades out as soon as the footer scrolls into view. ─── */
+  const scrollHint = document.getElementById('scroll-hint')
+  const footerEl   = document.getElementById('footer')
+  if (scrollHint && footerEl) {
+    const hintIO = new IntersectionObserver(([entry]) => {
+      scrollHint.classList.toggle('is-hidden', entry.isIntersecting)
+    }, { threshold: 0 })
+    hintIO.observe(footerEl)
+  }
 
   /* ─── Inflection title reveal ─── */
   gsap.to('.inflection__title', {

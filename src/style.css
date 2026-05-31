@@ -630,13 +630,16 @@ ul { list-style: none; }
 
 .hero__ca-copy-label { font-family: var(--font-mono); }
 
+/* One consistent scroll indicator across all breakpoints: fixed bottom-centre,
+   fades out once the footer scrolls into view (toggled via .is-hidden in JS). */
 .hero__scroll-hint {
-  position: absolute;
+  position: fixed;
   bottom: 32px;
   left: 0;
   right: 0;
   margin: 0 auto;
   width: max-content;
+  z-index: 130;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -647,6 +650,11 @@ ul { list-style: none; }
   color: rgba(255, 247, 224, 0.4);
   animation: scroll-hint-bob 2s ease-in-out infinite;
   pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.hero__scroll-hint.is-hidden {
+  opacity: 0;
 }
 
 .hero__scroll-arrow {
@@ -780,8 +788,15 @@ ul { list-style: none; }
   color: var(--gold);
 }
 
+/* Single inline-flow child of each flex-centered <p>, so words (and the gold
+   $SAIYAN span) stay inline with normal spacing instead of becoming flex items. */
+.about__line {
+  display: block;
+  width: 100%;
+}
+
 /* The $SAIYAN token name is always highlighted gold within the body copy */
-.about__token {
+.gold {
   color: var(--gold);
 }
 
@@ -1386,6 +1401,9 @@ ul { list-style: none; }
   }
 
   .about__rage-face {
+    /* Show the whole circular logo on mobile — contain, never crop the bottom */
+    object-fit: contain;
+    object-position: center;
     mask-image: radial-gradient(ellipse 100% 80% at 50% 50%, black 40%, transparent 90%);
     -webkit-mask-image: radial-gradient(ellipse 100% 80% at 50% 50%, black 40%, transparent 90%);
   }
@@ -1439,34 +1457,6 @@ ul { list-style: none; }
       linear-gradient(to bottom, rgba(5, 3, 6, 0.5) 0%, transparent 32%, rgba(5, 3, 6, 0.72) 100%),
       radial-gradient(ellipse at 76% 58%, transparent 20%, rgba(5, 3, 6, 0.68) 100%);
     opacity: 0.72;
-  }
-
-  .hero__scroll-hint {
-    position: fixed;
-    left: calc(6vw + 72px);
-    right: auto;
-    bottom: calc(36px + env(safe-area-inset-bottom, 0px));
-    z-index: 135;
-    width: min(58vw, 240px);
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    color: rgba(255, 210, 48, 0.74);
-    text-shadow: 0 0 20px rgba(255, 210, 48, 0.32);
-    animation: mobile-scroll-pulse 2.2s ease-in-out infinite;
-  }
-
-  .hero__scroll-hint::before,
-  .hero__scroll-hint::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: rgba(255, 210, 48, 0.46);
-    box-shadow: 0 0 14px rgba(255, 210, 48, 0.22);
-  }
-
-  .hero__scroll-arrow {
-    display: none;
   }
 
   .hero__ca {
@@ -1540,10 +1530,6 @@ ul { list-style: none; }
 
   .hero__vignette {
     opacity: 0.64;
-  }
-
-  .hero__scroll-hint {
-    display: none;
   }
 
   .hero__ca {
