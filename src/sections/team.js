@@ -5,7 +5,8 @@ gsap.registerPlugin(ScrollTrigger)
 
 const AUTO_SPEED   = 7     // degrees per second (slow spin)
 const DEG_PER_PX   = 0.26  // drag sensitivity
-const RESUME_DELAY = 3000  // ms of idle before auto-spin resumes after interaction
+const RESUME_DELAY = 3000  // ms idle before auto-spin resumes after interaction
+const DRAG_THRESH  = 6     // px before a press becomes a drag
 
 export function initTeam() {
   const section = document.getElementById('team')
@@ -23,16 +24,15 @@ export function initTeam() {
 
   const dImg  = dialog?.querySelector('.team-dialog__image')
   const dName = dialog?.querySelector('.team-dialog__name')
-  const dRole = dialog?.querySelector('.team-dialog__role')
-  const dBio  = dialog?.querySelector('.team-dialog__bio')
 
   let radius      = 440
   let rotation    = 0
-  let target      = null    // when set, ease toward it (arrow / drag-snap)
+  let target      = null
   let autoPaused  = false
   let resumeTimer = null
   let inView      = false
   let hovering    = false
+  let pointerDown = false
   let dragging    = false
   let pointerId   = null
   let startX      = 0
@@ -41,13 +41,14 @@ export function initTeam() {
   let raf         = null
   let prev        = performance.now()
 
-  /* Place cards evenly around the ring; radius derived from card width so they
-     don't overlap regardless of viewport size. */
+  /* Place cards on the wall of a cylinder, facing INWARD toward the centre
+     (translateZ is negative) so the viewer looks at it from the inside: the
+     front card is on the far wall and the sides curve toward you. */
   function layout() {
     const w = cards[0].getBoundingClientRect().width || 240
-    radius = Math.round((w * 1.22) / (2 * Math.tan(Math.PI / N)))
+    radius = Math.round((w * 1.18) / (2 * Math.tan(Math.PI / N)))
     cards.forEach((card, i) => {
-      card.style.transform = `rotateY(${i * step}deg) translateZ(${radius}px)`
+      card.style.transform = `rotateY(${i * step}deg) translateZ(${-radius}px)`
     })
   }
 
@@ -58,20 +59,26 @@ export function initTeam() {
     return a
   }
 
-  function apply() {
+  function applyRotation() {
     ring.style.transform = `translate(-50%, -50%) rotateY(${rotation}deg)`
   }
 
-  /* Per-frame: dim/hide cards by how far they face away; mark the front one. */
+  /* Per-frame: fade / disable the cards that have wrapped around behind us. */
   function updateCards() {
     cards.forEach((card, i) => {
       const facing = norm(i * step + rotation)
       const af     = Math.abs(facing)
-      const front  = af <= 90
-      const t      = front ? Math.cos(facing * Math.PI / 180) : 0
-      card.style.opacity      = front ? (0.22 + 0.78 * t).toFixed(3) : '0'
-      card.style.pointerEvents = af < 68 ? 'auto' : 'none'
-      card.style.zIndex        = String(Math.round(200 - af))
+      if (af >= 90) {
+        card.style.opacity = '0'
+        card.style.pointerEvents = 'none'
+        card.style.zIndex = '0'
+        card.classList.remove('is-active')
+        return
+      }
+      const t = Math.cos(facing * Math.PI / 180)        // 1 front → 0 at the sides
+      card.style.opacity = (af < 58 ? 1 : (90 - af) / 32).toFixed(3)
+      card.style.pointerEvents = af < 60 ? 'auto' : 'none'
+      card.style.zIndex = String(Math.round(100 + (1 - t) * 100))  // near (side) cards on top
       card.classList.toggle('is-active', af < step / 2)
     })
   }
@@ -84,7 +91,6 @@ export function initTeam() {
   function tick(now) {
     const dt = Math.min((now - prev) / 1000, 0.05)
     prev = now
-
     if (target !== null) {
       rotation += (target - rotation) * Math.min(1, dt * 7)
       if (Math.abs(target - rotation) < 0.06) { rotation = target; target = null }
@@ -93,8 +99,7 @@ export function initTeam() {
     }
     if (rotation > 360)  rotation -= 360
     if (rotation < -360) rotation += 360
-
-    apply()
+    applyRotation()
     updateCards()
     raf = requestAnimationFrame(tick)
   }
@@ -117,8 +122,6 @@ export function initTeam() {
     dImg.src = img?.currentSrc || img?.src || ''
     dImg.alt = card.dataset.name || ''
     if (dName) dName.textContent = card.dataset.name || ''
-    if (dRole) { dRole.textContent = card.dataset.role || ''; dRole.hidden = !card.dataset.role }
-    if (dBio)  dBio.textContent  = card.dataset.bio || ''
     dialog.showModal()
   }
 
@@ -129,7 +132,7 @@ export function initTeam() {
 
   cards.forEach(card => {
     card.addEventListener('click', () => {
-      if (Math.abs(dragDelta) > 8) return   // ignore the click that ends a drag
+      if (Math.abs(dragDelta) > DRAG_THRESH) return   // ignore the drag-end click
       openCard(card)
     })
     card.addEventListener('keydown', e => {
@@ -141,35 +144,43 @@ export function initTeam() {
   stage.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse' && !dragging) hovering = false })
 
   stage.addEventListener('pointerdown', e => {
-    pointerId = e.pointerId
-    dragging  = true
-    startX    = e.clientX
-    startRot  = rotation
-    dragDelta = 0
-    target    = null
-    stage.classList.add('is-dragging')
-    stage.setPointerCapture?.(pointerId)
+    pointerDown = true
+    pointerId   = e.pointerId
+    startX      = e.clientX
+    startRot    = rotation
+    dragDelta   = 0
+    dragging    = false
+    target      = null
   })
 
   stage.addEventListener('pointermove', e => {
-    if (!dragging || e.pointerId !== pointerId) return
+    if (!pointerDown || e.pointerId !== pointerId) return
     dragDelta = e.clientX - startX
-    rotation  = startRot + dragDelta * DEG_PER_PX
+    if (!dragging && Math.abs(dragDelta) > DRAG_THRESH) {
+      dragging = true
+      stage.classList.add('is-dragging')
+      stage.setPointerCapture?.(pointerId)   // capture only once dragging starts
+    }
+    if (dragging) rotation = startRot + dragDelta * DEG_PER_PX
   })
 
-  function endDrag(e) {
-    if (!dragging || e.pointerId !== pointerId) return
-    dragging = false
-    stage.classList.remove('is-dragging')
-    stage.releasePointerCapture?.(pointerId)
+  function endPointer(e) {
+    if (!pointerDown || e.pointerId !== pointerId) return
+    pointerDown = false
+    if (dragging) {
+      dragging = false
+      stage.classList.remove('is-dragging')
+      stage.releasePointerCapture?.(pointerId)
+      target = Math.round(rotation / step) * step    // snap to nearest member
+      pauseThenResume()
+      setTimeout(() => { dragDelta = 0 }, 0)
+    } else if (e.pointerType === 'mouse') {
+      hovering = stage.matches(':hover')
+    }
     pointerId = null
-    if (e.pointerType === 'mouse') hovering = stage.matches(':hover')
-    target = Math.round(rotation / step) * step   // snap to nearest member
-    pauseThenResume()
-    setTimeout(() => { dragDelta = 0 }, 0)
   }
-  stage.addEventListener('pointerup', endDrag)
-  stage.addEventListener('pointercancel', endDrag)
+  stage.addEventListener('pointerup', endPointer)
+  stage.addEventListener('pointercancel', endPointer)
 
   stage.addEventListener('keydown', e => {
     if (e.key === 'ArrowLeft')  { e.preventDefault(); nudge(-1) }
@@ -183,12 +194,11 @@ export function initTeam() {
     { threshold: 0.05 }).observe(section)
 
   layout()
-  apply()
+  applyRotation()
   updateCards()
   raf = requestAnimationFrame(tick)
-  window.addEventListener('resize', layout, { passive: true })
+  window.addEventListener('resize', () => { layout(); updateCards() }, { passive: true })
 
-  /* Entrance reveals (opacity only on the stage so the 3D perspective is intact) */
   gsap.fromTo('.team__header',
     { opacity: 0, y: 36 },
     { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
