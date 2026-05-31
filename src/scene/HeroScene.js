@@ -191,18 +191,19 @@ export class HeroScene {
     const visW       = visH * viewAspect
 
     if (isMobile()) {
-      // Portrait phones: cover the viewport (scale up if the near-square crop
-      // would otherwise be narrower than the viewport, so there are never empty
-      // bars), then anchor on the CHARACTER — not the right edge — so the full
-      // figure stays large and roughly centered/right-of-centre. The ETH crystal
-      // may sit partly off the right edge; the character is the priority.
+      // Portrait phones: scale the character down to ~74% of full cover so it
+      // doesn't fill the screen edge-to-edge, and push it into the lower 2/3 so
+      // the title has clean breathing room up top. Some dark background showing
+      // around the figure is intentional here. Anchored on the CHARACTER (not the
+      // right edge) so the full figure stays in frame; crystal may sit partly off.
+      const SIZE       = 0.74
       const coverScale = Math.max(visW / (visH * this._imageAspect), 1)
-      const planeH     = visH * 1.04 * coverScale
+      const planeH     = visH * 1.04 * coverScale * SIZE
       const planeW     = planeH * this._imageAspect
       this._plane.scale.set(planeW, planeH, 1)
 
       this._plane.position.x = -planeW * 0.065   // character-anchored shift
-      this._plane.position.y = 0
+      this._plane.position.y = -visH * 0.12      // sit lower, clear of the title
     } else {
       // Desktop: fit by HEIGHT (landscape art always covers width), then pin the
       // right edge so the figure + crystal stay framed and only the left
