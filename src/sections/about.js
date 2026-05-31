@@ -36,27 +36,51 @@ export function initAbout() {
     { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' },
     0
   )
-  intro.fromTo(imgCol,
-    { opacity: 0, x: mob ? '0%' : '34%', y: mob ? 26 : 0 },
-    { opacity: 1, x: '0%', y: 0, duration: 0.7, ease: 'power3.out' },
-    0
-  )
+  if (mob) {
+    gsap.set(imgCol, { opacity: 0, y: 26 })
+  } else {
+    intro.fromTo(imgCol,
+      { opacity: 0, x: '34%' },
+      { opacity: 1, x: '0%', duration: 0.7, ease: 'power3.out' },
+      0
+    )
+  }
 
   // ── Paragraph carousel: strictly ONE line at a time ──
   // Each paragraph fades+slides in, holds, then fully fades out. The next one
   // only begins after a gap — so the previous line is at opacity 0 before the
   // next appears. The segments never overlap, so two are never visible at once.
   gsap.set(paras, { opacity: 0, y: 44 })
+  if (mob && paras[0]) {
+    gsap.set(paras[0], { opacity: 1, y: 0 })
+  }
 
-  const tl   = gsap.timeline()
+  const tl   = gsap.timeline({ paused: true })
   const dIn  = 0.5
   const hold = 0.8
   const dOut = 0.5
   const gap  = 0.3                       // empty beat between paragraphs
   const step = dIn + hold + dOut + gap   // full, non-overlapping segment
 
+  if (mob) {
+    tl.fromTo(imgCol,
+      { opacity: 0, y: 26 },
+      { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out' },
+      0.35
+    )
+  }
+
   paras.forEach((p, i) => {
     const t = i * step
+    if (mob && i === 0) {
+      tl.fromTo(p,
+        { opacity: 1, y: 0 },
+        { opacity: 0, y: -44, duration: dOut, ease: 'power2.in' },
+        t + dIn + hold
+      )
+      return
+    }
+
     tl.fromTo(p,
       { opacity: 0, y: 44 },
       { opacity: 1, y: 0, duration: dIn, ease: 'power2.out' },
@@ -67,6 +91,18 @@ export function initAbout() {
       tl.to(p, { opacity: 0, y: -44, duration: dOut, ease: 'power2.in' }, t + dIn + hold)
     }
   })
+
+  if (mob && paras.length) {
+    const outroStart = (paras.length - 1) * step + dIn + hold
+    tl.to(paras[paras.length - 1],
+      { opacity: 0, y: -44, duration: dOut, ease: 'power2.in' },
+      outroStart
+    )
+    tl.to([imgCol, eyebrow],
+      { opacity: 0, y: -16, duration: 0.7, ease: 'power2.in' },
+      outroStart + 0.12
+    )
+  }
 
   ScrollTrigger.create({
     trigger:   section,

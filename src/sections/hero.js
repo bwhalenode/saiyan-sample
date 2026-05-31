@@ -45,6 +45,7 @@ export function revealHero(scene) {
     if (prefersReduced) {
       gsap.set(['#hero-line-1', '#hero-line-2'], { y: 0 })
       gsap.set('#hero-ca-bar', { opacity: 1, y: 0 })
+      document.getElementById('scroll-hint')?.classList.add('is-visible')
       resolve()
       return
     }
@@ -53,7 +54,7 @@ export function revealHero(scene) {
     const tl   = gsap.timeline({ onComplete: resolve })
 
     /* Nav slides down while the dolly plays */
-    tl.from('.nav__brand, .nav__links a', {
+    tl.from('.nav__brand, .nav__links a, .nav__socials a', {
       opacity: 0,
       y: -14,
       stagger: 0.05,
@@ -95,12 +96,10 @@ export function revealHero(scene) {
       ease: 'power3.out',
     }, '+=0.4')
 
-    /* Scroll hint fades in alongside CA bar */
-    tl.from('#scroll-hint', {
-      opacity: 0,
-      y: 8,
-      duration: 0.6,
-      ease: 'power2.out',
-    }, mobile ? lineStart + 0.25 : '<')
+    /* Scroll indicator enters with the CA circle, then stays visible until the
+       footer observer in timeline.js hides it. */
+    tl.call(() => {
+      document.getElementById('scroll-hint')?.classList.add('is-visible')
+    }, null, '<')
   })
 }
