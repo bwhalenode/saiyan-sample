@@ -6,6 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "lint": "eslint src scripts eslint.config.js",
     "optimize:images": "node scripts/optimize-images.js"
   },
   "dependencies": {
@@ -14,6 +15,9 @@
     "three": "^0.169.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "eslint": "^9.39.4",
+    "globals": "^17.6.0",
     "sharp": "^0.34.5",
     "vite": "^5.4.10"
   }

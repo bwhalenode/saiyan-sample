@@ -10,7 +10,6 @@ import { initHero, revealHero } from './sections/hero.js'
 import { initAbout }       from './sections/about.js'
 import { initTokenomics }  from './sections/tokenomics.js'
 import { initTeam }        from './sections/team.js'
-import { initHowToBuy }    from './sections/howtobuy.js'
 import { initFooter }      from './sections/footer.js'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -20,19 +19,21 @@ async function bootstrap() {
 
   const canvas = document.getElementById('hero-canvas')
 
-  // Preloader must be constructed BEFORE HeroScene so DefaultLoadingManager
-  // callbacks are registered before any texture loads begin.
+  // The preloader runs its own timed reveal animation and calls onComplete when
+  // it finishes; finishInit() then takes over and reveals the hero.
   const preloader = new AsciiPreloader({
     onComplete: () => finishInit(lenis, scene),
   })
 
-  // Create scene (may trigger top-level-await WebP probe, not a texture load)
+  // Create scene (constructor only sets up the renderer; no textures yet).
   const scene = new HeroScene(canvas)
 
-  // Start the preloader visual reveal
+  // Start the preloader's visual reveal.
   preloader.start()
 
-  // Kick off assets in the background — DefaultLoadingManager fires events
+  // Load the WebGL textures while the preloader plays. We intentionally do NOT
+  // await this here — the preloader's own animation gates when finishInit runs,
+  // and the scene is ready well before that. Errors are logged, not fatal.
   preloadImages(['/images/logo.webp', '/images/logo.png'])
   scene.load().catch(err => console.error('[SAIYAN] Scene load error:', err))
 }
@@ -53,7 +54,6 @@ async function finishInit(lenis, scene) {
   initAbout()
   initTokenomics()
   initTeam()
-  initHowToBuy()
   initFooter()
 
   // Register all scroll-driven animations
