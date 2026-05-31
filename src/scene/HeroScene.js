@@ -113,20 +113,25 @@ export class HeroScene {
     this._composer.addPass(new OutputPass())
   }
 
+  /* ── Hero texture URL for the given mobile/desktop state (WebP w/ jpg fallback) ── */
+  _texUrl(mob) {
+    return mob
+      ? (supportsWebP ? '/images/hero-1-mobile.webp' : '/images/hero-1.jpg')
+      : (supportsWebP ? '/images/hero-1.webp'        : '/images/hero-1.jpg')
+  }
+
   /* ── Async asset load — awaited by main.js before hiding preloader ── */
   async load(onProgress = () => {}) {
     onProgress(0.05)
 
     // ── Texture ──
-    const loader = new THREE.TextureLoader()
-    const mob    = isMobile()
-    const texUrl = mob
-      ? (supportsWebP ? '/images/hero-1-mobile.webp' : '/images/hero-1.jpg')
-      : (supportsWebP ? '/images/hero-1.webp'        : '/images/hero-1.jpg')
+    this._loader      = new THREE.TextureLoader()
+    this._isMobileTex = isMobile()
+    const texUrl      = this._texUrl(this._isMobileTex)
 
     let tex
     try {
-      tex = await loader.loadAsync(texUrl)
+      tex = await this._loader.loadAsync(texUrl)
       tex.colorSpace = THREE.SRGBColorSpace
     } catch (err) {
       console.warn('[HeroScene] texture load failed, using placeholder:', err)
@@ -186,27 +191,29 @@ export class HeroScene {
     const visW       = visH * viewAspect
 
     if (isMobile()) {
-      // Portrait: fill the viewport HEIGHT with the tight character crop so the
-      // silhouette is large and dominant, biased slightly right so the whole
-      // figure shows with the ETH crystal's glow at the right edge. The empty
-      // left of the source crops off. (object-fit: cover, anchored on the figure.)
-      const planeH = visH * 1.04
-      const planeW = planeH * this._imageAspect
+      // Portrait phones: cover the viewport (scale up if the near-square crop
+      // would otherwise be narrower than the viewport, so there are never empty
+      // bars), then anchor on the CHARACTER — not the right edge — so the full
+      // figure stays large and roughly centered/right-of-centre. The ETH crystal
+      // may sit partly off the right edge; the character is the priority.
+      const coverScale = Math.max(visW / (visH * this._imageAspect), 1)
+      const planeH     = visH * 1.04 * coverScale
+      const planeW     = planeH * this._imageAspect
       this._plane.scale.set(planeW, planeH, 1)
 
-      this._plane.position.x = -planeW * 0.065
+      this._plane.position.x = -planeW * 0.065   // character-anchored shift
       this._plane.position.y = 0
     } else {
-      // Desktop: fit by HEIGHT with a light overscale, then right-align so the
-      // full figure + ETH crystal show on the right and only the left negative
-      // space (where the title lives) is cropped.
+      // Desktop: fit by HEIGHT (landscape art always covers width), then pin the
+      // right edge so the figure + crystal stay framed and only the left
+      // negative space (where the title lives) is cropped.
       const OVERSCALE  = 1.04
       const planeH     = visH * OVERSCALE
       const planeW     = planeH * this._imageAspect
       this._plane.scale.set(planeW, planeH, 1)
 
       const rightInset = visW * 0.015
-      this._plane.position.x = -(planeW - visW) / 2 - rightInset
+      this._plane.position.x = (visW - planeW) / 2 - rightInset   // same right-edge anchor
       this._plane.position.y = 0
     }
 
@@ -285,7 +292,34 @@ export class HeroScene {
     this._renderer.setSize(w, h)
     this._renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this._composer.setSize(w, h)
+
+    // Swap the hero texture only when the mobile/desktop state actually flips,
+    // so dragging across the 900px breakpoint loads the correctly-framed crop.
+    const mob = isMobile()
+    if (this._isMobileTex !== undefined && mob !== this._isMobileTex) {
+      this._isMobileTex = mob
+      this._swapTexture(mob)
+    }
+
     this._updatePlaneSizing()
+  }
+
+  /* ── Swap hero texture when crossing the mobile/desktop breakpoint ── */
+  async _swapTexture(mob) {
+    if (!this._loader || !this._auraMat) return
+    try {
+      const tex = await this._loader.loadAsync(this._texUrl(mob))
+      tex.colorSpace = THREE.SRGBColorSpace
+      const prev = this._auraMat.uniforms.uTexture.value
+      this._auraMat.uniforms.uTexture.value = tex
+      const iw = tex.image?.naturalWidth  || tex.image?.width  || 512
+      const ih = tex.image?.naturalHeight || tex.image?.height || 900
+      this._imageAspect = iw / ih
+      prev?.dispose?.()
+      this._updatePlaneSizing()
+    } catch (err) {
+      console.warn('[HeroScene] texture swap failed:', err)
+    }
   }
 
   /* ── Expose camera for GSAP dolly in hero.js ── */
