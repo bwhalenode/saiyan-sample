@@ -195,7 +195,7 @@ export class AsciiPreloader {
     if (this._loaded) {
       // Page behind is ready → invite the tap.
       this._armed = true
-      this._prompt.textContent = 'TAP TO TRANSFORM'
+      this._prompt.textContent = 'TAP TO AWAKEN'
       this._prompt.classList.remove('is-loading')
       this._prompt.classList.add('is-ready')
       this._hudBot.style.transition = 'opacity 0.4s ease'
