@@ -1193,14 +1193,17 @@ ul { list-style: none; }
   color: rgba(255, 210, 48, 0.6);
 }
 
-/* ── Flat focal carousel (no 3D, so cards never overlap on any device) ── */
+/* ── 3D ring carousel: a circle of cards that slowly rotates; each card turns
+   to show a branded back as it passes around the far side. ── */
 .team__stage {
-  --team-card-w: clamp(248px, 23vw, 340px);
+  --team-card-w: clamp(228px, 21vw, 312px);
   --team-card-h: calc(var(--team-card-w) * 1.26);
   position: relative;
   z-index: 1;
   width: 100%;
   height: clamp(500px, 66vh, 720px);
+  perspective: 1500px;
+  perspective-origin: 50% 50%;
   user-select: none;
   touch-action: pan-y;
   cursor: grab;
@@ -1213,38 +1216,69 @@ ul { list-style: none; }
   outline-offset: -2px;
 }
 
-/* Full-size layer; cards are positioned relative to its centre. */
+/* Card-sized box centred in the stage; the cards orbit around it in 3D. */
 .team__ring {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.team-card {
   position: absolute;
   top: 50%;
   left: 50%;
   width: var(--team-card-w);
   height: var(--team-card-h);
+  transform-style: preserve-3d;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  pointer-events: none;          /* clicks fall through to the cards */
+}
+
+/* The card is only a 3D container — no overflow/box styling here, because
+   overflow:hidden would flatten preserve-3d. JS sets rotateY()+translateZ(). */
+.team-card {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  will-change: transform, opacity;
+}
+
+/* Front (image) + back (branded) faces */
+.team-card__image-wrap,
+.team-card__back {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
   border: 1px solid rgba(255, 210, 48, 0.2);
   border-radius: 8px;
   background: #020103;
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
-  cursor: pointer;
-  will-change: transform, opacity;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
-.team-card.is-active {
-  border-color: rgba(255, 210, 48, 0.62);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55), 0 0 34px rgba(255, 210, 48, 0.18);
+.team-card__back {
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  border-color: rgba(255, 210, 48, 0.32);
+  background:
+    radial-gradient(ellipse at 50% 38%, rgba(255, 210, 48, 0.14) 0%, transparent 68%),
+    linear-gradient(160deg, #0b0708 0%, #020103 100%);
 }
 
-.team-card__image-wrap {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.team-card__back img {
+  width: 40%;
+  max-width: 120px;
+  opacity: 0.92;
+  filter: drop-shadow(0 0 18px rgba(255, 210, 48, 0.45));
+}
+
+.team-card__back span {
+  font-family: var(--font-brand);
+  font-size: clamp(16px, 1.4vw, 22px);
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  text-shadow: 0 0 16px rgba(255, 210, 48, 0.5);
 }
 
 .team-card img {
@@ -1254,10 +1288,16 @@ ul { list-style: none; }
   pointer-events: none;
 }
 
+.team-card.is-active .team-card__image-wrap {
+  border-color: rgba(255, 210, 48, 0.62);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55), 0 0 34px rgba(255, 210, 48, 0.18);
+}
+
 .team-card__expand {
   position: absolute;
   top: 11px;
   right: 13px;
+  z-index: 2;
   width: 26px;
   height: 26px;
   display: grid;
@@ -1272,6 +1312,8 @@ ul { list-style: none; }
   opacity: 0;
   transition: opacity 0.3s;
   pointer-events: none;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .team-card.is-active .team-card__expand { opacity: 0.92; }
@@ -1844,9 +1886,9 @@ ul { list-style: none; }
   }
 
   .team__stage {
-    --team-card-w: clamp(200px, 60vw, 270px);
-    height: clamp(420px, 58vh, 540px);
-    perspective: 900px;
+    --team-card-w: clamp(168px, 52vw, 230px);
+    height: clamp(440px, 60vh, 560px);
+    perspective: 980px;
   }
 
   .team__arrow {

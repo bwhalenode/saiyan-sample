@@ -3,10 +3,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const AUTO_INTERVAL = 3400  // ms between auto-advances
-const RESUME_DELAY  = 3000  // ms idle before auto-advance resumes after interaction
-const DRAG_THRESH   = 6     // px before a press becomes a drag
-const VISIBLE       = 2.2   // how many cards each side stay rendered
+const AUTO_SPEED   = 7      // degrees / second (slow spin)
+const DEG_PER_PX   = 0.26   // drag sensitivity
+const RESUME_DELAY = 3000   // ms idle before auto-spin resumes after interaction
+const DRAG_THRESH  = 6      // px before a press becomes a drag
+const RADIUS_K     = 1.9    // ring radius as a multiple of card width
+const TILT         = 17     // degrees the ring leans toward the viewer (reveals the back arc)
 
 export function initTeam() {
   const section = document.getElementById('team')
@@ -19,96 +21,113 @@ export function initTeam() {
   if (!section || !stage || !ring || !cards.length) return
 
   const N       = cards.length
+  const step    = 360 / N
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
 
   const dImg  = dialog?.querySelector('.team-dialog__image')
   const dName = dialog?.querySelector('.team-dialog__name')
 
-  let spacing     = 300   // px between adjacent card centres (set in measure())
-  let pos         = 0     // current (eased) carousel position, in card units
-  let target      = 0     // snap target, in card units
-  let autoTimer   = null
-  let resumeAt    = 0
+  // Give each card a branded back face so it reads as a real card turning
+  // around the ring (front = member art, back = $SAIYAN mark).
+  cards.forEach(card => {
+    if (!card.querySelector('.team-card__back')) {
+      const back = document.createElement('div')
+      back.className = 'team-card__back'
+      back.setAttribute('aria-hidden', 'true')
+      back.innerHTML = '<img src="/images/logo.png" alt="" /><span>$SAIYAN</span>'
+      card.appendChild(back)
+    }
+  })
+
+  let radius      = 480
+  let rotation    = 0
+  let target      = null   // when set, ease toward it (arrow / tap-to-front / drag-snap)
+  let autoPaused  = false
+  let resumeTimer = null
   let inView      = false
   let hovering    = false
   let pointerDown = false
   let dragging    = false
   let pointerId   = null
   let startX      = 0
-  let startPos    = 0
+  let startRot    = 0
   let dragDelta   = 0
   let raf         = null
   let prev        = performance.now()
 
-  /* Spacing is a touch WIDER than a card so the focal card and its neighbours
-     never overlap — neighbours just peek in from the sides (and sit off-screen
-     on narrow phones, leaving a single clean card). */
-  function measure() {
+  function layout() {
     const w = cards[0].getBoundingClientRect().width || 240
-    spacing = w * 1.04
-  }
-
-  // Shortest signed distance from the focal position, wrapping around the ring.
-  function wrapDelta(d) {
-    d = ((d % N) + N) % N
-    if (d > N / 2) d -= N
-    return d
-  }
-
-  function render() {
+    radius = Math.round(w * RADIUS_K)
     cards.forEach((card, i) => {
-      const d  = wrapDelta(i - pos)
-      const ad = Math.abs(d)
-      if (ad > VISIBLE) {
-        card.style.opacity = '0'
-        card.style.pointerEvents = 'none'
-        card.style.zIndex = '0'
-        card.classList.remove('is-active')
-        return
-      }
-      const x     = d * spacing
-      const scale = Math.max(0.7, 1 - ad * 0.16)
-      const op    = Math.max(0, 1 - ad * 0.5)
-      card.style.transform = `translate(-50%, -50%) translateX(${x.toFixed(1)}px) scale(${scale.toFixed(3)})`
-      card.style.opacity = op.toFixed(3)
-      card.style.pointerEvents = 'auto'
-      card.style.zIndex = String(Math.round(100 - ad * 10))
-      card.classList.toggle('is-active', ad < 0.5)
+      card.style.transform = `rotateY(${i * step}deg) translateZ(${radius}px)`
     })
+  }
+
+  function norm(a) {
+    a %= 360
+    if (a > 180)  a -= 360
+    if (a < -180) a += 360
+    return a
+  }
+
+  function applyRotation() {
+    ring.style.transform = `translate(-50%, -50%) rotateX(${TILT}deg) rotateY(${rotation}deg)`
+  }
+
+  /* Every card stays rendered (so you see the whole circle, fronts on the near
+     side and backs wrapping around the far side). Depth = z-index + a gentle dim. */
+  function updateCards() {
+    cards.forEach((card, i) => {
+      const facing = norm(i * step + rotation)
+      const c = Math.cos(facing * Math.PI / 180)      // 1 = front, -1 = back
+      card.style.zIndex  = String(Math.round(200 + c * 100))
+      card.style.opacity = (0.45 + 0.55 * ((c + 1) / 2)).toFixed(3)
+      card.classList.toggle('is-active', Math.abs(facing) < step / 2)
+    })
+  }
+
+  function spinAllowed() {
+    return inView && !hovering && !dragging && !autoPaused &&
+           !reduced.matches && !(dialog && dialog.open)
   }
 
   function tick(now) {
     const dt = Math.min((now - prev) / 1000, 0.05)
     prev = now
-    if (!dragging) {
-      pos += (target - pos) * Math.min(1, dt * 6)
-      if (Math.abs(target - pos) < 0.0005) pos = target
+    if (target !== null) {
+      rotation += (target - rotation) * Math.min(1, dt * 7)
+      if (Math.abs(target - rotation) < 0.05) { rotation = target; target = null }
+    } else if (spinAllowed()) {
+      rotation += AUTO_SPEED * dt
     }
-    render()
+    if (rotation > 360)  rotation -= 360
+    if (rotation < -360) rotation += 360
+    applyRotation()
+    updateCards()
     raf = requestAnimationFrame(tick)
   }
 
-  function canAuto() {
-    return inView && !hovering && !dragging && !reduced.matches &&
-           !(dialog && dialog.open) && Date.now() > resumeAt
+  function pauseThenResume() {
+    autoPaused = true
+    clearTimeout(resumeTimer)
+    resumeTimer = setTimeout(() => { autoPaused = false }, RESUME_DELAY)
   }
 
-  function scheduleAuto() {
-    clearInterval(autoTimer)
-    autoTimer = setInterval(() => { if (canAuto()) target += 1 }, AUTO_INTERVAL)
+  function nudge(dir) {
+    const base = target ?? rotation
+    target = base + dir * step
+    pauseThenResume()
   }
 
-  function pause() { resumeAt = Date.now() + RESUME_DELAY }
-
-  // Bring card i to the front by the shortest path; returns the unbounded target.
-  function targetForCard(i) {
-    const base = Math.round(target)
-    return base + wrapDelta(i - base)
+  // Rotate so card i faces front (shortest path).
+  function bringToFront(i) {
+    target = rotation - norm(i * step + rotation)
+    pauseThenResume()
   }
 
   function openCard(card) {
     if (!dialog || !dImg) return
-    const img = card.querySelector('img')
+    const img = card.querySelector('.team-card__image-wrap img')
     dImg.src = img?.currentSrc || img?.src || ''
     dImg.alt = card.dataset.name || ''
     if (dName) dName.textContent = card.dataset.name || ''
@@ -117,14 +136,14 @@ export function initTeam() {
 
   /* ── Interactions ── */
   arrows.forEach(a => {
-    a.addEventListener('click', () => { target = Math.round(target) + (Number(a.dataset.teamDirection) || 1); pause() })
+    a.addEventListener('click', () => nudge(Number(a.dataset.teamDirection) || 1))
   })
 
   cards.forEach((card, i) => {
     card.addEventListener('click', () => {
-      if (Math.abs(dragDelta) > DRAG_THRESH) return        // ignore the drag-end click
-      if (Math.abs(wrapDelta(i - pos)) < 0.5) openCard(card) // focal card → open
-      else { target = targetForCard(i); pause() }            // side card → bring to front
+      if (Math.abs(dragDelta) > DRAG_THRESH) return     // ignore the drag-end click
+      if (Math.abs(norm(i * step + rotation)) < step / 2) openCard(card)  // front card → open
+      else bringToFront(i)                                                // others → spin to front
     })
     card.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(card) }
@@ -138,9 +157,10 @@ export function initTeam() {
     pointerDown = true
     pointerId   = e.pointerId
     startX      = e.clientX
-    startPos    = pos
+    startRot    = rotation
     dragDelta   = 0
     dragging    = false
+    target      = null
   })
 
   stage.addEventListener('pointermove', e => {
@@ -151,7 +171,7 @@ export function initTeam() {
       stage.classList.add('is-dragging')
       stage.setPointerCapture?.(pointerId)
     }
-    if (dragging) pos = startPos - dragDelta / spacing
+    if (dragging) rotation = startRot + dragDelta * DEG_PER_PX
   })
 
   function endPointer(e) {
@@ -161,8 +181,8 @@ export function initTeam() {
       dragging = false
       stage.classList.remove('is-dragging')
       stage.releasePointerCapture?.(pointerId)
-      target = Math.round(pos)
-      pause()
+      target = Math.round(rotation / step) * step    // snap to nearest member
+      pauseThenResume()
       setTimeout(() => { dragDelta = 0 }, 0)
     } else if (e.pointerType === 'mouse') {
       hovering = stage.matches(':hover')
@@ -173,8 +193,8 @@ export function initTeam() {
   stage.addEventListener('pointercancel', endPointer)
 
   stage.addEventListener('keydown', e => {
-    if (e.key === 'ArrowLeft')  { e.preventDefault(); target = Math.round(target) - 1; pause() }
-    if (e.key === 'ArrowRight') { e.preventDefault(); target = Math.round(target) + 1; pause() }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); nudge(-1) }
+    if (e.key === 'ArrowRight') { e.preventDefault(); nudge(1) }
   })
 
   dialog?.querySelector('.team-dialog__close')?.addEventListener('click', () => dialog.close())
@@ -183,11 +203,11 @@ export function initTeam() {
   new IntersectionObserver(([entry]) => { inView = entry.isIntersecting },
     { threshold: 0.05 }).observe(section)
 
-  measure()
-  render()
+  layout()
+  applyRotation()
+  updateCards()
   raf = requestAnimationFrame(tick)
-  scheduleAuto()
-  window.addEventListener('resize', () => { measure(); render() }, { passive: true })
+  window.addEventListener('resize', () => { layout(); updateCards() }, { passive: true })
 
   gsap.fromTo('.team__header',
     { opacity: 0, y: 36 },
@@ -201,6 +221,6 @@ export function initTeam() {
 
   window.addEventListener('pagehide', () => {
     cancelAnimationFrame(raf)
-    clearInterval(autoTimer)
+    clearTimeout(resumeTimer)
   }, { once: true })
 }
