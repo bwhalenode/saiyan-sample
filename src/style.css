@@ -512,6 +512,22 @@ ul { list-style: none; }
   width: 100%;
 }
 
+.nav__links .nav__game-cta {
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 210, 48, 0.46);
+  color: var(--gold);
+  box-shadow: 0 0 18px rgba(255, 210, 48, 0.08);
+}
+
+.nav__links .nav__game-cta:hover {
+  background: rgba(255, 210, 48, 0.1);
+  box-shadow: 0 0 24px rgba(255, 210, 48, 0.18);
+}
+
+.nav__links .nav__game-cta::after {
+  display: none;
+}
+
 .nav__socials {
   display: none;
   align-items: center;
@@ -532,6 +548,16 @@ ul { list-style: none; }
   color: var(--gold);
   filter: drop-shadow(0 0 12px rgba(255, 210, 48, 0.32));
   transform: translateY(-2px);
+}
+
+.nav__socials .nav__game-link {
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 210, 48, 0.42);
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  line-height: 1;
 }
 
 /* ════════════════════════════════════════
@@ -1289,12 +1315,12 @@ ul { list-style: none; }
 /* ── 3D ring carousel: a circle of cards that slowly rotates; each card turns
    to show a branded back as it passes around the far side. ── */
 .team__stage {
-  --team-card-w: clamp(190px, 17vw, 260px);
+  --team-card-w: clamp(176px, 14vw, 224px);
   --team-card-h: calc(var(--team-card-w) * 1.26);
   position: relative;
   z-index: 1;
   width: 100%;
-  height: clamp(400px, 54vh, 580px);
+  height: clamp(350px, 48vh, 480px);
   perspective: 1500px;
   perspective-origin: 50% 50%;
   user-select: none;
@@ -1312,7 +1338,7 @@ ul { list-style: none; }
 /* Card-sized box centred in the stage; the cards orbit around it in 3D. */
 .team__ring {
   position: absolute;
-  top: 62%;
+  top: 58%;
   left: 50%;
   width: var(--team-card-w);
   height: var(--team-card-h);
@@ -1639,6 +1665,210 @@ ul { list-style: none; }
 .htb__ca-repeat a:hover { opacity: 1; }
 
 /* ════════════════════════════════════════
+   GAME INVITE
+   ════════════════════════════════════════ */
+.section--game {
+  position: relative;
+  z-index: 2;
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 104px 5vw;
+  background:
+    radial-gradient(ellipse 54% 72% at 76% 52%, rgba(255, 210, 48, 0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 34% 54% at 78% 54%, rgba(74, 216, 255, 0.065) 0%, transparent 72%),
+    var(--bg);
+}
+
+.game-invite__grid {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(255, 210, 48, 0.055) 1px, transparent 1px) 0 0 / 86px 86px,
+    linear-gradient(rgba(255, 210, 48, 0.045) 1px, transparent 1px) 0 0 / 86px 86px;
+  mask-image: radial-gradient(ellipse at 72% 52%, black 0%, transparent 72%);
+  opacity: 0.52;
+  pointer-events: none;
+}
+
+.game-invite__glow {
+  position: absolute;
+  right: 8vw;
+  top: 50%;
+  width: min(46vw, 680px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 210, 48, 0.2) 0%, rgba(255, 168, 0, 0.08) 38%, transparent 70%);
+  transform: translateY(-50%);
+  filter: blur(14px);
+  pointer-events: none;
+}
+
+.game-invite__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(360px, 0.72fr);
+  align-items: center;
+  gap: clamp(44px, 8vw, 120px);
+  width: min(1280px, 100%);
+  margin: 0 auto;
+}
+
+.game-invite__copy,
+.game-invite__visual {
+  opacity: 0;
+  transform: translateY(34px);
+}
+
+.game-invite__eyebrow {
+  margin-bottom: 16px;
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.34em;
+}
+
+.game-invite__title {
+  font-family: var(--font-display);
+  font-size: clamp(92px, 11vw, 174px);
+  font-weight: 400;
+  letter-spacing: 0.035em;
+  line-height: 0.84;
+  color: var(--ink);
+  text-shadow: 0 0 36px rgba(255, 210, 48, 0.12);
+}
+
+.game-invite__title span {
+  color: var(--gold);
+  text-shadow: 0 0 32px rgba(255, 210, 48, 0.32);
+}
+
+.game-invite__text {
+  max-width: 640px;
+  margin: 28px 0 34px;
+  color: rgba(255, 247, 224, 0.62);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.game-invite__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 26px;
+  padding: 18px 24px;
+  border: 1px solid var(--gold);
+  background: var(--gold);
+  color: #080507;
+  font-family: var(--font-display);
+  font-size: 24px;
+  letter-spacing: 0.1em;
+  box-shadow: 0 0 40px rgba(255, 210, 48, 0.24);
+  transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s;
+}
+
+.game-invite__cta:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 56px rgba(255, 210, 48, 0.4);
+}
+
+.game-invite__visual {
+  display: block;
+  transform: translateY(34px) rotate(2deg);
+  transition: filter 0.35s;
+}
+
+.game-invite__visual:hover {
+  filter: drop-shadow(0 0 30px rgba(255, 210, 48, 0.4));
+}
+
+.game-invite__visual-frame {
+  position: relative;
+  min-height: 470px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 210, 48, 0.58);
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255, 210, 48, 0.22) 0%, transparent 38%),
+    linear-gradient(145deg, rgba(255, 210, 48, 0.12), rgba(5, 3, 6, 0.94) 58%);
+  box-shadow: inset 0 0 50px rgba(255, 210, 48, 0.08), 0 0 48px rgba(255, 168, 0, 0.14);
+}
+
+.game-invite__visual-frame::before,
+.game-invite__visual-frame::after {
+  content: '';
+  position: absolute;
+  width: 180%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 210, 48, 0.65), transparent);
+  transform: rotate(-28deg);
+}
+
+.game-invite__visual-frame::before { top: 24%; }
+.game-invite__visual-frame::after { bottom: 24%; }
+
+.game-invite__visual-status {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 247, 224, 0.58);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+}
+
+.game-invite__visual-status span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 14px var(--gold);
+  animation: game-status-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes game-status-pulse {
+  50% { opacity: 0.42; transform: scale(0.76); }
+}
+
+.game-invite__visual img {
+  position: relative;
+  z-index: 1;
+  width: clamp(120px, 14vw, 190px);
+  filter: drop-shadow(0 0 30px rgba(255, 210, 48, 0.55));
+}
+
+.game-invite__visual strong {
+  position: relative;
+  z-index: 1;
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-size: clamp(66px, 7vw, 104px);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 0.82;
+  text-align: center;
+  text-shadow: 0 0 28px rgba(255, 210, 48, 0.36);
+}
+
+.game-invite__visual em {
+  position: relative;
+  z-index: 1;
+  color: rgba(255, 247, 224, 0.58);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-style: normal;
+  letter-spacing: 0.22em;
+}
+
+/* ════════════════════════════════════════
    FOOTER / CTA
    ════════════════════════════════════════ */
 .section--footer {
@@ -1843,6 +2073,8 @@ ul { list-style: none; }
   .htb__step,
   .htb__step-icon,
   .htb__ca-repeat,
+  .game-invite__copy,
+  .game-invite__visual,
   .footer__cta,
   .footer__buy-btn,
   .footer__ca,
@@ -1988,6 +2220,37 @@ ul { list-style: none; }
   .tokenomics__cards {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
+  }
+
+  .section--game {
+    min-height: auto;
+    padding: 88px 6vw;
+  }
+
+  .game-invite__inner {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .game-invite__title {
+    font-size: clamp(82px, 23vw, 132px);
+  }
+
+  .game-invite__text {
+    margin: 20px 0 26px;
+    font-size: 13px;
+  }
+
+  .game-invite__visual {
+    transform: translateY(28px) rotate(0);
+  }
+
+  .game-invite__visual-frame {
+    min-height: 360px;
+  }
+
+  .game-invite__visual strong {
+    font-size: clamp(70px, 20vw, 110px);
   }
 
   .tokenomics__title {

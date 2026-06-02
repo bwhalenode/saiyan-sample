@@ -198,6 +198,29 @@ export function initTimeline(lenis) {
     },
   })
 
+  /* ─── Game invite ─── */
+  const gameTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '#game',
+      start:   'top 72%',
+      end:     'bottom 16%',
+      toggleActions: revealActions,
+    },
+  })
+
+  gameTl.to('.game-invite__copy', {
+    opacity: 1,
+    y: 0,
+    duration: 0.9,
+    ease: 'power3.out',
+  })
+  gameTl.to('.game-invite__visual', {
+    opacity: 1,
+    y: 0,
+    duration: 0.9,
+    ease: 'power3.out',
+  }, 0.18)
+
   /* ─── Footer CTA ─── */
   gsap.to('.footer__cta', {
     opacity: 1,
