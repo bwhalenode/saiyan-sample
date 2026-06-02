@@ -20,6 +20,7 @@ export const supportsWebP = await new Promise(resolve => {
 })
 
 const isMobile = () => window.innerWidth < 900 || !window.matchMedia('(hover: hover)').matches
+const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 // The camera rests at z=4 after the dolly; plane sizing is computed for this distance
 const FINAL_CAM_Z = 4
@@ -166,6 +167,8 @@ export class HeroScene {
         uMouseDist:    { value: 0 },
         uAuraStrength: { value: 0.4 },
         uResolution:   { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+        uMotionStrength: { value: prefersReducedMotion() ? 0 : 1 },
+        uMobileAmbient:  { value: isMobile() ? 1 : 0 },
       },
       vertexShader:   auraVert,
       fragmentShader: auraFrag,
@@ -220,6 +223,8 @@ export class HeroScene {
 
     if (this._auraMat) {
       this._auraMat.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight)
+      this._auraMat.uniforms.uMobileAmbient.value = isMobile() ? 1 : 0
+      this._auraMat.uniforms.uMotionStrength.value = prefersReducedMotion() ? 0 : 1
     }
   }
 

@@ -591,15 +591,30 @@ ul { list-style: none; }
 }
 
 .hero__eyebrow {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-brand);
+  font-size: clamp(17px, 1.7vw, 27px);
   font-weight: 700;
-  letter-spacing: 0.34em;
-  color: var(--gold);
+  letter-spacing: 0.22em;
+  line-height: 1;
+  background: linear-gradient(90deg, var(--gold-hot) 0%, var(--gold) 52%, var(--gold-white) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   text-shadow:
     0 0 14px rgba(255, 210, 48, 0.55),
     0 0 30px rgba(255, 168, 0, 0.3);
-  margin-bottom: -8px;
+  filter: drop-shadow(0 0 12px rgba(255, 210, 48, 0.36));
+  margin-bottom: -6px;
+  animation: hero-eyebrow-pulse 3.8s ease-in-out infinite;
+}
+
+@keyframes hero-eyebrow-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 10px rgba(255, 210, 48, 0.28));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(255, 210, 48, 0.64));
+  }
 }
 
 .hero__headline-wrap {
@@ -929,6 +944,15 @@ ul { list-style: none; }
   color: var(--gold);
 }
 
+.about__text .about__punch {
+  padding-left: 16px;
+  border-left: 2px solid var(--gold);
+  color: var(--gold);
+  font-size: clamp(20px, 2.15vw, 31px);
+  letter-spacing: 0.055em;
+  text-shadow: 0 0 18px rgba(255, 210, 48, 0.3);
+}
+
 /* Single inline-flow child of each flex-centered <p>, so words (and the gold
    $SAIYAN span) stay inline with normal spacing instead of becoming flex items. */
 .about__line {
@@ -990,13 +1014,21 @@ ul { list-style: none; }
   pointer-events: none;
 }
 
-.inflection__title {
+.inflection__quote {
   position: relative;
   z-index: 1;
+  width: min(1180px, 90vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.inflection__title {
   font-family: var(--font-display);
-  font-size: clamp(60px, 9vw, 160px);
+  font-size: clamp(52px, 7.4vw, 124px);
   letter-spacing: 0.04em;
-  line-height: 1;
+  line-height: 0.96;
   text-align: center;
   background: linear-gradient(90deg, var(--gold-hot) 0%, var(--gold) 50%, var(--gold-white) 100%);
   -webkit-background-clip: text;
@@ -1005,6 +1037,19 @@ ul { list-style: none; }
   filter: drop-shadow(0 4px 30px rgba(255, 168, 0, 0.4));
   opacity: 0;
   transform: translateY(20px);
+}
+
+.inflection__attribution {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.2vw, 36px);
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  line-height: 1;
+  color: var(--gold);
+  text-align: center;
+  text-shadow: 0 0 18px rgba(255, 210, 48, 0.35);
+  opacity: 0;
+  transform: translateY(14px);
 }
 
 /* ════════════════════════════════════════
@@ -1747,9 +1792,29 @@ ul { list-style: none; }
   }
 
   .hero__headline-line { transform: none !important; }
+  .hero__eyebrow { animation: none !important; }
   .hero__ca { opacity: 1 !important; transform: none !important; }
   .about__eyebrow { opacity: 1 !important; }
   .about__image-col { transform: none !important; opacity: 1 !important; }
+  .inflection__title,
+  .inflection__attribution,
+  .tokenomics__title,
+  .token-card,
+  .team__header,
+  .team__stage,
+  .htb__section-title,
+  .htb__step,
+  .htb__step-icon,
+  .htb__ca-repeat,
+  .footer__cta,
+  .footer__buy-btn,
+  .footer__ca,
+  .footer__socials,
+  .footer__disclaimer,
+  .footer__rights {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 
   /* No carousel — show the copy as a normal, fully readable stack */
   .about__inner { height: auto !important; min-height: auto !important; overflow: visible !important; }
@@ -1778,6 +1843,25 @@ ul { list-style: none; }
 
   .section--inflection {
     background-attachment: scroll;
+  }
+
+  .hero__eyebrow {
+    font-size: clamp(15px, 3.4vw, 22px);
+    letter-spacing: 0.17em;
+  }
+
+  .inflection__quote {
+    width: min(88vw, 680px);
+    gap: 18px;
+  }
+
+  .inflection__title {
+    font-size: clamp(42px, 11vw, 84px);
+  }
+
+  .inflection__attribution {
+    font-size: clamp(17px, 4vw, 28px);
+    letter-spacing: 0.2em;
   }
 
   /* Header stack: disclaimer strip on its own row, nav clearly below it */
@@ -2153,8 +2237,8 @@ ul { list-style: none; }
   }
 
   .hero__eyebrow {
-    font-size: 9px;
-    letter-spacing: 0.2em;
+    font-size: clamp(13px, 4vw, 18px);
+    letter-spacing: 0.14em;
   }
 
   .hero__ca-address {

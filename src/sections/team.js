@@ -212,12 +212,20 @@ export function initTeam() {
   gsap.fromTo('.team__header',
     { opacity: 0, y: 36 },
     { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: { trigger: section, start: 'top 72%' } })
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 72%',
+        toggleActions: 'play none none reverse',
+      } })
 
   gsap.fromTo(stage,
     { opacity: 0 },
     { opacity: 1, duration: 1, ease: 'power2.out',
-      scrollTrigger: { trigger: section, start: 'top 64%' } })
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 64%',
+        toggleActions: 'play none none reverse',
+      } })
 
   window.addEventListener('pagehide', () => {
     cancelAnimationFrame(raf)

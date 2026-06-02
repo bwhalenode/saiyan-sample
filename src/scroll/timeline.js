@@ -5,6 +5,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 export function initTimeline(lenis) {
   const isMobile = window.innerWidth <= 900
+  const revealActions = 'play none none reverse'
 
   // Let Lenis proxy scroll for ScrollTrigger
   lenis.on('scroll', ScrollTrigger.update)
@@ -56,17 +57,27 @@ export function initTimeline(lenis) {
     hintIO.observe(footerEl)
   }
 
-  /* ─── Inflection title reveal ─── */
-  gsap.to('.inflection__title', {
+  /* ─── Inflection quote reveal ─── */
+  const inflectionTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '#inflection',
+      start:   'top 65%',
+      toggleActions: revealActions,
+    },
+  })
+
+  inflectionTl.to('.inflection__title', {
     opacity: 1,
     y: 0,
     duration: 1.2,
     ease: 'power3.out',
-    scrollTrigger: {
-      trigger: '#inflection',
-      start:   'top 65%',
-    },
   })
+  inflectionTl.to('.inflection__attribution', {
+    opacity: 1,
+    y: 0,
+    duration: 0.7,
+    ease: 'power2.out',
+  }, 0.42)
 
   /* ─── Tokenomics title entrance ─── */
   gsap.fromTo('.tokenomics__title',
@@ -79,6 +90,7 @@ export function initTimeline(lenis) {
       scrollTrigger: {
         trigger: '#tokenomics',
         start:   'top 75%',
+        toggleActions: revealActions,
       },
     },
   )
@@ -87,6 +99,12 @@ export function initTimeline(lenis) {
   const cards = document.querySelectorAll('.token-card')
   cards.forEach((card, i) => {
     const shockwave = card.querySelector('.token-card__shockwave')
+    const playShockwave = () => {
+      gsap.fromTo(shockwave,
+        { scale: 0.5, opacity: 1 },
+        { scale: 2.5, opacity: 0, duration: 0.9, ease: 'power2.out', delay: i * 0.12 },
+      )
+    }
 
     gsap.to(card, {
       opacity:  1,
@@ -97,12 +115,9 @@ export function initTimeline(lenis) {
       scrollTrigger: {
         trigger: '#tokenomics',
         start:   'top 65%',
-        onEnter: () => {
-          gsap.fromTo(shockwave,
-            { scale: 0.5, opacity: 1 },
-            { scale: 2.5, opacity: 0, duration: 0.9, ease: 'power2.out', delay: i * 0.12 },
-          )
-        },
+        toggleActions: revealActions,
+        onEnter: playShockwave,
+        onEnterBack: playShockwave,
       },
     })
   })
@@ -116,6 +131,7 @@ export function initTimeline(lenis) {
     scrollTrigger: {
       trigger: '#howtobuy',
       start:   isMobile ? 'top 86%' : 'top 75%',
+      toggleActions: revealActions,
     },
   })
 
@@ -129,6 +145,7 @@ export function initTimeline(lenis) {
     scrollTrigger: {
       trigger: '#howtobuy',
       start:   isMobile ? 'top 78%' : 'top 65%',
+      toggleActions: revealActions,
     },
   })
 
@@ -145,6 +162,7 @@ export function initTimeline(lenis) {
         scrollTrigger: {
           trigger: '#howtobuy',
           start:   'top 74%',
+          toggleActions: revealActions,
         },
       },
     )
@@ -169,6 +187,7 @@ export function initTimeline(lenis) {
     scrollTrigger: {
       trigger: '#howtobuy',
       start:   'bottom 80%',
+      toggleActions: revealActions,
     },
   })
 
@@ -181,6 +200,7 @@ export function initTimeline(lenis) {
     scrollTrigger: {
       trigger: '#footer',
       start:   'top 70%',
+      toggleActions: revealActions,
     },
   })
 
@@ -192,6 +212,7 @@ export function initTimeline(lenis) {
     scrollTrigger: {
       trigger: '#footer',
       start:   'top 70%',
+      toggleActions: revealActions,
     },
   })
 
@@ -202,6 +223,7 @@ export function initTimeline(lenis) {
     scrollTrigger: {
       trigger: '#footer',
       start:   'top 50%',
+      toggleActions: revealActions,
     },
   })
 
