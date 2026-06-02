@@ -3,10 +3,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const AUTO_SPEED   = 7     // degrees per second (slow spin)
-const DEG_PER_PX   = 0.26  // drag sensitivity
-const RESUME_DELAY = 3000  // ms idle before auto-spin resumes after interaction
-const DRAG_THRESH  = 6     // px before a press becomes a drag
+const AUTO_INTERVAL = 3400  // ms between auto-advances
+const RESUME_DELAY  = 3000  // ms idle before auto-advance resumes after interaction
+const DRAG_THRESH   = 6     // px before a press becomes a drag
+const VISIBLE       = 2.2   // how many cards each side stay rendered
 
 export function initTeam() {
   const section = document.getElementById('team')
@@ -19,101 +19,91 @@ export function initTeam() {
   if (!section || !stage || !ring || !cards.length) return
 
   const N       = cards.length
-  const step    = 360 / N
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
 
   const dImg  = dialog?.querySelector('.team-dialog__image')
   const dName = dialog?.querySelector('.team-dialog__name')
 
-  let radius      = 440
-  let rotation    = 0
-  let target      = null
-  let autoPaused  = false
-  let resumeTimer = null
+  let spacing     = 300   // px between adjacent card centres (set in measure())
+  let pos         = 0     // current (eased) carousel position, in card units
+  let target      = 0     // snap target, in card units
+  let autoTimer   = null
+  let resumeAt    = 0
   let inView      = false
   let hovering    = false
   let pointerDown = false
   let dragging    = false
   let pointerId   = null
   let startX      = 0
-  let startRot    = 0
+  let startPos    = 0
   let dragDelta   = 0
   let raf         = null
   let prev        = performance.now()
 
-  /* Place cards on the wall of a cylinder, facing INWARD toward the centre
-     (translateZ is negative) so the viewer looks at it from the inside: the
-     front card is on the far wall and the sides curve toward you. */
-  function layout() {
+  /* Spacing is a touch WIDER than a card so the focal card and its neighbours
+     never overlap — neighbours just peek in from the sides (and sit off-screen
+     on narrow phones, leaving a single clean card). */
+  function measure() {
     const w = cards[0].getBoundingClientRect().width || 240
-    radius = Math.round((w * 1.18) / (2 * Math.tan(Math.PI / N)))
+    spacing = w * 1.04
+  }
+
+  // Shortest signed distance from the focal position, wrapping around the ring.
+  function wrapDelta(d) {
+    d = ((d % N) + N) % N
+    if (d > N / 2) d -= N
+    return d
+  }
+
+  function render() {
     cards.forEach((card, i) => {
-      card.style.transform = `rotateY(${i * step}deg) translateZ(${-radius}px)`
-    })
-  }
-
-  function norm(a) {
-    a %= 360
-    if (a > 180)  a -= 360
-    if (a < -180) a += 360
-    return a
-  }
-
-  function applyRotation() {
-    ring.style.transform = `translate(-50%, -50%) rotateY(${rotation}deg)`
-  }
-
-  /* Per-frame: fade / disable the cards that have wrapped around behind us. */
-  function updateCards() {
-    cards.forEach((card, i) => {
-      const facing = norm(i * step + rotation)
-      const af     = Math.abs(facing)
-      if (af >= 90) {
+      const d  = wrapDelta(i - pos)
+      const ad = Math.abs(d)
+      if (ad > VISIBLE) {
         card.style.opacity = '0'
         card.style.pointerEvents = 'none'
         card.style.zIndex = '0'
         card.classList.remove('is-active')
         return
       }
-      const t = Math.cos(facing * Math.PI / 180)        // 1 front → 0 at the sides
-      card.style.opacity = (af < 58 ? 1 : (90 - af) / 32).toFixed(3)
-      card.style.pointerEvents = af < 60 ? 'auto' : 'none'
-      card.style.zIndex = String(Math.round(100 + (1 - t) * 100))  // near (side) cards on top
-      card.classList.toggle('is-active', af < step / 2)
+      const x     = d * spacing
+      const scale = Math.max(0.7, 1 - ad * 0.16)
+      const op    = Math.max(0, 1 - ad * 0.5)
+      card.style.transform = `translate(-50%, -50%) translateX(${x.toFixed(1)}px) scale(${scale.toFixed(3)})`
+      card.style.opacity = op.toFixed(3)
+      card.style.pointerEvents = 'auto'
+      card.style.zIndex = String(Math.round(100 - ad * 10))
+      card.classList.toggle('is-active', ad < 0.5)
     })
-  }
-
-  function spinAllowed() {
-    return inView && !hovering && !dragging && !autoPaused &&
-           !reduced.matches && !(dialog && dialog.open)
   }
 
   function tick(now) {
     const dt = Math.min((now - prev) / 1000, 0.05)
     prev = now
-    if (target !== null) {
-      rotation += (target - rotation) * Math.min(1, dt * 7)
-      if (Math.abs(target - rotation) < 0.06) { rotation = target; target = null }
-    } else if (spinAllowed()) {
-      rotation += AUTO_SPEED * dt
+    if (!dragging) {
+      pos += (target - pos) * Math.min(1, dt * 6)
+      if (Math.abs(target - pos) < 0.0005) pos = target
     }
-    if (rotation > 360)  rotation -= 360
-    if (rotation < -360) rotation += 360
-    applyRotation()
-    updateCards()
+    render()
     raf = requestAnimationFrame(tick)
   }
 
-  function pauseThenResume() {
-    autoPaused = true
-    clearTimeout(resumeTimer)
-    resumeTimer = setTimeout(() => { autoPaused = false }, RESUME_DELAY)
+  function canAuto() {
+    return inView && !hovering && !dragging && !reduced.matches &&
+           !(dialog && dialog.open) && Date.now() > resumeAt
   }
 
-  function nudge(dir) {
-    const base = target ?? rotation
-    target = base + dir * step
-    pauseThenResume()
+  function scheduleAuto() {
+    clearInterval(autoTimer)
+    autoTimer = setInterval(() => { if (canAuto()) target += 1 }, AUTO_INTERVAL)
+  }
+
+  function pause() { resumeAt = Date.now() + RESUME_DELAY }
+
+  // Bring card i to the front by the shortest path; returns the unbounded target.
+  function targetForCard(i) {
+    const base = Math.round(target)
+    return base + wrapDelta(i - base)
   }
 
   function openCard(card) {
@@ -127,13 +117,14 @@ export function initTeam() {
 
   /* ── Interactions ── */
   arrows.forEach(a => {
-    a.addEventListener('click', () => nudge(Number(a.dataset.teamDirection) || 1))
+    a.addEventListener('click', () => { target = Math.round(target) + (Number(a.dataset.teamDirection) || 1); pause() })
   })
 
-  cards.forEach(card => {
+  cards.forEach((card, i) => {
     card.addEventListener('click', () => {
-      if (Math.abs(dragDelta) > DRAG_THRESH) return   // ignore the drag-end click
-      openCard(card)
+      if (Math.abs(dragDelta) > DRAG_THRESH) return        // ignore the drag-end click
+      if (Math.abs(wrapDelta(i - pos)) < 0.5) openCard(card) // focal card → open
+      else { target = targetForCard(i); pause() }            // side card → bring to front
     })
     card.addEventListener('keydown', e => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCard(card) }
@@ -147,10 +138,9 @@ export function initTeam() {
     pointerDown = true
     pointerId   = e.pointerId
     startX      = e.clientX
-    startRot    = rotation
+    startPos    = pos
     dragDelta   = 0
     dragging    = false
-    target      = null
   })
 
   stage.addEventListener('pointermove', e => {
@@ -159,9 +149,9 @@ export function initTeam() {
     if (!dragging && Math.abs(dragDelta) > DRAG_THRESH) {
       dragging = true
       stage.classList.add('is-dragging')
-      stage.setPointerCapture?.(pointerId)   // capture only once dragging starts
+      stage.setPointerCapture?.(pointerId)
     }
-    if (dragging) rotation = startRot + dragDelta * DEG_PER_PX
+    if (dragging) pos = startPos - dragDelta / spacing
   })
 
   function endPointer(e) {
@@ -171,8 +161,8 @@ export function initTeam() {
       dragging = false
       stage.classList.remove('is-dragging')
       stage.releasePointerCapture?.(pointerId)
-      target = Math.round(rotation / step) * step    // snap to nearest member
-      pauseThenResume()
+      target = Math.round(pos)
+      pause()
       setTimeout(() => { dragDelta = 0 }, 0)
     } else if (e.pointerType === 'mouse') {
       hovering = stage.matches(':hover')
@@ -183,8 +173,8 @@ export function initTeam() {
   stage.addEventListener('pointercancel', endPointer)
 
   stage.addEventListener('keydown', e => {
-    if (e.key === 'ArrowLeft')  { e.preventDefault(); nudge(-1) }
-    if (e.key === 'ArrowRight') { e.preventDefault(); nudge(1) }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); target = Math.round(target) - 1; pause() }
+    if (e.key === 'ArrowRight') { e.preventDefault(); target = Math.round(target) + 1; pause() }
   })
 
   dialog?.querySelector('.team-dialog__close')?.addEventListener('click', () => dialog.close())
@@ -193,11 +183,11 @@ export function initTeam() {
   new IntersectionObserver(([entry]) => { inView = entry.isIntersecting },
     { threshold: 0.05 }).observe(section)
 
-  layout()
-  applyRotation()
-  updateCards()
+  measure()
+  render()
   raf = requestAnimationFrame(tick)
-  window.addEventListener('resize', () => { layout(); updateCards() }, { passive: true })
+  scheduleAuto()
+  window.addEventListener('resize', () => { measure(); render() }, { passive: true })
 
   gsap.fromTo('.team__header',
     { opacity: 0, y: 36 },
@@ -211,6 +201,6 @@ export function initTeam() {
 
   window.addEventListener('pagehide', () => {
     cancelAnimationFrame(raf)
-    clearTimeout(resumeTimer)
+    clearInterval(autoTimer)
   }, { once: true })
 }
