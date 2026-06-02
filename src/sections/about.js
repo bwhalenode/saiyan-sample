@@ -22,9 +22,8 @@ export function initAbout() {
     return
   }
 
-  // The whole origin story reads on one screen. When the section scrolls into
-  // view, the eyebrow, logo, and every paragraph fade/stagger in together and
-  // stay — no pinning, no multi-step scrubbing.
+  // The whole origin story reads on one screen. As the section moves through
+  // the viewport, the eyebrow, logo, and paragraphs fade/stagger together.
   gsap.set(eyebrow, { opacity: 0, y: 18 })
   gsap.set(paras,   { opacity: 0, y: 24 })
   gsap.set(imgCol,  { opacity: 0, x: mob ? 0 : '14%', y: mob ? 26 : 0 })
@@ -33,7 +32,8 @@ export function initAbout() {
     scrollTrigger: {
       trigger: section,
       start:   'top 68%',
-      toggleActions: 'play none none reverse',
+      end:     'bottom 18%',
+      toggleActions: 'play reverse play reverse',
     },
   })
 

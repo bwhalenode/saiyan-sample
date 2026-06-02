@@ -1312,7 +1312,7 @@ ul { list-style: none; }
 /* Card-sized box centred in the stage; the cards orbit around it in 3D. */
 .team__ring {
   position: absolute;
-  top: 50%;
+  top: 62%;
   left: 50%;
   width: var(--team-card-w);
   height: var(--team-card-h);
@@ -1347,6 +1347,10 @@ ul { list-style: none; }
   -webkit-backface-visibility: hidden;
 }
 
+.team-card__image-wrap {
+  transition: opacity 0.3s;
+}
+
 .team-card__back {
   transform: rotateY(180deg);
   display: flex;
@@ -1360,9 +1364,20 @@ ul { list-style: none; }
     linear-gradient(160deg, #0b0708 0%, #020103 100%);
 }
 
-.team-card__back img {
+.team-card.is-far .team-card__image-wrap {
+  opacity: 0;
+}
+
+.team-card.is-far .team-card__back {
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
+}
+
+.team-card .team-card__back img {
   width: 40%;
+  height: auto;
   max-width: 120px;
+  object-fit: contain;
   opacity: 0.92;
   filter: drop-shadow(0 0 18px rgba(255, 210, 48, 0.45));
 }
@@ -1822,6 +1837,7 @@ ul { list-style: none; }
   .tokenomics__title,
   .token-card,
   .team__header,
+  .team__hint,
   .team__stage,
   .htb__section-title,
   .htb__step,
@@ -2016,6 +2032,10 @@ ul { list-style: none; }
     --team-card-w: clamp(136px, 40vw, 172px);
     height: clamp(330px, 48vh, 430px);
     perspective: 980px;
+  }
+
+  .team__ring {
+    top: 58%;
   }
 
   .team-dialog__image {

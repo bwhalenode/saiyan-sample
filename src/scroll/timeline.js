@@ -5,7 +5,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 export function initTimeline(lenis) {
   const isMobile = window.innerWidth <= 900
-  const revealActions = 'play none none reverse'
+  const revealActions = 'play reverse play reverse'
 
   // Let Lenis proxy scroll for ScrollTrigger
   lenis.on('scroll', ScrollTrigger.update)
@@ -62,6 +62,7 @@ export function initTimeline(lenis) {
     scrollTrigger: {
       trigger: '#inflection',
       start:   'top 65%',
+      end:     'bottom 20%',
       toggleActions: revealActions,
     },
   })
@@ -90,6 +91,7 @@ export function initTimeline(lenis) {
       scrollTrigger: {
         trigger: '#tokenomics',
         start:   'top 75%',
+        end:     'bottom 20%',
         toggleActions: revealActions,
       },
     },
@@ -115,6 +117,7 @@ export function initTimeline(lenis) {
       scrollTrigger: {
         trigger: '#tokenomics',
         start:   'top 65%',
+        end:     'bottom 20%',
         toggleActions: revealActions,
         onEnter: playShockwave,
         onEnterBack: playShockwave,
@@ -131,6 +134,7 @@ export function initTimeline(lenis) {
     scrollTrigger: {
       trigger: '#howtobuy',
       start:   isMobile ? 'top 86%' : 'top 75%',
+      end:     'bottom 18%',
       toggleActions: revealActions,
     },
   })
@@ -145,6 +149,7 @@ export function initTimeline(lenis) {
     scrollTrigger: {
       trigger: '#howtobuy',
       start:   isMobile ? 'top 78%' : 'top 65%',
+      end:     'bottom 18%',
       toggleActions: revealActions,
     },
   })
@@ -162,6 +167,7 @@ export function initTimeline(lenis) {
         scrollTrigger: {
           trigger: '#howtobuy',
           start:   'top 74%',
+          end:     'bottom 18%',
           toggleActions: revealActions,
         },
       },
@@ -187,6 +193,7 @@ export function initTimeline(lenis) {
     scrollTrigger: {
       trigger: '#howtobuy',
       start:   'bottom 80%',
+      end:     'bottom 10%',
       toggleActions: revealActions,
     },
   })
@@ -200,6 +207,7 @@ export function initTimeline(lenis) {
     scrollTrigger: {
       trigger: '#footer',
       start:   'top 70%',
+      end:     'bottom 10%',
       toggleActions: revealActions,
     },
   })
@@ -212,6 +220,7 @@ export function initTimeline(lenis) {
     scrollTrigger: {
       trigger: '#footer',
       start:   'top 70%',
+      end:     'bottom 10%',
       toggleActions: revealActions,
     },
   })
@@ -223,6 +232,7 @@ export function initTimeline(lenis) {
     scrollTrigger: {
       trigger: '#footer',
       start:   'top 50%',
+      end:     'bottom 10%',
       toggleActions: revealActions,
     },
   })

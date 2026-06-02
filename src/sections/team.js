@@ -7,8 +7,8 @@ const AUTO_SPEED   = 7      // degrees / second (slow spin)
 const DEG_PER_PX   = 0.26   // drag sensitivity
 const RESUME_DELAY = 3000   // ms idle before auto-spin resumes after interaction
 const DRAG_THRESH  = 6      // px before a press becomes a drag
-const RADIUS_K     = 1.62   // ring radius as a multiple of card width
-const TILT         = 8      // subtle lean keeps the far-side branded backs orderly
+const RADIUS_K     = 1.86   // wider ring keeps the full near and far arcs readable
+const TILT         = 15     // reveal the branded far-side backs without crowding the heading
 
 export function initTeam() {
   const section = document.getElementById('team')
@@ -80,8 +80,9 @@ export function initTeam() {
       const facing = norm(i * step + rotation)
       const c = Math.cos(facing * Math.PI / 180)      // 1 = front, -1 = back
       card.style.zIndex  = String(Math.round(200 + c * 100))
-      card.style.opacity = (0.24 + 0.76 * ((c + 1) / 2)).toFixed(3)
-      card.style.filter  = `brightness(${(0.58 + 0.42 * ((c + 1) / 2)).toFixed(3)})`
+      card.style.opacity = (0.46 + 0.54 * ((c + 1) / 2)).toFixed(3)
+      card.style.filter  = `brightness(${(0.74 + 0.26 * ((c + 1) / 2)).toFixed(3)})`
+      card.classList.toggle('is-far', c < -0.08)
       card.classList.toggle('is-active', Math.abs(facing) < step / 2)
     })
   }
@@ -205,13 +206,14 @@ export function initTeam() {
   raf = requestAnimationFrame(tick)
   window.addEventListener('resize', () => { layout(); updateCards() }, { passive: true })
 
-  gsap.fromTo('.team__header',
+  gsap.fromTo(['.team__header', '.team__hint'],
     { opacity: 0, y: 36 },
     { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
       scrollTrigger: {
         trigger: section,
         start: 'top 72%',
-        toggleActions: 'play none none reverse',
+        end: 'bottom 18%',
+        toggleActions: 'play reverse play reverse',
       } })
 
   gsap.fromTo(stage,
@@ -220,7 +222,8 @@ export function initTeam() {
       scrollTrigger: {
         trigger: section,
         start: 'top 64%',
-        toggleActions: 'play none none reverse',
+        end: 'bottom 18%',
+        toggleActions: 'play reverse play reverse',
       } })
 
   window.addEventListener('pagehide', () => {
