@@ -7,15 +7,14 @@ const AUTO_SPEED   = 7      // degrees / second (slow spin)
 const DEG_PER_PX   = 0.26   // drag sensitivity
 const RESUME_DELAY = 3000   // ms idle before auto-spin resumes after interaction
 const DRAG_THRESH  = 6      // px before a press becomes a drag
-const RADIUS_K     = 1.9    // ring radius as a multiple of card width
-const TILT         = 17     // degrees the ring leans toward the viewer (reveals the back arc)
+const RADIUS_K     = 1.62   // ring radius as a multiple of card width
+const TILT         = 8      // subtle lean keeps the far-side branded backs orderly
 
 export function initTeam() {
   const section = document.getElementById('team')
   const stage   = section?.querySelector('.team__stage')
   const ring    = document.getElementById('team-ring')
   const cards   = Array.from(ring?.querySelectorAll('.team-card') || [])
-  const arrows  = Array.from(section?.querySelectorAll('.team__arrow') || [])
   const dialog  = document.getElementById('team-dialog')
 
   if (!section || !stage || !ring || !cards.length) return
@@ -41,7 +40,7 @@ export function initTeam() {
 
   let radius      = 480
   let rotation    = 0
-  let target      = null   // when set, ease toward it (arrow / tap-to-front / drag-snap)
+  let target      = null   // when set, ease toward it (keyboard / tap-to-front / drag-snap)
   let autoPaused  = false
   let resumeTimer = null
   let inView      = false
@@ -81,7 +80,8 @@ export function initTeam() {
       const facing = norm(i * step + rotation)
       const c = Math.cos(facing * Math.PI / 180)      // 1 = front, -1 = back
       card.style.zIndex  = String(Math.round(200 + c * 100))
-      card.style.opacity = (0.45 + 0.55 * ((c + 1) / 2)).toFixed(3)
+      card.style.opacity = (0.24 + 0.76 * ((c + 1) / 2)).toFixed(3)
+      card.style.filter  = `brightness(${(0.58 + 0.42 * ((c + 1) / 2)).toFixed(3)})`
       card.classList.toggle('is-active', Math.abs(facing) < step / 2)
     })
   }
@@ -135,10 +135,6 @@ export function initTeam() {
   }
 
   /* ── Interactions ── */
-  arrows.forEach(a => {
-    a.addEventListener('click', () => nudge(Number(a.dataset.teamDirection) || 1))
-  })
-
   cards.forEach((card, i) => {
     card.addEventListener('click', () => {
       if (Math.abs(dragDelta) > DRAG_THRESH) return     // ignore the drag-end click
