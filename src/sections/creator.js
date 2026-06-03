@@ -8,12 +8,17 @@ if (root) {
   const modeButtons = [...root.querySelectorAll('.creator__mode-btn')]
   const upload = root.querySelector('.creator__upload')
   const templateSelect = root.querySelector('.creator__template')
+  const imageZoom = root.querySelector('.creator__zoom')
+  const imageOffsetX = root.querySelector('.creator__offset-x')
+  const imageOffsetY = root.querySelector('.creator__offset-y')
   const pfpText = root.querySelector('.creator__pfp-text')
   const topText = root.querySelector('.creator__top-text')
   const bottomText = root.querySelector('.creator__bottom-text')
+  const memeSize = root.querySelector('.creator__meme-size')
+  const memeStyle = root.querySelector('.creator__meme-style')
   const frameToggle = root.querySelector('.creator__frame-toggle')
   const vignetteToggle = root.querySelector('.creator__vignette-toggle')
-  const watermarkToggle = root.querySelector('.creator__watermark-toggle')
+  const lightningToggle = root.querySelector('.creator__lightning-toggle')
   const download = root.querySelector('.creator__download')
   const pfpControls = [...root.querySelectorAll('[data-pfp-control]')]
   const memeControls = [...root.querySelectorAll('[data-meme-control]')]
@@ -54,12 +59,15 @@ if (root) {
     render()
   }
 
-  function coverImage(image, x, y, width, height) {
-    const scale = Math.max(width / image.width, height / image.height)
+  function coverImage(image, x, y, width, height, transform = {}) {
+    const zoom = Number(transform.zoom ?? imageZoom.value)
+    const offsetX = Number(transform.offsetX ?? imageOffsetX.value)
+    const offsetY = Number(transform.offsetY ?? imageOffsetY.value)
+    const scale = Math.max(width / image.width, height / image.height) * zoom
     const drawWidth = image.width * scale
     const drawHeight = image.height * scale
-    const drawX = x + (width - drawWidth) / 2
-    const drawY = y + (height - drawHeight) / 2
+    const drawX = x + (width - drawWidth) / 2 + offsetX
+    const drawY = y + (height - drawHeight) / 2 + offsetY
     ctx.drawImage(image, drawX, drawY, drawWidth, drawHeight)
   }
 
@@ -150,12 +158,11 @@ if (root) {
   }
 
   function drawWatermark() {
-    if (!watermarkToggle.checked || !state.watermark) return
+    if (!state.watermark) return
 
-    const size = state.mode === 'pfp' ? 164 : 128
-    const margin = state.mode === 'pfp' ? 58 : 34
-    const x = 1024 - size - margin
-    const y = 1024 - size - margin
+    const size = state.mode === 'pfp' ? 136 : 128
+    const x = state.mode === 'pfp' ? 710 : 862
+    const y = state.mode === 'pfp' ? 710 : 862
 
     ctx.save()
     ctx.shadowColor = 'rgba(255, 210, 48, 0.45)'
@@ -188,10 +195,10 @@ if (root) {
     else drawFallbackBackground()
 
     if (vignetteToggle.checked) drawVignette()
-    drawLightning()
+    if (lightningToggle.checked) drawLightning()
     if (frameToggle.checked) drawAuraFrame()
-    drawPfpText()
     drawWatermark()
+    drawPfpText()
   }
 
   function wrapText(text, maxWidth) {
@@ -219,15 +226,21 @@ if (root) {
     ctx.save()
     ctx.textAlign = 'center'
     ctx.textBaseline = direction === 'top' ? 'top' : 'bottom'
-    ctx.font = '900 68px Arial Black, Impact, sans-serif'
+    ctx.font = `900 ${memeSize.value}px Arial Black, Impact, sans-serif`
     ctx.lineWidth = 12
     ctx.strokeStyle = 'rgba(0,0,0,0.84)'
-    ctx.fillStyle = '#fff7dc'
-    ctx.shadowColor = 'rgba(255, 210, 48, 0.32)'
+    ctx.fillStyle = memeStyle.value === 'blue'
+      ? '#9de9ff'
+      : memeStyle.value === 'gold'
+        ? '#ffd230'
+        : '#fff7dc'
+    ctx.shadowColor = memeStyle.value === 'blue'
+      ? 'rgba(74, 216, 255, 0.46)'
+      : 'rgba(255, 210, 48, 0.36)'
     ctx.shadowBlur = 20
 
     const lines = wrapText(text, 880)
-    const lineHeight = 78
+    const lineHeight = Number(memeSize.value) * 1.14
     const total = (lines.length - 1) * lineHeight
 
     lines.forEach((line, index) => {
@@ -243,11 +256,12 @@ if (root) {
 
   function drawMeme() {
     ctx.clearRect(0, 0, 1024, 1024)
-    if (state.templateImage) coverImage(state.templateImage, 0, 0, 1024, 1024)
+    if (state.userImage) coverImage(state.userImage, 0, 0, 1024, 1024)
+    else if (state.templateImage) coverImage(state.templateImage, 0, 0, 1024, 1024)
     else drawFallbackBackground()
 
     drawVignette()
-    drawLightning()
+    if (lightningToggle.checked) drawLightning()
     drawMemeText(topText.value || 'WHEN THE KI HITS', 72, 'top')
     drawMemeText(bottomText.value || 'POWER LEVEL RISING', 948, 'bottom')
     drawWatermark()
@@ -281,9 +295,14 @@ if (root) {
     pfpText,
     topText,
     bottomText,
+    imageZoom,
+    imageOffsetX,
+    imageOffsetY,
+    memeSize,
+    memeStyle,
     frameToggle,
     vignetteToggle,
-    watermarkToggle,
+    lightningToggle,
   ].forEach((control) => {
     control.addEventListener('input', render)
     control.addEventListener('change', render)

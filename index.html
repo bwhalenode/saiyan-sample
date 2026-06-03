@@ -430,9 +430,9 @@
 
     <div class="creator__inner">
       <div class="creator__intro">
-        <p class="creator__eyebrow">WEBSITE TOOL // CLIENT-SIDE</p>
+        <p class="creator__eyebrow">CREATE // DOWNLOAD // SHARE</p>
         <h2 class="creator__title" id="creator-title">SAIYAN<br><span>CREATOR.</span></h2>
-        <p class="creator__text">Forge a $SAIYAN-branded PFP or meme in your browser. No uploads, no backend, no AI — just your image, your words, and a local PNG download.</p>
+        <p class="creator__text">Turn your image into a $SAIYAN profile picture or make a battle-ready meme. Add the aura, tune the crop, write your line, and download your PNG.</p>
       </div>
 
       <div class="creator__workspace" data-creator>
@@ -440,7 +440,7 @@
           <div class="creator__canvas-wrap">
             <canvas class="creator__canvas" width="1024" height="1024" aria-label="SAIYAN creator preview"></canvas>
           </div>
-          <p class="creator__privacy">Images stay in your browser. Download exports a PNG locally.</p>
+          <p class="creator__privacy">Your image appears in the preview only. Press download when it looks right.</p>
         </div>
 
         <form class="creator__controls" aria-label="SAIYAN creator controls">
@@ -449,13 +449,28 @@
             <button class="creator__mode-btn" type="button" data-mode="meme" role="tab" aria-selected="false">MEME</button>
           </div>
 
-          <label class="creator__field creator__field--upload" data-pfp-control>
+          <label class="creator__field creator__field--upload">
             <span>Upload Image</span>
             <input class="creator__upload" type="file" accept="image/*" />
           </label>
 
+          <div class="creator__adjustments">
+            <label class="creator__field">
+              <span>Zoom</span>
+              <input class="creator__zoom" type="range" min="0.7" max="2.2" step="0.01" value="1" />
+            </label>
+            <label class="creator__field">
+              <span>Move X</span>
+              <input class="creator__offset-x" type="range" min="-240" max="240" step="1" value="0" />
+            </label>
+            <label class="creator__field">
+              <span>Move Y</span>
+              <input class="creator__offset-y" type="range" min="-240" max="240" step="1" value="0" />
+            </label>
+          </div>
+
           <label class="creator__field" data-meme-control hidden>
-            <span>Meme Template</span>
+            <span>Meme Background</span>
             <select class="creator__template">
               <option value="/images/hero-1.jpg">Hero Power</option>
               <option value="/images/hero-1-mobile.webp">Mobile Aura</option>
@@ -479,6 +494,20 @@
             <input class="creator__bottom-text" type="text" maxlength="42" placeholder="POWER LEVEL RISING" />
           </label>
 
+          <label class="creator__field" data-meme-control hidden>
+            <span>Text Size</span>
+            <input class="creator__meme-size" type="range" min="44" max="86" step="1" value="68" />
+          </label>
+
+          <label class="creator__field" data-meme-control hidden>
+            <span>Text Style</span>
+            <select class="creator__meme-style">
+              <option value="gold">Gold Glow</option>
+              <option value="cream">Cream Impact</option>
+              <option value="blue">Blue Ki</option>
+            </select>
+          </label>
+
           <div class="creator__toggles">
             <label class="creator__toggle" data-pfp-control>
               <input class="creator__frame-toggle" type="checkbox" checked />
@@ -488,9 +517,9 @@
               <input class="creator__vignette-toggle" type="checkbox" checked />
               <span>Dark vignette</span>
             </label>
-            <label class="creator__toggle">
-              <input class="creator__watermark-toggle" type="checkbox" checked />
-              <span>Logo badge</span>
+            <label class="creator__toggle" data-pfp-control>
+              <input class="creator__lightning-toggle" type="checkbox" checked />
+              <span>Blue lightning</span>
             </label>
           </div>
 

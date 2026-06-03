@@ -9,6 +9,10 @@
     linear-gradient(180deg, #050306 0%, #08060b 48%, #050306 100%);
 }
 
+.section--creator [hidden] {
+  display: none !important;
+}
+
 .creator__grid,
 .creator__glow {
   position: absolute;
@@ -134,6 +138,15 @@
   padding: clamp(16px, 2.2vw, 22px);
 }
 
+.creator__adjustments {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(74, 216, 255, 0.12);
+  background: rgba(74, 216, 255, 0.035);
+}
+
 .creator__mode {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -180,6 +193,12 @@
   letter-spacing: 0.06em;
   outline: none;
   padding: 12px 12px;
+}
+
+.creator__field input[type='range'] {
+  padding: 0;
+  accent-color: var(--gold);
+  cursor: pointer;
 }
 
 .creator__field input:focus,
