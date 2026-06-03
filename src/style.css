@@ -512,6 +512,28 @@ ul { list-style: none; }
   width: 100%;
 }
 
+.nav__links a.nav__icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  line-height: 0;
+  color: rgba(255, 247, 224, 0.58);
+  filter: drop-shadow(0 0 10px rgba(74, 216, 255, 0.08));
+  transition: color 0.2s, filter 0.2s, transform 0.2s;
+}
+
+.nav__links a.nav__icon-link::after {
+  display: none;
+}
+
+.nav__links a.nav__icon-link:hover {
+  color: var(--gold);
+  filter: drop-shadow(0 0 12px rgba(255, 210, 48, 0.32));
+  transform: translateY(-2px);
+}
+
 .nav__links .nav__game-cta {
   padding: 7px 10px;
   border: 1px solid rgba(255, 210, 48, 0.46);

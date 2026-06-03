@@ -12,16 +12,18 @@ let isPlaying = false
 
 audio.volume = 0.36
 
+function setSoundState(playing) {
+  isPlaying = playing
+  toggle.classList.toggle('is-playing', playing)
+  toggle.setAttribute('aria-pressed', String(playing))
+  toggle.setAttribute('aria-label', playing ? 'Mute sound' : 'Enable sound')
+}
+
 function playRandomTrack() {
   audio.src = tracks[Math.floor(Math.random() * tracks.length)]
   audio.play()
-    .then(() => {
-      isPlaying = true
-      toggle.textContent = '♫ SOUND: ON'
-    })
-    .catch(() => {
-      toggle.textContent = '♫ ENABLE SOUND'
-    })
+    .then(() => setSoundState(true))
+    .catch(() => setSoundState(false))
 }
 
 toggle.addEventListener('click', () => {
@@ -32,19 +34,20 @@ toggle.addEventListener('click', () => {
 
   if (isPlaying) {
     audio.pause()
-    isPlaying = false
-    toggle.textContent = '♫ SOUND: OFF'
+    setSoundState(false)
     return
   }
 
   audio.play()
-    .then(() => {
-      isPlaying = true
-      toggle.textContent = '♫ SOUND: ON'
-    })
-    .catch(() => {
-      toggle.textContent = '♫ ENABLE SOUND'
-    })
+    .then(() => setSoundState(true))
+    .catch(() => setSoundState(false))
 })
 
 audio.addEventListener('ended', playRandomTrack)
+
+window.addEventListener('message', (event) => {
+  if (event.origin !== 'https://games.heidrunbot.app') return
+  if (event.data !== 'closeGame') return
+
+  window.location.href = 'https://games.heidrunbot.app/game?hub'
+})
