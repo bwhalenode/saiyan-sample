@@ -483,6 +483,11 @@ ul { list-style: none; }
   pointer-events: all;
 }
 
+.nav__links li {
+  display: inline-flex;
+  align-items: center;
+}
+
 .nav__links a {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -516,12 +521,19 @@ ul { list-style: none; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   line-height: 0;
   color: rgba(255, 247, 224, 0.58);
   filter: drop-shadow(0 0 10px rgba(74, 216, 255, 0.08));
+  transform: translateY(1px);
   transition: color 0.2s, filter 0.2s, transform 0.2s;
+}
+
+.nav__links a.nav__icon-link svg {
+  display: block;
+  width: 16px;
+  height: 16px;
 }
 
 .nav__links a.nav__icon-link::after {
@@ -531,7 +543,7 @@ ul { list-style: none; }
 .nav__links a.nav__icon-link:hover {
   color: var(--gold);
   filter: drop-shadow(0 0 12px rgba(255, 210, 48, 0.32));
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .nav__links .nav__game-cta {
