@@ -16,41 +16,23 @@
   <div class="play-shell">
     <div class="play-shell__glow" aria-hidden="true"></div>
 
-    <header class="play-header">
-      <a class="play-brand" href="/" aria-label="Return to $SAIYAN home">
-        <img src="/images/logo.png" alt="" aria-hidden="true" />
-        <span>$SAIYAN</span>
-      </a>
-
-      <div class="play-header__actions">
-        <a class="play-link" href="/" aria-label="Return to website">WEBSITE</a>
-        <a
-          class="play-link play-link--primary"
-          href="https://games.heidrunbot.app/game/saiyan.html"
-          target="_blank"
-          rel="noopener noreferrer"
-        >OPEN GAME</a>
-      </div>
-    </header>
-
     <main class="play-main">
-      <div class="play-intro">
-        <p class="play-eyebrow">TRAINING GROUNDS</p>
-        <h1>AWAKEN YOUR POWER.</h1>
-        <p>Enter the arena. On mobile, use <strong>OPEN GAME</strong> for the cleanest full-screen experience.</p>
-      </div>
-
       <div class="play-frame-wrap">
         <div class="play-frame-wrap__edge" aria-hidden="true"></div>
         <iframe
           class="play-frame"
           src="https://games.heidrunbot.app/game/saiyan.html"
           title="$SAIYAN community game"
-          allow="fullscreen"
           loading="eager"
+          allow="autoplay"
         ></iframe>
+        <a class="play-frame-exit" href="/" aria-label="Exit game and return to website">
+          ← EXIT
+        </a>
+        <button class="play-sound-toggle" type="button">♫ ENABLE SOUND</button>
       </div>
     </main>
   </div>
+  <script type="module" src="/src/play.js"></script>
 </body>
 </html>
