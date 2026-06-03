@@ -29,6 +29,8 @@ if (root) {
     templateImage: null,
     watermark: null,
     uploadUrl: null,
+    pinchDistance: 0,
+    pinchZoom: 1,
   }
 
   const watermark = new Image()
@@ -191,11 +193,19 @@ if (root) {
 
   function drawPfp() {
     ctx.clearRect(0, 0, 1024, 1024)
+
+    ctx.save()
+    ctx.beginPath()
+    ctx.arc(512, 512, 448, 0, Math.PI * 2)
+    ctx.clip()
+
     if (state.userImage) coverImage(state.userImage, 0, 0, 1024, 1024)
     else drawFallbackBackground()
 
     if (vignetteToggle.checked) drawVignette()
     if (lightningToggle.checked) drawLightning()
+    ctx.restore()
+
     if (frameToggle.checked) drawAuraFrame()
     drawWatermark()
     drawPfpText()
@@ -284,6 +294,40 @@ if (root) {
     state.uploadUrl = URL.createObjectURL(file)
     state.userImage = await loadImage(state.uploadUrl)
     render()
+  })
+
+  function touchDistance(touches) {
+    const [first, second] = touches
+    return Math.hypot(
+      second.clientX - first.clientX,
+      second.clientY - first.clientY,
+    )
+  }
+
+  canvas.addEventListener('touchstart', (event) => {
+    if (event.touches.length !== 2) return
+
+    state.pinchDistance = touchDistance(event.touches)
+    state.pinchZoom = Number(imageZoom.value)
+  }, { passive: true })
+
+  canvas.addEventListener('touchmove', (event) => {
+    if (event.touches.length !== 2 || !state.pinchDistance) return
+
+    event.preventDefault()
+    const nextDistance = touchDistance(event.touches)
+    const ratio = nextDistance / state.pinchDistance
+    const min = Number(imageZoom.min)
+    const max = Number(imageZoom.max)
+    const nextZoom = Math.min(max, Math.max(min, state.pinchZoom * ratio))
+
+    imageZoom.value = String(nextZoom)
+    render()
+  }, { passive: false })
+
+  canvas.addEventListener('touchend', () => {
+    state.pinchDistance = 0
+    state.pinchZoom = Number(imageZoom.value)
   })
 
   templateSelect.addEventListener('change', async () => {
