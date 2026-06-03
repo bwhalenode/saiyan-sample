@@ -423,6 +423,83 @@
     </div>
   </section>
 
+  <!-- ═══════════════ SAIYAN CREATOR ═══════════════ -->
+  <section id="creator" class="section section--creator" data-section="creator" aria-labelledby="creator-title">
+    <div class="creator__grid" aria-hidden="true"></div>
+    <div class="creator__glow" aria-hidden="true"></div>
+
+    <div class="creator__inner">
+      <div class="creator__intro">
+        <p class="creator__eyebrow">WEBSITE TOOL // CLIENT-SIDE</p>
+        <h2 class="creator__title" id="creator-title">SAIYAN<br><span>CREATOR.</span></h2>
+        <p class="creator__text">Forge a $SAIYAN-branded PFP or meme in your browser. No uploads, no backend, no AI — just your image, your words, and a local PNG download.</p>
+      </div>
+
+      <div class="creator__workspace" data-creator>
+        <div class="creator__preview-panel">
+          <div class="creator__canvas-wrap">
+            <canvas class="creator__canvas" width="1024" height="1024" aria-label="SAIYAN creator preview"></canvas>
+          </div>
+          <p class="creator__privacy">Images stay in your browser. Download exports a PNG locally.</p>
+        </div>
+
+        <form class="creator__controls" aria-label="SAIYAN creator controls">
+          <div class="creator__mode" role="tablist" aria-label="Creator mode">
+            <button class="creator__mode-btn is-active" type="button" data-mode="pfp" role="tab" aria-selected="true">PFP</button>
+            <button class="creator__mode-btn" type="button" data-mode="meme" role="tab" aria-selected="false">MEME</button>
+          </div>
+
+          <label class="creator__field creator__field--upload" data-pfp-control>
+            <span>Upload Image</span>
+            <input class="creator__upload" type="file" accept="image/*" />
+          </label>
+
+          <label class="creator__field" data-meme-control hidden>
+            <span>Meme Template</span>
+            <select class="creator__template">
+              <option value="/images/hero-1.jpg">Hero Power</option>
+              <option value="/images/hero-1-mobile.webp">Mobile Aura</option>
+              <option value="/images/mid-page.webp">Blue Ki Burst</option>
+              <option value="/images/og-logo.jpg">Logo Strike</option>
+            </select>
+          </label>
+
+          <label class="creator__field creator__field--text" data-pfp-control>
+            <span>Custom Text</span>
+            <input class="creator__pfp-text" type="text" maxlength="28" placeholder="AWAKEN YOUR POWER" />
+          </label>
+
+          <label class="creator__field creator__field--text" data-meme-control hidden>
+            <span>Top Text</span>
+            <input class="creator__top-text" type="text" maxlength="42" placeholder="WHEN THE KI HITS" />
+          </label>
+
+          <label class="creator__field creator__field--text" data-meme-control hidden>
+            <span>Bottom Text</span>
+            <input class="creator__bottom-text" type="text" maxlength="42" placeholder="POWER LEVEL RISING" />
+          </label>
+
+          <div class="creator__toggles">
+            <label class="creator__toggle" data-pfp-control>
+              <input class="creator__frame-toggle" type="checkbox" checked />
+              <span>Gold aura frame</span>
+            </label>
+            <label class="creator__toggle" data-pfp-control>
+              <input class="creator__vignette-toggle" type="checkbox" checked />
+              <span>Dark vignette</span>
+            </label>
+            <label class="creator__toggle">
+              <input class="creator__watermark-toggle" type="checkbox" checked />
+              <span>Logo badge</span>
+            </label>
+          </div>
+
+          <button class="creator__download" type="button">DOWNLOAD PNG</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
   <!-- ═══════════════ FOOTER / CTA ═══════════════ -->
   <section id="footer" class="section section--footer" data-section="footer">
     <div class="footer__inner">
@@ -487,5 +564,6 @@
   </section>
 
   <script type="module" src="/src/main.js"></script>
+  <script type="module" src="/src/sections/creator.js"></script>
 </body>
 </html>
