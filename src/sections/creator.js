@@ -31,6 +31,10 @@ if (root) {
     uploadUrl: null,
     pinchDistance: 0,
     pinchZoom: 1,
+    dragStartX: 0,
+    dragStartY: 0,
+    dragOffsetX: 0,
+    dragOffsetY: 0,
   }
 
   const watermark = new Image()
@@ -193,6 +197,8 @@ if (root) {
 
   function drawPfp() {
     ctx.clearRect(0, 0, 1024, 1024)
+    ctx.fillStyle = '#020104'
+    ctx.fillRect(0, 0, 1024, 1024)
 
     ctx.save()
     ctx.beginPath()
@@ -304,7 +310,22 @@ if (root) {
     )
   }
 
+  function setOffset(input, value) {
+    const min = Number(input.min)
+    const max = Number(input.max)
+    input.value = String(Math.min(max, Math.max(min, value)))
+  }
+
   canvas.addEventListener('touchstart', (event) => {
+    if (event.touches.length === 1) {
+      const [touch] = event.touches
+      state.dragStartX = touch.clientX
+      state.dragStartY = touch.clientY
+      state.dragOffsetX = Number(imageOffsetX.value)
+      state.dragOffsetY = Number(imageOffsetY.value)
+      return
+    }
+
     if (event.touches.length !== 2) return
 
     state.pinchDistance = touchDistance(event.touches)
@@ -312,6 +333,20 @@ if (root) {
   }, { passive: true })
 
   canvas.addEventListener('touchmove', (event) => {
+    if (event.touches.length === 1) {
+      event.preventDefault()
+      const [touch] = event.touches
+      const rect = canvas.getBoundingClientRect()
+      const scale = canvas.width / rect.width
+      const deltaX = (touch.clientX - state.dragStartX) * scale
+      const deltaY = (touch.clientY - state.dragStartY) * scale
+
+      setOffset(imageOffsetX, state.dragOffsetX + deltaX)
+      setOffset(imageOffsetY, state.dragOffsetY + deltaY)
+      render()
+      return
+    }
+
     if (event.touches.length !== 2 || !state.pinchDistance) return
 
     event.preventDefault()
@@ -328,6 +363,8 @@ if (root) {
   canvas.addEventListener('touchend', () => {
     state.pinchDistance = 0
     state.pinchZoom = Number(imageZoom.value)
+    state.dragOffsetX = Number(imageOffsetX.value)
+    state.dragOffsetY = Number(imageOffsetY.value)
   })
 
   templateSelect.addEventListener('change', async () => {
