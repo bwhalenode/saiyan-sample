@@ -5,3 +5,7 @@ dist
 
 # Local Claude Code settings & machine-specific tool permissions
 .claude/
+
+# Throwaway QA/screenshot captures (root-level only)
+/desktop-*.png
+/mobile-*.png
