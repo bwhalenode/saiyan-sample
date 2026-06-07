@@ -53,14 +53,15 @@ export function revealHero(scene) {
     const cam  = scene?.getCamera()
     const tl   = gsap.timeline({ onComplete: resolve })
 
-    /* Nav slides down while the dolly plays */
+    /* Nav fades in (cascade) — opacity only, so items never read as vertically
+       misaligned mid-stagger. The whole bar drops in together below. */
+    tl.from('.nav', { opacity: 0, y: -14, duration: 0.6, ease: 'power2.out' }, 0)
     tl.from('.nav__brand, .nav__links a, .nav__socials a', {
       opacity: 0,
-      y: -14,
       stagger: 0.05,
-      duration: 0.6,
+      duration: 0.5,
       ease: 'power2.out',
-    }, 0)
+    }, 0.05)
 
     const mobile = isMob()
     const lineStart = mobile ? 0.45 : 1.4

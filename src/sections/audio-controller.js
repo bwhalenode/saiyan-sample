@@ -37,6 +37,7 @@ export const audioPlayer = {
   subscribe(fn) { subs.add(fn); return () => subs.delete(fn) },
 
   get playing()     { return !!audio && !audio.paused },
+  get hasTrack()    { return !!audio && !!audio.src },
   get currentTime() { return audio?.currentTime || 0 },
   get duration()    { return audio?.duration || 0 },
 
@@ -50,6 +51,8 @@ export const audioPlayer = {
   },
 
   pause() { audio?.pause() },
+
+  resume() { audio?.play().catch(() => emit()) },
 
   toggle(src) {
     const a = ensure()

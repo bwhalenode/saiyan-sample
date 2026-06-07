@@ -6,6 +6,20 @@ gsap.registerPlugin(ScrollTrigger)
 export function initTimeline(lenis) {
   const isMobile = window.innerWidth <= 900
   const revealActions = 'play reverse play reverse'
+  const bindLiveSection = selector => {
+    const section = document.querySelector(selector)
+    if (!section) return
+
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top 72%',
+      end: 'bottom 18%',
+      onEnter: () => section.classList.add('is-live'),
+      onEnterBack: () => section.classList.add('is-live'),
+      onLeave: () => section.classList.remove('is-live'),
+      onLeaveBack: () => section.classList.remove('is-live'),
+    })
+  }
 
   // Let Lenis proxy scroll for ScrollTrigger
   lenis.on('scroll', ScrollTrigger.update)
@@ -65,28 +79,77 @@ export function initTimeline(lenis) {
     })
   }
 
-  /* ─── Inflection quote reveal ─── */
+  /* ─── Inflection quote: words strike in on scroll, lit by a lightning flash ─── */
+  const inflectionTitle = document.querySelector('.inflection__title')
+  if (inflectionTitle && !inflectionTitle.dataset.split) {
+    inflectionTitle.innerHTML = inflectionTitle.textContent.trim().split(/\s+/)
+      .map(w => `<span class="inflection__word">${w}</span>`)
+      .join(' ')
+    inflectionTitle.dataset.split = '1'
+  }
+
+  // Keep the lightning alive only while the quote section is active.
+  const inflectionFlash = document.querySelector('.inflection__flash')
+  const inflectionSection = document.getElementById('inflection')
+  let inflectionStrike
+  const strike = () => {
+    if (!inflectionFlash) return
+    inflectionStrike?.kill()
+    inflectionStrike = gsap.timeline()
+      .set(inflectionFlash, { opacity: 0 })
+      .to(inflectionFlash, { opacity: 0.95, duration: 0.06, ease: 'none' })
+      .to(inflectionFlash, { opacity: 0.1,  duration: 0.07, ease: 'none' })
+      .to(inflectionFlash, { opacity: 0.7,  duration: 0.05, ease: 'none' })
+      .to(inflectionFlash, { opacity: 0,    duration: 0.55, ease: 'power2.out' })
+  }
+  const startInflectionLightning = () => {
+    inflectionSection?.classList.add('is-live')
+    strike()
+  }
+  const stopInflectionLightning = () => {
+    inflectionSection?.classList.remove('is-live')
+    inflectionStrike?.kill()
+    if (inflectionFlash) gsap.set(inflectionFlash, { opacity: 0 })
+  }
+
   const inflectionTl = gsap.timeline({
     scrollTrigger: {
       trigger: '#inflection',
-      start:   'top 65%',
-      end:     'bottom 20%',
+      start:   isMobile ? 'top 56%' : 'top 52%',
+      end:     'bottom 18%',
       toggleActions: revealActions,
+      onEnter:     startInflectionLightning,
+      onEnterBack: startInflectionLightning,
+      onLeave:     stopInflectionLightning,
+      onLeaveBack: stopInflectionLightning,
     },
   })
 
-  inflectionTl.to('.inflection__title', {
-    opacity: 1,
-    y: 0,
-    duration: 1.2,
-    ease: 'power3.out',
-  })
-  inflectionTl.to('.inflection__attribution', {
-    opacity: 1,
-    y: 0,
-    duration: 0.7,
-    ease: 'power2.out',
-  }, 0.42)
+  inflectionTl.fromTo('.inflection__word',
+    {
+      opacity: 0,
+      yPercent: 70,
+      scale: 0.94,
+      filter: 'blur(14px) brightness(2.6)',
+      textShadow: '0 0 28px rgba(74,216,255,0.85), 0 0 44px rgba(255,210,48,0.35)',
+    },
+    {
+      opacity: 1,
+      yPercent: 0,
+      scale: 1,
+      filter: 'blur(0px) brightness(1)',
+      textShadow: '0 0 18px rgba(255,210,48,0.34), 0 0 18px rgba(74,216,255,0.12)',
+      duration: isMobile ? 0.48 : 0.56,
+      stagger: { each: isMobile ? 0.045 : 0.055, from: 'center' },
+      ease: 'power3.out',
+    },
+    0.04,
+  )
+  inflectionTl.fromTo('.inflection__attribution',
+    { opacity: 0, y: 18, filter: 'blur(8px)' },
+    { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.65, ease: 'power2.out' },
+    '>-0.15',
+  )
 
   /* ─── Tokenomics title entrance ─── */
   gsap.fromTo('.tokenomics__title',
@@ -182,6 +245,8 @@ export function initTimeline(lenis) {
     )
   }
 
+  bindLiveSection('#howtobuy')
+
   /* ─── HTB lightning connector line draw ─── */
   gsap.to('#htb-line', {
     strokeDashoffset: 0,
@@ -228,6 +293,31 @@ export function initTimeline(lenis) {
     duration: 0.9,
     ease: 'power3.out',
   }, 0.18)
+  bindLiveSection('#game')
+
+  /* ─── Creator reveal + active energy ─── */
+  const creatorTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '#creator',
+      start:   isMobile ? 'top 78%' : 'top 70%',
+      end:     'bottom 14%',
+      toggleActions: revealActions,
+    },
+  })
+
+  creatorTl.to('.creator__intro', {
+    opacity: 1,
+    y: 0,
+    duration: 0.85,
+    ease: 'power3.out',
+  })
+  creatorTl.to('.creator__workspace', {
+    opacity: 1,
+    y: 0,
+    duration: 0.85,
+    ease: 'power3.out',
+  }, 0.16)
+  bindLiveSection('#creator')
 
   /* ─── Footer CTA ─── */
   gsap.to('.footer__cta', {

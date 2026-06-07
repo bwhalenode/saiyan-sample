@@ -102,6 +102,7 @@
         </div>
       </div>
     </div>
+
   </section>
 
   <div class="hero__ca" id="hero-ca-bar">
@@ -187,6 +188,7 @@
   <!-- ═══════════════ INFLECTION ═══════════════ -->
   <section id="inflection" class="section section--inflection" aria-label="Super Saiyan quote">
     <div class="inflection__overlay" aria-hidden="true"></div>
+    <div class="inflection__flash" aria-hidden="true"></div>
     <div class="inflection__quote">
       <h2 class="inflection__title">POWER COMES IN RESPONSE TO A NEED, NOT A DESIRE.</h2>
       <p class="inflection__attribution">— SUPER SAIYAN</p>
@@ -197,7 +199,11 @@
   <section id="tokenomics" class="section section--tokenomics" data-section="tokenomics">
     <div class="tokenomics__glow" aria-hidden="true"></div>
     <h2 class="tokenomics__title">POWER<br>LEVEL</h2>
-    <div class="tokenomics__cards">
+    <div class="tokenomics__pulse">
+      <span class="tokenomics__pulse-label">LIVE MARKET PULSE</span>
+      <span class="tokenomics__pulse-status" data-market-status>SYNCING</span>
+    </div>
+    <div class="tokenomics__cards" data-token-market aria-live="polite">
 
       <div class="token-card" data-cursor="hover" data-index="0">
         <div class="token-card__inner">
@@ -255,6 +261,77 @@
         </div>
       </div>
 
+      <div
+        class="token-card token-card--market"
+        data-cursor="hover"
+        data-index="4"
+      >
+        <div class="token-card__inner">
+          <div class="token-card__label">PRICE</div>
+          <div class="token-card__value" data-market-price>—</div>
+          <div class="token-card__signal">LIVE</div>
+        </div>
+        <div class="token-card__shockwave" aria-hidden="true">
+          <svg viewBox="0 0 200 200" width="200" height="200" fill="none" aria-hidden="true">
+            <circle cx="100" cy="100" r="90" stroke="var(--gold)" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
+
+      <div
+        class="token-card token-card--market"
+        data-cursor="hover"
+        data-index="5"
+      >
+        <div class="token-card__inner">
+          <div class="token-card__label">MARKET CAP</div>
+          <div class="token-card__value" data-market-cap>—</div>
+          <div class="token-card__signal">DEX</div>
+        </div>
+        <div class="token-card__shockwave" aria-hidden="true">
+          <svg viewBox="0 0 200 200" width="200" height="200" fill="none" aria-hidden="true">
+            <circle cx="100" cy="100" r="90" stroke="var(--gold)" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
+
+      <div
+        class="token-card token-card--market"
+        data-cursor="hover"
+        data-index="6"
+      >
+        <div class="token-card__inner">
+          <div class="token-card__label">24H VOLUME</div>
+          <div class="token-card__value" data-market-volume>—</div>
+          <div class="token-card__signal">FLOW</div>
+        </div>
+        <div class="token-card__shockwave" aria-hidden="true">
+          <svg viewBox="0 0 200 200" width="200" height="200" fill="none" aria-hidden="true">
+            <circle cx="100" cy="100" r="90" stroke="var(--gold)" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
+
+      <a
+        class="token-card token-card--market"
+        href="https://dexscreener.com/ethereum/0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-cursor="hover"
+        data-index="7"
+        aria-label="View live $SAIYAN liquidity chart"
+      >
+        <div class="token-card__inner">
+          <div class="token-card__label">LIVE LIQUIDITY</div>
+          <div class="token-card__value" data-market-liquidity>—</div>
+          <div class="token-card__signal">LIVE CHART →</div>
+        </div>
+        <div class="token-card__shockwave" aria-hidden="true">
+          <svg viewBox="0 0 200 200" width="200" height="200" fill="none" aria-hidden="true">
+            <circle cx="100" cy="100" r="90" stroke="var(--gold)" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </a>
     </div>
   </section>
 
