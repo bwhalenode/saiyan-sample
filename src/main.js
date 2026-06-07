@@ -11,7 +11,7 @@ import { initAbout }       from './sections/about.js'
 import { initTokenomics }  from './sections/tokenomics.js'
 import { initTeam }        from './sections/team.js'
 import { initMusic }       from './sections/music.js'
-import { initHeroAnthem }  from './sections/hero-anthem.js'
+import { initHeroAnthem, startHeroAnthemMuted }  from './sections/hero-anthem.js'
 import { initFooter }      from './sections/footer.js'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -58,6 +58,7 @@ async function finishInit(lenis, scene) {
   initTeam()
   initMusic()
   initHeroAnthem()
+  startHeroAnthemMuted()
   initFooter()
 
   // Register all scroll-driven animations

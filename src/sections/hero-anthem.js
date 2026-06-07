@@ -25,20 +25,34 @@ export function initHeroAnthem() {
 
   function render() {
     const playing = audioPlayer.playing            // lit for ANY track in the queue
+    const muted = audioPlayer.muted
     wrap.classList.toggle('is-playing', playing)
+    wrap.classList.toggle('is-muted', playing && muted)
     btn.setAttribute('aria-pressed', String(playing))
-    btn.setAttribute('aria-label', playing ? 'Pause the $SAIYAN soundtrack' : 'Play the $SAIYAN soundtrack')
-    if (nameEl && audioPlayer.hasTrack) nameEl.textContent = currentName()
+    btn.setAttribute('aria-label', playing && muted
+      ? 'Unmute the $SAIYAN soundtrack'
+      : playing
+        ? 'Pause the $SAIYAN soundtrack'
+        : 'Play the $SAIYAN soundtrack')
+    if (nameEl) {
+      nameEl.textContent = playing && muted ? 'TAP FOR SOUND' : currentName()
+    }
   }
 
   // Master play/pause for the queue: pause if anything's playing, resume the
   // current track if one is loaded, otherwise kick the loop off from the anthem.
   btn.addEventListener('click', () => {
-    if (audioPlayer.playing) audioPlayer.pause()
+    if (audioPlayer.playing && audioPlayer.muted) audioPlayer.unmute()
+    else if (audioPlayer.playing) audioPlayer.pause()
     else if (audioPlayer.hasTrack) audioPlayer.resume()
     else audioPlayer.play(ANTHEM_SRC)
   })
 
   audioPlayer.subscribe(render)
   render()
+}
+
+export function startHeroAnthemMuted() {
+  audioPlayer.setPlaylistIfEmpty?.([ANTHEM_SRC])
+  audioPlayer.playMuted(ANTHEM_SRC)
 }

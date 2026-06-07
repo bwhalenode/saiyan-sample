@@ -886,6 +886,13 @@ ul { list-style: none; }
   transform: translateX(0);
 }
 
+.hero__anthem.is-muted .hero__anthem-name {
+  opacity: 1;
+  transform: translateX(0);
+  color: rgba(255, 210, 48, 0.9);
+  animation: anthem-unmute-label 4.8s ease-out 1 forwards;
+}
+
 .hero__anthem-btn {
   position: relative;
   flex: 0 0 auto;
@@ -931,6 +938,17 @@ ul { list-style: none; }
   animation: anthem-ring 1.8s ease-out infinite;
 }
 
+.hero__anthem.is-muted .hero__anthem-btn {
+  border-color: rgba(255, 210, 48, 0.76);
+  box-shadow:
+    0 0 0 1px rgba(255, 210, 48, 0.12) inset,
+    0 0 34px rgba(255, 210, 48, 0.26);
+}
+
+.hero__anthem.is-muted .hero__anthem-btn::after {
+  animation: anthem-ring 2.35s ease-out infinite;
+}
+
 @keyframes anthem-ring {
   0%   { opacity: 0.55; transform: scale(1); }
   100% { opacity: 0;    transform: scale(1.45); }
@@ -938,14 +956,26 @@ ul { list-style: none; }
 
 /* Icon swap: idle → play ▸ · playing → equalizer · playing+hover → pause */
 .hero__anthem-icon,
-.hero__anthem-eq { grid-area: 1 / 1; }
+.hero__anthem-eq,
+.hero__anthem-muted-mark { grid-area: 1 / 1; }
 .hero__anthem-icon--pause,
-.hero__anthem-eq { display: none; }
+.hero__anthem-eq,
+.hero__anthem-muted-mark { display: none; }
 
 .hero__anthem.is-playing .hero__anthem-icon--play { display: none; }
 .hero__anthem.is-playing .hero__anthem-eq { display: flex; }
+.hero__anthem.is-muted .hero__anthem-eq {
+  display: flex;
+  opacity: 0.46;
+  filter: saturate(0.8);
+}
+.hero__anthem.is-muted .hero__anthem-muted-mark {
+  display: block;
+}
 .hero__anthem.is-playing .hero__anthem-btn:hover .hero__anthem-eq { display: none; }
 .hero__anthem.is-playing .hero__anthem-btn:hover .hero__anthem-icon--pause { display: block; }
+.hero__anthem.is-muted .hero__anthem-btn:hover .hero__anthem-eq { display: flex; }
+.hero__anthem.is-muted .hero__anthem-btn:hover .hero__anthem-icon--pause { display: none; }
 
 .hero__anthem-eq {
   align-items: flex-end;
@@ -963,9 +993,38 @@ ul { list-style: none; }
   animation: music-eq 0.9s ease-in-out infinite;
 }
 
+.hero__anthem.is-muted .hero__anthem-eq i {
+  animation-duration: 1.55s;
+}
+
+.hero__anthem-muted-mark {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  pointer-events: none;
+}
+
+.hero__anthem-muted-mark::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 31px;
+  border-radius: 2px;
+  background: var(--gold);
+  box-shadow: 0 0 12px rgba(255, 210, 48, 0.62);
+  transform: translate(-50%, -50%) rotate(-42deg);
+}
+
 .hero__anthem-eq i:nth-child(2) { animation-delay: 0.15s; }
 .hero__anthem-eq i:nth-child(3) { animation-delay: 0.30s; }
 .hero__anthem-eq i:nth-child(4) { animation-delay: 0.45s; }
+
+@keyframes anthem-unmute-label {
+  0%, 72% { opacity: 1; }
+  100% { opacity: 0; }
+}
 
 /* Scroll indicator: the "line with a traveling dot" pattern — a glowing gold
    ki-dot charges downward along a thin line. Centered with clear gaps from the
