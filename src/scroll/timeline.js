@@ -210,20 +210,24 @@ export function initTimeline(lenis) {
     },
   })
 
-  /* HTB steps stagger */
-  gsap.to('.htb__step', {
-    opacity: 1,
-    y: 0,
-    stagger: isMobile ? 0.14 : 0.18,
-    duration: isMobile ? 0.72 : 0.8,
-    ease: 'power3.out',
-    scrollTrigger: {
-      trigger: '#howtobuy',
-      start:   isMobile ? 'top 78%' : 'top 65%',
-      end:     'bottom 18%',
-      toggleActions: revealActions,
+  /* HTB step cards fade up out of the dark, one after another */
+  gsap.fromTo('.htb__step',
+    { opacity: 0, y: 64, scale: 0.95 },
+    {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      stagger: isMobile ? 0.14 : 0.18,
+      duration: isMobile ? 0.8 : 0.9,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '.htb__steps',
+        start:   isMobile ? 'top 92%' : 'top 85%',
+        end:     'bottom 20%',
+        toggleActions: revealActions,
+      },
     },
-  })
+  )
 
   if (isMobile) {
     gsap.fromTo('.htb__step-icon',
@@ -281,18 +285,15 @@ export function initTimeline(lenis) {
     },
   })
 
-  gameTl.to('.game-invite__copy', {
-    opacity: 1,
-    y: 0,
-    duration: 0.9,
-    ease: 'power3.out',
-  })
-  gameTl.to('.game-invite__visual', {
-    opacity: 1,
-    y: 0,
-    duration: 0.9,
-    ease: 'power3.out',
-  }, 0.18)
+  gameTl.fromTo('.game-invite__copy',
+    { opacity: 0, y: 40 },
+    { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' },
+  )
+  gameTl.fromTo('.game-invite__visual',
+    { opacity: 0, y: 70, scale: 0.94 },
+    { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power3.out' },
+    0.15,
+  )
   bindLiveSection('#game')
 
   /* Creator reveal + active energy */
@@ -305,18 +306,15 @@ export function initTimeline(lenis) {
     },
   })
 
-  creatorTl.to('.creator__intro', {
-    opacity: 1,
-    y: 0,
-    duration: 0.85,
-    ease: 'power3.out',
-  })
-  creatorTl.to('.creator__workspace', {
-    opacity: 1,
-    y: 0,
-    duration: 0.85,
-    ease: 'power3.out',
-  }, 0.16)
+  creatorTl.fromTo('.creator__intro',
+    { opacity: 0, y: 40 },
+    { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out' },
+  )
+  creatorTl.fromTo('.creator__workspace',
+    { opacity: 0, y: 70, scale: 0.96 },
+    { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power3.out' },
+    0.16,
+  )
   bindLiveSection('#creator')
 
   /* Footer CTA */
