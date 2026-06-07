@@ -69,6 +69,12 @@ export const audioPlayer = {
     emit()
   },
 
+  mute() {
+    const a = ensure()
+    a.muted = true
+    emit()
+  },
+
   toggle(src) {
     const a = ensure()
     if (this.isCurrent(src)) (a.paused ? a.play().catch(() => {}) : a.pause())

@@ -1,7 +1,7 @@
-/* Hero anthem toggle, a corner master control for the shared audio queue.
-   Pressing it starts "Awaken The Saiyan" (track 01) and rolls through the whole
-   $SAIYAN soundtrack on an endless loop (auto-advance lives in the controller).
-   Audio is always user-initiated (a click), satisfying browser autoplay rules. */
+/* Hero sound toggle, a corner mute/unmute for the shared soundtrack queue.
+   The queue auto-plays muted on load; this button only crosses (mute) or
+   uncrosses (unmute) the speaker. Unmuting counts as the user gesture browsers
+   require, and auto-advance through the playlist lives in the controller. */
 import { audioPlayer } from './audio-controller.js'
 
 const ANTHEM_SRC = '/music/awaken-the-saiyan.mp3'
@@ -24,28 +24,24 @@ export function initHeroAnthem() {
   }
 
   function render() {
-    const playing = audioPlayer.playing            // lit for ANY track in the queue
-    const muted = audioPlayer.muted
-    wrap.classList.toggle('is-playing', playing)
-    wrap.classList.toggle('is-muted', playing && muted)
-    btn.setAttribute('aria-pressed', String(playing))
-    btn.setAttribute('aria-label', playing && muted
-      ? 'Unmute the $SAIYAN soundtrack'
-      : playing
-        ? 'Pause the $SAIYAN soundtrack'
-        : 'Play the $SAIYAN soundtrack')
-    if (nameEl) {
-      nameEl.textContent = playing && muted ? 'TAP FOR SOUND' : currentName()
-    }
+    const on = audioPlayer.playing && !audioPlayer.muted   // sound audible
+    wrap.classList.toggle('is-on', on)
+    wrap.classList.toggle('is-muted', !on)
+    btn.setAttribute('aria-pressed', String(on))
+    btn.setAttribute('aria-label', on ? 'Mute the $SAIYAN soundtrack' : 'Unmute the $SAIYAN soundtrack')
+    if (nameEl) nameEl.textContent = on ? currentName() : 'TAP FOR SOUND'
   }
 
-  // Master play/pause for the queue: pause if anything's playing, resume the
-  // current track if one is loaded, otherwise kick the loop off from the anthem.
+  // Pure mute toggle: unmute (resuming/starting the queue if needed), or mute.
   btn.addEventListener('click', () => {
-    if (audioPlayer.playing && audioPlayer.muted) audioPlayer.unmute()
-    else if (audioPlayer.playing) audioPlayer.pause()
-    else if (audioPlayer.hasTrack) audioPlayer.resume()
-    else audioPlayer.play(ANTHEM_SRC)
+    if (audioPlayer.playing && !audioPlayer.muted) {
+      audioPlayer.mute()
+      return
+    }
+    if (!audioPlayer.playing) {
+      audioPlayer.hasTrack ? audioPlayer.resume() : audioPlayer.play(ANTHEM_SRC)
+    }
+    audioPlayer.unmute()
   })
 
   audioPlayer.subscribe(render)

@@ -880,7 +880,7 @@ ul { list-style: none; }
 }
 
 .hero__anthem:hover .hero__anthem-name,
-.hero__anthem.is-playing .hero__anthem-name {
+.hero__anthem.is-on .hero__anthem-name {
   opacity: 1;
   transform: translateX(0);
 }
@@ -925,7 +925,7 @@ ul { list-style: none; }
 
 .hero__anthem-btn:active { transform: scale(0.96); }
 
-/* Soft pulse ring while the anthem is playing */
+/* Soft pulse ring only while sound is actually on */
 .hero__anthem-btn::after {
   content: '';
   position: absolute;
@@ -936,10 +936,11 @@ ul { list-style: none; }
   pointer-events: none;
 }
 
-.hero__anthem.is-playing .hero__anthem-btn::after {
+.hero__anthem.is-on .hero__anthem-btn::after {
   animation: anthem-ring 1.8s ease-out infinite;
 }
 
+/* Muted is the default resting state, give the button a touch more glow to invite the tap */
 .hero__anthem.is-muted .hero__anthem-btn {
   border-color: rgba(255, 210, 48, 0.76);
   box-shadow:
@@ -947,39 +948,17 @@ ul { list-style: none; }
     0 0 34px rgba(255, 210, 48, 0.26);
 }
 
-.hero__anthem.is-muted .hero__anthem-btn::after {
-  animation: anthem-ring 2.35s ease-out infinite;
-}
-
 @keyframes anthem-ring {
   0%   { opacity: 0.55; transform: scale(1); }
   100% { opacity: 0;    transform: scale(1.45); }
 }
 
-/* Icon swap: idle → play ▸ · playing → equalizer · playing+hover → pause */
-.hero__anthem-icon,
+/* Always-on equalizer; a diagonal slash crosses it out while muted */
 .hero__anthem-eq,
 .hero__anthem-muted-mark { grid-area: 1 / 1; }
-.hero__anthem-icon--pause,
-.hero__anthem-eq,
-.hero__anthem-muted-mark { display: none; }
-
-.hero__anthem.is-playing .hero__anthem-icon--play { display: none; }
-.hero__anthem.is-playing .hero__anthem-eq { display: flex; }
-.hero__anthem.is-muted .hero__anthem-eq {
-  display: flex;
-  opacity: 0.46;
-  filter: saturate(0.8);
-}
-.hero__anthem.is-muted .hero__anthem-muted-mark {
-  display: block;
-}
-.hero__anthem.is-playing .hero__anthem-btn:hover .hero__anthem-eq { display: none; }
-.hero__anthem.is-playing .hero__anthem-btn:hover .hero__anthem-icon--pause { display: block; }
-.hero__anthem.is-muted .hero__anthem-btn:hover .hero__anthem-eq { display: flex; }
-.hero__anthem.is-muted .hero__anthem-btn:hover .hero__anthem-icon--pause { display: none; }
 
 .hero__anthem-eq {
+  display: flex;
   align-items: flex-end;
   justify-content: center;
   gap: 3px;
@@ -995,16 +974,23 @@ ul { list-style: none; }
   animation: music-eq 0.9s ease-in-out infinite;
 }
 
-.hero__anthem.is-muted .hero__anthem-eq i {
-  animation-duration: 1.55s;
-}
+.hero__anthem-eq i:nth-child(2) { animation-delay: 0.15s; }
+.hero__anthem-eq i:nth-child(3) { animation-delay: 0.30s; }
+.hero__anthem-eq i:nth-child(4) { animation-delay: 0.45s; }
+
+/* Muted: dim and slow the bars, then cross them out */
+.hero__anthem.is-muted .hero__anthem-eq { opacity: 0.5; }
+.hero__anthem.is-muted .hero__anthem-eq i { animation-duration: 1.6s; }
 
 .hero__anthem-muted-mark {
   position: relative;
   width: 30px;
   height: 30px;
   pointer-events: none;
+  display: none;
 }
+
+.hero__anthem.is-muted .hero__anthem-muted-mark { display: block; }
 
 .hero__anthem-muted-mark::before {
   content: '';
@@ -1018,10 +1004,6 @@ ul { list-style: none; }
   box-shadow: 0 0 12px rgba(255, 210, 48, 0.62);
   transform: translate(-50%, -50%) rotate(-42deg);
 }
-
-.hero__anthem-eq i:nth-child(2) { animation-delay: 0.15s; }
-.hero__anthem-eq i:nth-child(3) { animation-delay: 0.30s; }
-.hero__anthem-eq i:nth-child(4) { animation-delay: 0.45s; }
 
 @keyframes anthem-unmute-label {
   0%, 68% {
