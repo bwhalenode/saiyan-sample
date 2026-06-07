@@ -260,5 +260,22 @@ export function initTimeline(lenis) {
     },
   })
 
+  /* ─── Music / soundtrack: heading + tracks come alive on scroll ─── */
+  gsap.fromTo('.music__head',
+    { opacity: 0, y: 40 },
+    {
+      opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: '#music', start: 'top 75%', end: 'bottom 12%', toggleActions: revealActions },
+    },
+  )
+
+  gsap.fromTo('.music__track',
+    { opacity: 0, y: 30 },
+    {
+      opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power3.out',
+      scrollTrigger: { trigger: '#music', start: 'top 72%', end: 'bottom 12%', toggleActions: revealActions },
+    },
+  )
+
   ScrollTrigger.refresh()
 }

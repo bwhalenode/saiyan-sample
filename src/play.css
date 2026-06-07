@@ -58,6 +58,8 @@ a {
 
 .play-shell {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100vw;
   min-height: 100svh;
   overflow: hidden;
@@ -178,15 +180,60 @@ a {
   border-color: rgba(255, 210, 48, 0.62);
 }
 
+/* Slim "more games → community" bar (drives players to Telegram) */
+.play-more {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 9px 16px;
+  border-bottom: 1px solid rgba(255, 210, 48, 0.18);
+  background: rgba(8, 5, 9, 0.82);
+  font-family: var(--mono);
+  font-size: clamp(10px, 1.4vw, 12px);
+  letter-spacing: 0.12em;
+  text-align: center;
+}
+
+.play-more__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 10px 2px rgba(255, 210, 48, 0.6);
+  animation: play-more-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes play-more-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.85); }
+  50%      { opacity: 1;   transform: scale(1.1); }
+}
+
+.play-more__text { color: rgba(255, 247, 224, 0.66); }
+
+.play-more__cta {
+  color: var(--gold);
+  font-weight: 700;
+  text-shadow: 0 0 14px rgba(255, 210, 48, 0.4);
+  transition: text-shadow 0.25s, opacity 0.2s;
+}
+
+.play-more__cta:hover { opacity: 0.85; text-shadow: 0 0 20px rgba(255, 210, 48, 0.7); }
+
 .play-main {
   position: relative;
   z-index: 1;
-  min-height: calc(100svh - 72px);
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .play-frame-wrap {
   position: relative;
-  min-height: calc(100svh - 72px);
+  height: 100%;
+  min-height: 0;
   background: #000;
 }
 
@@ -201,7 +248,8 @@ a {
 .play-frame {
   display: block;
   width: 100%;
-  min-height: calc(100svh - 72px);
+  height: 100%;
+  min-height: 0;
   border: 0;
   background: #000;
 }
@@ -282,7 +330,11 @@ a {
   .play-frame {
     width: 100vw;
     max-width: 100vw;
-    min-height: calc(100svh - 58px);
+  }
+
+  .play-more {
+    padding: 7px 12px;
+    letter-spacing: 0.08em;
   }
 
   .play-frame-wrap {

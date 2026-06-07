@@ -333,9 +333,9 @@
 
           <div class="htb__step" data-step="01">
             <div class="htb__step-bg-num" aria-hidden="true">01</div>
-            <div class="htb__step-icon" aria-hidden="true">
+            <div class="htb__step-icon htb__step-icon--wallets" aria-hidden="true">
               <!-- MetaMask Fox -->
-              <svg viewBox="0 0 100 100" width="56" height="56" fill="none">
+              <svg viewBox="0 0 100 100" width="52" height="52" fill="none">
                 <polygon points="50,8 85,25 85,65 50,90 15,65 15,25" fill="#E2761B" stroke="#E2761B" stroke-linejoin="round"/>
                 <polygon points="50,8 50,55 85,25" fill="#E4761B" stroke="#E4761B" stroke-linejoin="round"/>
                 <polygon points="50,8 15,25 50,55" fill="#F6851B" stroke="#F6851B" stroke-linejoin="round"/>
@@ -346,10 +346,12 @@
                 <circle cx="36" cy="44" r="5" fill="white"/>
                 <circle cx="64" cy="44" r="5" fill="white"/>
               </svg>
+              <!-- Phantom -->
+              <img class="htb__wallet-logo" src="/images/phantom.png" alt="" width="52" height="52" loading="lazy" />
             </div>
             <div class="htb__step-num">STEP 01</div>
             <h3 class="htb__step-title">WALLET</h3>
-            <p class="htb__step-desc">Download MetaMask or your preferred Web3 wallet. Create your wallet and store your seed phrase somewhere safe — not online.</p>
+            <p class="htb__step-desc">Download a Web3 wallet — MetaMask or Phantom both work. Create your wallet and store your seed phrase somewhere safe — not online.</p>
           </div>
 
           <div class="htb__step" data-step="02">
@@ -365,7 +367,7 @@
             </div>
             <div class="htb__step-num">STEP 02</div>
             <h3 class="htb__step-title">GET ETH</h3>
-            <p class="htb__step-desc">Buy ETH from an exchange like Coinbase or Binance. Send it to your MetaMask wallet address. You'll need ETH to swap.</p>
+            <p class="htb__step-desc">Buy ETH from an exchange like Coinbase or Binance. Send it to your wallet address. You'll need ETH to swap.</p>
           </div>
 
           <div class="htb__step" data-step="03">
@@ -529,6 +531,76 @@
     </div>
   </section>
 
+  <!-- ═══════════════ MUSIC / SOUNDTRACK ═══════════════ -->
+  <section id="music" class="section section--music" data-section="music" aria-labelledby="music-title">
+    <div class="music__glow" aria-hidden="true"></div>
+    <div class="music__inner">
+      <div class="music__head">
+        <p class="music__eyebrow">SOUND OF THE SAIYANS</p>
+        <h2 class="music__title" id="music-title">THE<br><span>SOUNDTRACK.</span></h2>
+        <p class="music__text">Original $SAIYAN anthems forged for the grind. Press play and raise your power level.</p>
+      </div>
+
+      <ul class="music__list" data-music>
+        <li class="music__track" data-src="/music/awaken-the-saiyan.mp3">
+          <button class="music__toggle" type="button" aria-label="Play Awaken The Saiyan">
+            <svg class="music__icon music__icon--play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="music__icon music__icon--pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+          </button>
+          <span class="music__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <div class="music__meta">
+            <span class="music__index">01</span>
+            <span class="music__name">AWAKEN THE SAIYAN</span>
+            <span class="music__progress"><span class="music__progress-fill"></span></span>
+          </div>
+          <span class="music__time">0:00</span>
+        </li>
+
+        <li class="music__track" data-src="/music/pain-2-power.mp3">
+          <button class="music__toggle" type="button" aria-label="Play Pain 2 Power">
+            <svg class="music__icon music__icon--play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="music__icon music__icon--pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+          </button>
+          <span class="music__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <div class="music__meta">
+            <span class="music__index">02</span>
+            <span class="music__name">PAIN 2 POWER</span>
+            <span class="music__progress"><span class="music__progress-fill"></span></span>
+          </div>
+          <span class="music__time">0:00</span>
+        </li>
+
+        <li class="music__track" data-src="/music/saiyan-party.mp3">
+          <button class="music__toggle" type="button" aria-label="Play Saiyan Party">
+            <svg class="music__icon music__icon--play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="music__icon music__icon--pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+          </button>
+          <span class="music__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <div class="music__meta">
+            <span class="music__index">03</span>
+            <span class="music__name">SAIYAN PARTY</span>
+            <span class="music__progress"><span class="music__progress-fill"></span></span>
+          </div>
+          <span class="music__time">0:00</span>
+        </li>
+
+        <li class="music__track" data-src="/music/super-saiyan.mp3">
+          <button class="music__toggle" type="button" aria-label="Play Super Saiyan">
+            <svg class="music__icon music__icon--play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="music__icon music__icon--pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+          </button>
+          <span class="music__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <div class="music__meta">
+            <span class="music__index">04</span>
+            <span class="music__name">SUPER SAIYAN</span>
+            <span class="music__progress"><span class="music__progress-fill"></span></span>
+          </div>
+          <span class="music__time">0:00</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
   <!-- ═══════════════ FOOTER / CTA ═══════════════ -->
   <section id="footer" class="section section--footer" data-section="footer">
     <div class="footer__inner">
@@ -560,15 +632,11 @@
             <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
           </svg>
         </a>
-        <a href="https://www.dextools.io/app/en/ether/pair-explorer/0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56" target="_blank" rel="noopener noreferrer" data-cursor="hover" aria-label="Dextools">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
+        <a href="https://www.dextools.io/app/en/ether/pair-explorer/0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56" target="_blank" rel="noopener noreferrer" data-cursor="hover" aria-label="DEXTools">
+          <span class="footer__brand-icon footer__brand-icon--dextools" aria-hidden="true"></span>
         </a>
-        <a href="https://dexscreener.com/ethereum/0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56" target="_blank" rel="noopener noreferrer" data-cursor="hover" aria-label="Dexscreener">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M3 3h18v18H3V3zm2 2v14h14V5H5zm2 2h4v4H7V7zm6 0h4v4h-4V7zM7 13h4v4H7v-4zm6 0h4v4h-4v-4z"/>
-          </svg>
+        <a href="https://dexscreener.com/ethereum/0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56" target="_blank" rel="noopener noreferrer" data-cursor="hover" aria-label="DexScreener">
+          <span class="footer__brand-icon footer__brand-icon--dexscreener" aria-hidden="true"></span>
         </a>
       </div>
 

@@ -9,3 +9,6 @@ dist
 # Throwaway QA/screenshot captures (root-level only)
 /desktop-*.png
 /mobile-*.png
+
+# Local source-staging for build assets (shipped copies live in public/)
+build-assets/
