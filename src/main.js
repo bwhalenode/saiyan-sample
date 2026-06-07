@@ -48,6 +48,11 @@ async function finishInit(lenis, scene) {
   }
   requestAnimationFrame(loop)
 
+  // Start the hero sound control as soon as the preloader hands off to the hero.
+  // The track runs muted until the user taps the visible "TAP FOR SOUND" control.
+  initHeroAnthem()
+  startHeroAnthemMuted()
+
   // Cinematic reveal: camera dolly + staggered title wipe
   await revealHero(scene)
 
@@ -57,8 +62,6 @@ async function finishInit(lenis, scene) {
   initTokenomics()
   initTeam()
   initMusic()
-  initHeroAnthem()
-  startHeroAnthemMuted()
   initFooter()
 
   // Register all scroll-driven animations

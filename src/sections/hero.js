@@ -35,7 +35,7 @@ export function initHero() {
  *   1. Camera dollies in (2 s)
  *   2. "SUPER" wipes up (0.6 s before dolly ends)
  *   3. "SAIYAN" wipes up 0.2 s after SUPER
- *   4. CA bar fades in 0.4 s after SAIYAN finishes
+ *   4. Audio circle wakes immediately; CA bar fades in after SAIYAN finishes
  *   5. Nav fades in alongside the dolly start
  */
 export function revealHero(scene) {
@@ -75,6 +75,15 @@ export function revealHero(scene) {
       }, 0)
     }
 
+    /* Audio circle comes alive immediately after the preloader shockwave handoff.
+       The CA button still waits until the title lands. */
+    tl.to('#hero-anthem-wrap', {
+      opacity: 1,
+      y: 0,
+      duration: 0.55,
+      ease: 'power3.out',
+    }, 0.12)
+
     /* "SUPER" — starts 1.4 s into dolly (0.6 s overlap with end) */
     tl.to('#hero-line-1', {
       y: 0,
@@ -89,8 +98,8 @@ export function revealHero(scene) {
       ease: 'power4.out',
     }, '+=0.2')
 
-    /* Hero CA circle + anthem toggle — 0.4 s after SAIYAN animation finishes */
-    tl.to(['#hero-ca-bar', '#hero-anthem-wrap'], {
+    /* Hero CA circle — 0.4 s after SAIYAN animation finishes */
+    tl.to('#hero-ca-bar', {
       opacity: 1,
       y: 0,
       duration: 0.7,

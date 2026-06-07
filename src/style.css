@@ -890,6 +890,9 @@ ul { list-style: none; }
   opacity: 1;
   transform: translateX(0);
   color: rgba(255, 210, 48, 0.9);
+  text-shadow:
+    0 0 16px rgba(255, 210, 48, 0.62),
+    0 0 28px rgba(74, 216, 255, 0.12);
   animation: anthem-unmute-label 4.8s ease-out 1 forwards;
 }
 
@@ -1022,8 +1025,14 @@ ul { list-style: none; }
 .hero__anthem-eq i:nth-child(4) { animation-delay: 0.45s; }
 
 @keyframes anthem-unmute-label {
-  0%, 72% { opacity: 1; }
-  100% { opacity: 0; }
+  0%, 68% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(6px);
+  }
 }
 
 /* Scroll indicator: the "line with a traveling dot" pattern — a glowing gold
@@ -3388,6 +3397,14 @@ ul { list-style: none; }
   /* No hover on touch — the eq + pulse ring already signal play state, and the
      label would crowd the centered scroll hint. */
   .hero__anthem-name { display: none; }
+
+  .hero__anthem.is-muted .hero__anthem-name {
+    position: absolute;
+    right: 68px;
+    display: block;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+  }
 
   .hero__ca-panel {
     position: absolute;
