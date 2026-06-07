@@ -156,6 +156,7 @@ a {
   height: 34px;
   padding: 0 11px;
   border: 1px solid rgba(255, 210, 48, 0.36);
+  border-radius: 999px;
   background: rgba(255, 210, 48, 0.06);
   color: var(--gold);
 }
