@@ -7,6 +7,10 @@ if (root) {
   const ctx = canvas.getContext('2d')
   const modeButtons = [...root.querySelectorAll('.creator__mode-btn')]
   const upload = root.querySelector('.creator__upload')
+  const camera = root.querySelector('.creator__camera')
+  const uploadTrigger = root.querySelector('[data-upload-trigger]')
+  const uploadMenu = root.querySelector('[data-upload-menu]')
+  const coarsePointer = window.matchMedia('(hover: none), (pointer: coarse)').matches
   const templateSelect = root.querySelector('.creator__template')
   const imageZoom = root.querySelector('.creator__zoom')
   const imageOffsetX = root.querySelector('.creator__offset-x')
@@ -292,14 +296,36 @@ if (root) {
     button.addEventListener('click', () => setMode(button.dataset.mode))
   })
 
-  upload.addEventListener('change', async () => {
-    const [file] = upload.files
+  async function handleFile(input) {
+    const [file] = input.files
     if (!file) return
 
     if (state.uploadUrl) URL.revokeObjectURL(state.uploadUrl)
     state.uploadUrl = URL.createObjectURL(file)
     state.userImage = await loadImage(state.uploadUrl)
     render()
+  }
+
+  upload.addEventListener('change', () => handleFile(upload))
+  camera.addEventListener('change', () => handleFile(camera))
+
+  const closeUploadMenu = () => {
+    uploadMenu.hidden = true
+    uploadTrigger.setAttribute('aria-expanded', 'false')
+  }
+
+  uploadTrigger.addEventListener('click', () => {
+    // Desktop has no camera to choose, so go straight to the file picker.
+    if (!coarsePointer) { upload.click(); return }
+    const open = uploadMenu.hidden
+    uploadMenu.hidden = !open
+    uploadTrigger.setAttribute('aria-expanded', String(open))
+  })
+
+  uploadMenu.querySelector('[data-pick="camera"]').addEventListener('click', () => { closeUploadMenu(); camera.click() })
+  uploadMenu.querySelector('[data-pick="gallery"]').addEventListener('click', () => { closeUploadMenu(); upload.click() })
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.creator__upload-control')) closeUploadMenu()
   })
 
   function touchDistance(touches) {

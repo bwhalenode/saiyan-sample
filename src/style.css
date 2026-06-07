@@ -798,14 +798,14 @@ ul { list-style: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 36px;
+  min-height: 40px;
   background: var(--gold);
   color: #000;
   font-family: var(--font-display);
   font-size: 20px;
   line-height: 1;
   letter-spacing: 0.08em;
-  border-radius: 2px;
+  border-radius: 999px;
   box-shadow: 0 0 24px rgba(255, 210, 48, 0.22);
   transition: transform 0.2s var(--ease-out-expo), box-shadow 0.2s;
 }

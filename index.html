@@ -510,10 +510,20 @@
             <button class="creator__mode-btn" type="button" data-mode="meme" role="tab" aria-selected="false">MEME</button>
           </div>
 
-          <label class="creator__field creator__field--upload">
+          <div class="creator__field creator__field--upload">
             <span>Upload Image</span>
-            <input class="creator__upload" type="file" accept="image/*" />
-          </label>
+            <div class="creator__upload-control">
+              <button type="button" class="creator__upload-btn" data-upload-trigger aria-haspopup="true" aria-expanded="false">
+                <span class="creator__upload-plus" aria-hidden="true">+</span> Add Image
+              </button>
+              <div class="creator__upload-menu" data-upload-menu role="menu" hidden>
+                <button type="button" data-pick="camera" role="menuitem">Take Photo</button>
+                <button type="button" data-pick="gallery" role="menuitem">Choose from Library</button>
+              </div>
+            </div>
+            <input class="creator__upload" type="file" accept="image/*" hidden />
+            <input class="creator__camera" type="file" accept="image/*" capture="environment" hidden />
+          </div>
 
           <div class="creator__adjustments">
             <label class="creator__field">
