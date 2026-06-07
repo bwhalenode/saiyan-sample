@@ -53,7 +53,7 @@ export function revealHero(scene) {
     const cam  = scene?.getCamera()
     const tl   = gsap.timeline({ onComplete: resolve })
 
-    /* Nav fades in (cascade) — opacity only, so items never read as vertically
+    /* Nav fades in (cascade), opacity only, so items never read as vertically
        misaligned mid-stagger. The whole bar drops in together below. */
     tl.from('.nav', { opacity: 0, y: -14, duration: 0.6, ease: 'power2.out' }, 0)
     tl.from('.nav__brand, .nav__links a, .nav__socials a', {
@@ -84,21 +84,21 @@ export function revealHero(scene) {
       ease: 'power3.out',
     }, 0.12)
 
-    /* "SUPER" — starts 1.4 s into dolly (0.6 s overlap with end) */
+    /* "SUPER", starts 1.4 s into dolly (0.6 s overlap with end) */
     tl.to('#hero-line-1', {
       y: 0,
       duration: 0.9,
       ease: 'power4.out',
     }, lineStart)
 
-    /* "SAIYAN" — 0.2 s after SUPER starts */
+    /* "SAIYAN", 0.2 s after SUPER starts */
     tl.to('#hero-line-2', {
       y: 0,
       duration: 0.9,
       ease: 'power4.out',
     }, '+=0.2')
 
-    /* Hero CA circle — 0.4 s after SAIYAN animation finishes */
+    /* Hero CA circle, 0.4 s after SAIYAN animation finishes */
     tl.to('#hero-ca-bar', {
       opacity: 1,
       y: 0,

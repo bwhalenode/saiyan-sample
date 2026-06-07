@@ -49,7 +49,7 @@ export function initTimeline(lenis) {
     })
   })
 
-  /* ─── Canvas fade out as hero exits ─── */
+  /* Canvas fade out as hero exits */
   gsap.to('#hero-canvas', {
     opacity: 0,
     scrollTrigger: {
@@ -60,8 +60,8 @@ export function initTimeline(lenis) {
     },
   })
 
-  /* ─── Scroll indicator: one consistent component on every viewport. Visible
-         from the top, fades out as soon as the footer scrolls into view. ─── */
+  /* Scroll indicator: one consistent component on every viewport. Visible
+         from the top, fades out as soon as the footer scrolls into view. */
   const scrollHint = document.getElementById('scroll-hint')
   const footerEl   = document.getElementById('footer')
   if (scrollHint && footerEl) {
@@ -70,7 +70,7 @@ export function initTimeline(lenis) {
     }, { threshold: 0 })
     hintIO.observe(footerEl)
 
-    // Clickable cue — anchor to the first section below the fold (UX best practice)
+    // Clickable cue, anchor to the first section below the fold (UX best practice)
     scrollHint.addEventListener('click', () => {
       const about = document.getElementById('about')
       if (!about) return
@@ -79,7 +79,7 @@ export function initTimeline(lenis) {
     })
   }
 
-  /* ─── Inflection quote: words strike in on scroll, lit by a lightning flash ─── */
+  /* Inflection quote: words strike in on scroll, lit by a lightning flash */
   const inflectionTitle = document.querySelector('.inflection__title')
   if (inflectionTitle && !inflectionTitle.dataset.split) {
     inflectionTitle.innerHTML = inflectionTitle.textContent.trim().split(/\s+/)
@@ -151,7 +151,7 @@ export function initTimeline(lenis) {
     '>-0.15',
   )
 
-  /* ─── Tokenomics title entrance ─── */
+  /* Tokenomics title entrance */
   gsap.fromTo('.tokenomics__title',
     { opacity: 0, y: 60 },
     {
@@ -168,7 +168,7 @@ export function initTimeline(lenis) {
     },
   )
 
-  /* ─── Token cards entrance + shockwave ─── */
+  /* Token cards entrance + shockwave */
   const cards = document.querySelectorAll('.token-card')
   cards.forEach((card, i) => {
     const shockwave = card.querySelector('.token-card__shockwave')
@@ -196,7 +196,7 @@ export function initTimeline(lenis) {
     })
   })
 
-  /* ─── How to Buy title ─── */
+  /* How to Buy title */
   gsap.to('.htb__section-title', {
     opacity: 1,
     y: 0,
@@ -210,7 +210,7 @@ export function initTimeline(lenis) {
     },
   })
 
-  /* ─── HTB steps stagger ─── */
+  /* HTB steps stagger */
   gsap.to('.htb__step', {
     opacity: 1,
     y: 0,
@@ -247,7 +247,7 @@ export function initTimeline(lenis) {
 
   bindLiveSection('#howtobuy')
 
-  /* ─── HTB lightning connector line draw ─── */
+  /* HTB lightning connector line draw */
   gsap.to('#htb-line', {
     strokeDashoffset: 0,
     ease:   'power1.inOut',
@@ -259,7 +259,7 @@ export function initTimeline(lenis) {
     },
   })
 
-  /* ─── HTB CA repeat ─── */
+  /* HTB CA repeat */
   gsap.to('.htb__ca-repeat', {
     opacity: 1,
     duration: 0.6,
@@ -271,7 +271,7 @@ export function initTimeline(lenis) {
     },
   })
 
-  /* ─── Game invite ─── */
+  /* Game invite */
   const gameTl = gsap.timeline({
     scrollTrigger: {
       trigger: '#game',
@@ -295,7 +295,7 @@ export function initTimeline(lenis) {
   }, 0.18)
   bindLiveSection('#game')
 
-  /* ─── Creator reveal + active energy ─── */
+  /* Creator reveal + active energy */
   const creatorTl = gsap.timeline({
     scrollTrigger: {
       trigger: '#creator',
@@ -319,7 +319,7 @@ export function initTimeline(lenis) {
   }, 0.16)
   bindLiveSection('#creator')
 
-  /* ─── Footer CTA ─── */
+  /* Footer CTA */
   gsap.to('.footer__cta', {
     opacity: 1,
     scale:   1,
@@ -358,7 +358,7 @@ export function initTimeline(lenis) {
     },
   })
 
-  /* ─── Music / soundtrack: heading + tracks come alive on scroll ─── */
+  /* Music / soundtrack: heading + tracks come alive on scroll */
   gsap.fromTo('.music__head',
     { opacity: 0, y: 40 },
     {

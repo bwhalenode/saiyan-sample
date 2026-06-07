@@ -12,7 +12,6 @@ import { initTokenomics }  from './sections/tokenomics.js'
 import { initTeam }        from './sections/team.js'
 import { initMusic }       from './sections/music.js'
 import { initHeroAnthem, startHeroAnthemMuted }  from './sections/hero-anthem.js'
-import { initFooter }      from './sections/footer.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -30,12 +29,10 @@ async function bootstrap() {
   // Create scene (constructor only sets up the renderer; no textures yet).
   const scene = new HeroScene(canvas)
 
-  // Start the preloader's visual reveal.
   preloader.start()
 
-  // Load the WebGL textures while the preloader plays. We intentionally do NOT
-  // await this here — the preloader's own animation gates when finishInit runs,
-  // and the scene is ready well before that. Errors are logged, not fatal.
+  // Don't await: the preloader's animation gates finishInit, and the scene is
+  // ready well before that. Errors are logged, not fatal.
   preloadImages(['/images/logo.webp', '/images/logo.png'])
   scene.load().catch(err => console.error('[SAIYAN] Scene load error:', err))
 }
@@ -48,23 +45,18 @@ async function finishInit(lenis, scene) {
   }
   requestAnimationFrame(loop)
 
-  // Start the hero sound control as soon as the preloader hands off to the hero.
-  // The track runs muted until the user taps the visible "TAP FOR SOUND" control.
+  // Anthem plays muted on handoff; the visible "TAP FOR SOUND" control unmutes it.
   initHeroAnthem()
   startHeroAnthemMuted()
 
-  // Cinematic reveal: camera dolly + staggered title wipe
   await revealHero(scene)
 
-  // Boot sections
   initHero()
   initAbout()
   initTokenomics()
   initTeam()
   initMusic()
-  initFooter()
 
-  // Register all scroll-driven animations
   initTimeline(lenis)
 }
 

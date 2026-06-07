@@ -36,7 +36,7 @@ float fbm(vec2 p) {
 void main() {
   vec2 uv = vUv;
 
-  // Noise-based edge breathing — displaces UV at semi-transparent boundary
+  // Noise-based edge breathing, displaces UV at semi-transparent boundary
   float n = fbm(uv * 3.0 + vec2(uTime * 0.18, uTime * 0.12));
   float edgeNoise = (n - 0.5) * 0.018;
   vec2 displaceduv = uv + vec2(edgeNoise, edgeNoise * 0.7);
@@ -48,7 +48,7 @@ void main() {
   // Gold rim glow at alpha edges
   float edgeFactor = smoothstep(0.04, 0.35, tex.a) * (1.0 - smoothstep(0.5, 1.0, tex.a));
 
-  // Animated intensity — base rim plus mouse proximity boost, scaled by aura strength
+  // Animated intensity, base rim plus mouse proximity boost, scaled by aura strength
   float rimBase = 0.6 + 0.4 * sin(uTime * 1.8 + uv.y * 3.0);
   float rimIntensity = rimBase * (0.4 + uMouseDist * 1.4) * uAuraStrength;
   rimIntensity = clamp(rimIntensity, 0.0, 2.5);

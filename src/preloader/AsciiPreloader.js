@@ -35,8 +35,7 @@ export class AsciiPreloader {
     this._buildDOM()
   }
 
-  // ── DOM ──────────────────────────────────────────────────────────────────
-
+  // DOM
   _buildDOM() {
     const el = document.createElement('div')
     el.className = 'preloader'
@@ -72,8 +71,7 @@ export class AsciiPreloader {
     this._image.src = _canUseWebP() ? '/images/pre-loader.webp' : '/images/pre-loader.png'
   }
 
-  // ── Entry point ──────────────────────────────────────────────────────────
-
+  // Entry point
   start() {
     this._startTime = performance.now()
     this._trackReady()
@@ -87,8 +85,7 @@ export class AsciiPreloader {
     this._scheduleGlitch()
   }
 
-  // ── Readiness: wait for hero assets + fonts (capped), then maybe show tap ──
-
+  // Readiness: wait for hero assets + fonts (capped), then maybe show tap
   _trackReady() {
     const assetLoads = READY_ASSETS.map(src => new Promise(res => {
       const img = new Image()
@@ -108,8 +105,7 @@ export class AsciiPreloader {
     })
   }
 
-  // ── Reveal loop ──────────────────────────────────────────────────────────
-
+  // Reveal loop
   _tick(now) {
     const elapsed  = now - this._startTime
     const duration = IS_MOB() ? 1800 : 2400
@@ -138,8 +134,7 @@ export class AsciiPreloader {
     if (this._pctEl) this._pctEl.textContent = pct + '%'
   }
 
-  // ── Glitch characters ────────────────────────────────────────────────────
-
+  // Glitch characters
   _spawnGlitchChars(p) {
     if (!this._glitch || !this._stage) return
     const mob    = IS_MOB()
@@ -186,8 +181,7 @@ export class AsciiPreloader {
     if (this._glitch) this._glitch.innerHTML = ''
   }
 
-  // ── Tap gate ───────────────────────────────────────────────────────────────
-
+  // Tap gate
   _maybeShowPrompt() {
     if (this._armed || this._bursting || this._done) return
     if (!this._revealDone) return
@@ -225,8 +219,7 @@ export class AsciiPreloader {
     this._burst()
   }
 
-  // ── Transformation burst ────────────────────────────────────────────────────
-
+  // Transformation burst
   async _burst() {
     // Hide prompt + HUD as the burst begins.
     this._prompt.classList.remove('is-ready')
@@ -235,7 +228,7 @@ export class AsciiPreloader {
     this._hudTop.style.opacity = '0'
 
     if (REDUCED()) {
-      // Reduced motion: skip the shockwave/shake — quick fade, still gated on tap.
+      // Reduced motion: skip the shockwave/shake, quick fade, still gated on tap.
       this._el.style.transition = 'opacity 0.3s ease'
       this._el.style.opacity = '0'
       await wait(320)
@@ -243,7 +236,7 @@ export class AsciiPreloader {
       return
     }
 
-    // 1) Flare — the crystal surges bright (~300ms).
+    // 1) Flare, the crystal surges bright (~300ms).
     this._stage.classList.add('preloader-stage--flare')
 
     // 2) Shockwave + flash (+ shake) fire mid-flare.
@@ -267,8 +260,7 @@ export class AsciiPreloader {
     this._onComplete()
   }
 
-  // ── Reduced-motion path ──────────────────────────────────────────────────
-
+  // Reduced-motion path
   _reducedMotionReveal() {
     this._mask.style.display   = 'none'
     this._scan.style.display   = 'none'

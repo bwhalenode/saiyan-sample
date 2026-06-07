@@ -1,4 +1,4 @@
-/* SAIYAN audio — a single shared <audio> element so the hero anthem button and
+/* SAIYAN audio, a single shared <audio> element so the hero anthem button and
    the soundtrack list act as remotes for the SAME playback. Nothing ever plays
    over anything else, and every surface stays in sync via subscribe(). */
 let audio = null
@@ -66,12 +66,6 @@ export const audioPlayer = {
   unmute() {
     const a = ensure()
     a.muted = false
-    emit()
-  },
-
-  mute() {
-    const a = ensure()
-    a.muted = true
     emit()
   },
 

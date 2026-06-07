@@ -20,9 +20,7 @@ function jaggledPoints(a, b, depth) {
 export class Lightning {
   constructor(scene) {
     this._scene  = scene
-    this._bolts  = []
     this._timers = []
-    this._origin = new THREE.Vector3(0, 0, 0)
 
     // Material pool
     this._matCore = new THREE.LineBasicMaterial({
@@ -73,7 +71,6 @@ export class Lightning {
     const group = new THREE.Group()
     group.add(core, glow)
     this._scene.add(group)
-    this._bolts[index] = group
 
     clearTimeout(this._timers[index])
     this._timers[index] = setTimeout(() => {
@@ -83,14 +80,4 @@ export class Lightning {
     }, BOLT_LIFETIME + Math.random() * 300)
   }
 
-  setOrigin(v) {
-    this._origin.copy(v)
-  }
-
-  dispose() {
-    this._timers.forEach(t => clearTimeout(t))
-    this._bolts.forEach(b => this._scene.remove(b))
-    this._matCore.dispose()
-    this._matGlow.dispose()
-  }
 }

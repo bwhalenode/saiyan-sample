@@ -70,7 +70,7 @@
 
 .creator__title {
   margin: 0;
-  color: var(--cream);
+  color: var(--ink);
   font-family: var(--font-display);
   font-size: clamp(64px, 10vw, 142px);
   font-weight: 400;
@@ -274,7 +274,7 @@
   border: 1px solid rgba(255, 210, 48, 0.22);
   border-radius: 16px;
   background: rgba(0, 0, 0, 0.42);
-  color: var(--cream);
+  color: var(--ink);
   font: inherit;
   font-size: 12px;
   letter-spacing: 0.06em;

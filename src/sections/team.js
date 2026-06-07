@@ -135,7 +135,7 @@ export function initTeam() {
     dialog.showModal()
   }
 
-  /* ── Interactions ── */
+  /* Interactions */
   cards.forEach((card, i) => {
     card.addEventListener('click', () => {
       if (Math.abs(dragDelta) > DRAG_THRESH) return     // ignore the drag-end click

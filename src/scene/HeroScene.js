@@ -11,8 +11,8 @@ import crystalFrag from './shaders/crystal.frag?raw'
 
 import { Lightning } from './Lightning.js'
 
-// WebP feature detection — resolves before textures load
-export const supportsWebP = await new Promise(resolve => {
+// WebP feature detection, resolves before textures load
+const supportsWebP = await new Promise(resolve => {
   const img = new Image()
   img.onload  = () => resolve(img.width === 1)
   img.onerror = () => resolve(false)
@@ -28,17 +28,13 @@ const FINAL_CAM_Z = 4
 export class HeroScene {
   constructor(canvas) {
     this._canvas      = canvas
-    this._mouse       = new THREE.Vector2(0, 0)
     this._mouseNorm   = { x: 0, y: 0 }
     this._cameraTarget = new THREE.Vector3()
-    this._visible     = true
-    this._prevTime    = 0
     this._imageAspect = null
     this._plane       = null
     this._auraMat     = null
     this._crystal     = null
     this._crystalMat  = null
-    this._lightning   = null
 
     this._initRenderer()
     this._initScene()
@@ -48,7 +44,7 @@ export class HeroScene {
     this._bindEvents()
   }
 
-  /* ── Renderer ── */
+  /* Renderer */
   _initRenderer() {
     this._renderer = new THREE.WebGLRenderer({
       canvas:      this._canvas,
@@ -64,12 +60,12 @@ export class HeroScene {
     this._renderer.setClearColor(0x050306, 1)
   }
 
-  /* ── Scene ── */
+  /* Scene */
   _initScene() {
     this._scene = new THREE.Scene()
   }
 
-  /* ── Camera ── */
+  /* Camera */
   _initCamera() {
     this._camera = new THREE.PerspectiveCamera(
       50,
@@ -77,13 +73,13 @@ export class HeroScene {
       0.01,
       100,
     )
-    // Start 20% further back — GSAP dollies to FINAL_CAM_Z in revealHero()
+    // Start 20% further back, GSAP dollies to FINAL_CAM_Z in revealHero()
     this._camera.position.set(0, 0, FINAL_CAM_Z * 1.2)
     // Base used for X/Y mouse drift after dolly is done
     this._cameraBase = new THREE.Vector3(0, 0, FINAL_CAM_Z)
   }
 
-  /* ── Lights ── */
+  /* Lights */
   _initLights() {
     this._scene.add(new THREE.AmbientLight(0xfff5c2, 0.4))
 
@@ -96,7 +92,7 @@ export class HeroScene {
     this._scene.add(fill)
   }
 
-  /* ── Post-processing ── */
+  /* Post-processing */
   _initPostprocessing() {
     this._composer = new EffectComposer(this._renderer)
     this._composer.addPass(new RenderPass(this._scene, this._camera))
@@ -114,18 +110,14 @@ export class HeroScene {
     this._composer.addPass(new OutputPass())
   }
 
-  /* ── Hero texture URL for the given mobile/desktop state (WebP w/ jpg fallback) ── */
+  /* Hero texture URL for the given mobile/desktop state (WebP w/ jpg fallback) */
   _texUrl(mob) {
     return mob
       ? (supportsWebP ? '/images/hero-1-mobile.webp' : '/images/hero-1.jpg')
       : (supportsWebP ? '/images/hero-1.webp'        : '/images/hero-1.jpg')
   }
 
-  /* ── Async asset load — awaited by main.js before hiding preloader ── */
-  async load(onProgress = () => {}) {
-    onProgress(0.05)
-
-    // ── Texture ──
+  async load() {
     this._loader      = new THREE.TextureLoader()
     this._isMobileTex = isMobile()
     const texUrl      = this._texUrl(this._isMobileTex)
@@ -139,21 +131,17 @@ export class HeroScene {
       tex = this._makePlaceholderTexture()
     }
 
-    onProgress(0.5)
-
-    // ── Build geometry + materials ──
     this._buildCharacterPlane(tex)
 
     if (!isMobile()) {
       this._buildCrystal()
     }
 
-    this._lightning = new Lightning(this._scene)
-
-    onProgress(1.0)
+    // Self-managing electric arcs, spawns/expires its own bolts on the scene.
+    new Lightning(this._scene)
   }
 
-  /* ── Plane: 1×1 unit geo scaled to fill viewport (cover logic) ── */
+  /* Plane: 1×1 unit geo scaled to fill viewport (cover logic) */
   _buildCharacterPlane(tex) {
     const iw = tex.image?.naturalWidth  || tex.image?.width  || 512
     const ih = tex.image?.naturalHeight || tex.image?.height || 900
@@ -184,7 +172,7 @@ export class HeroScene {
     this._updatePlaneSizing()
   }
 
-  /* ── Recompute plane scale + position for current viewport ── */
+  /* Recompute plane scale + position for current viewport */
   _updatePlaneSizing() {
     if (!this._plane || !this._imageAspect) return
 
@@ -228,7 +216,7 @@ export class HeroScene {
     }
   }
 
-  /* ── ETH crystal ── */
+  /* ETH crystal */
   _buildCrystal() {
     const geo = new THREE.IcosahedronGeometry(0.38, 0)
     const mat = new THREE.ShaderMaterial({
@@ -249,7 +237,7 @@ export class HeroScene {
     this._crystalMat = mat
   }
 
-  /* ── Placeholder for missing texture ── */
+  /* Placeholder for missing texture */
   _makePlaceholderTexture() {
     const cv  = document.createElement('canvas')
     cv.width  = 512
@@ -266,17 +254,13 @@ export class HeroScene {
     return tex
   }
 
-  /* ── Events: ResizeObserver + mouse ── */
+  /* Events: ResizeObserver + mouse */
   _bindEvents() {
     // ResizeObserver is more reliable than window resize, especially on mobile
     const ro = new ResizeObserver(() => this._onResize())
     ro.observe(document.documentElement)
 
     window.addEventListener('mousemove', (e) => {
-      this._mouse.set(
-        (e.clientX / window.innerWidth)  * 2 - 1,
-        -(e.clientY / window.innerHeight) * 2 + 1,
-      )
       this._mouseNorm.x = e.clientX / window.innerWidth  - 0.5
       this._mouseNorm.y = e.clientY / window.innerHeight - 0.5
     }, { passive: true })
@@ -310,7 +294,7 @@ export class HeroScene {
     this._updatePlaneSizing()
   }
 
-  /* ── Swap hero texture when crossing the mobile/desktop breakpoint ── */
+  /* Swap hero texture when crossing the mobile/desktop breakpoint */
   async _swapTexture(mob) {
     if (!this._loader || !this._auraMat) return
     try {
@@ -328,15 +312,11 @@ export class HeroScene {
     }
   }
 
-  /* ── Expose camera for GSAP dolly in hero.js ── */
+  /* Expose camera for GSAP dolly in hero.js */
   getCamera() { return this._camera }
 
-  /* ── Main update ── */
+  /* Main update */
   update(t) {
-    this._prevTime = t
-
-    if (!this._visible) return
-
     const dist = 1.0 - Math.min(
       Math.sqrt(this._mouseNorm.x ** 2 + this._mouseNorm.y ** 2) * 1.6,
       1.0,
@@ -366,15 +346,5 @@ export class HeroScene {
     }
 
     this._composer.render()
-  }
-
-  setVisible(v) {
-    this._visible        = v
-    this._canvas.style.opacity = v ? '1' : '0'
-  }
-
-  dispose() {
-    this._lightning?.dispose()
-    this._renderer.dispose()
   }
 }

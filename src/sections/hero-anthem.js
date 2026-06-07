@@ -1,4 +1,4 @@
-/* Hero anthem toggle — a corner master control for the shared audio queue.
+/* Hero anthem toggle, a corner master control for the shared audio queue.
    Pressing it starts "Awaken The Saiyan" (track 01) and rolls through the whole
    $SAIYAN soundtrack on an endless loop (auto-advance lives in the controller).
    Audio is always user-initiated (a click), satisfying browser autoplay rules. */

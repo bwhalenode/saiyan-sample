@@ -12,7 +12,7 @@ void main() {
   // Fresnel rim
   float fresnel = pow(1.0 - clamp(dot(viewDir, normal), 0.0, 1.0), 3.0);
 
-  // Internal refraction tint — gold + electric blue
+  // Internal refraction tint, gold + electric blue
   vec3 goldCore  = vec3(1.0, 0.82, 0.19);
   vec3 blueEdge  = vec3(0.29, 0.85, 1.0);
   vec3 baseColor = mix(goldCore, blueEdge, fresnel);

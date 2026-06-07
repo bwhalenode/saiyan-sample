@@ -53,8 +53,6 @@
   --gold:       #FFD230;
   --gold-hot:   #FFA800;
   --gold-white: #FFF5C2;
-  --electric:   #4AD8FF;
-  --rage:       #FF2A3C;
   --ink:        #FFF7E0;
 
   --font-display: 'Bebas Neue', 'Arial Black', sans-serif;
@@ -62,7 +60,6 @@
   --font-mono:    'JetBrains Mono', 'Courier New', monospace;
 
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
-  --ease-in-expo:  cubic-bezier(0.95, 0.05, 0.795, 0.035);
 }
 
 /* ════════════════════════════════════════
@@ -111,7 +108,7 @@ ul { list-style: none; }
 
 
 /* ════════════════════════════════════════
-   PRELOADER — ASCII portrait reveal
+   PRELOADER, ASCII portrait reveal
    ════════════════════════════════════════ */
 .preloader {
   position: fixed;
@@ -144,7 +141,7 @@ ul { list-style: none; }
   display: block;
 }
 
-/* Black mask — clips from bottom to reveal image bottom-up */
+/* Black mask, clips from bottom to reveal image bottom-up */
 .preloader-mask {
   position: absolute;
   inset: 0;
@@ -193,7 +190,7 @@ ul { list-style: none; }
   100% { opacity: 0; }
 }
 
-/* HUD — top-left tag line */
+/* HUD, top-left tag line */
 .preloader-hud-top {
   position: absolute;
   top: 20px;
@@ -206,7 +203,7 @@ ul { list-style: none; }
   pointer-events: none;
 }
 
-/* HUD — bottom-left loading bar */
+/* HUD, bottom-left loading bar */
 .preloader-hud-bottom {
   position: absolute;
   bottom: 20px;
@@ -605,7 +602,7 @@ ul { list-style: none; }
   isolation: isolate;
 }
 
-/* Left-to-right dark ramp — keeps title readable against the lit character */
+/* Left-to-right dark ramp, keeps title readable against the lit character */
 .hero__left-gradient {
   position: absolute;
   inset: 0;
@@ -620,7 +617,7 @@ ul { list-style: none; }
   z-index: 2;
 }
 
-/* Radial vignette — darkens edges, preserves center clarity */
+/* Radial vignette, darkens edges, preserves center clarity */
 .hero__vignette {
   position: absolute;
   inset: 0;
@@ -707,7 +704,7 @@ ul { list-style: none; }
   -webkit-text-fill-color: transparent;
   background-clip: text;
   -webkit-text-stroke: 0.7px rgba(185, 151, 68, 0.78);
-  /* Hidden initial state — GSAP animates from 110% to 0 */
+  /* Hidden initial state, GSAP animates from 110% to 0 */
   transform: translateY(110%);
   text-shadow:
     0 1px 0 rgba(255, 250, 240, 0.24),
@@ -854,7 +851,7 @@ ul { list-style: none; }
 
 .hero__ca-copy-label { font-family: var(--font-mono); }
 
-/* ── Hero anthem toggle ── corner remote that plays "Awaken The Saiyan".
+/* Hero anthem toggle: corner remote that plays "Awaken The Saiyan".
    Mirrors the CA circle (bottom-left) on the opposite corner so the hero base
    reads as a balanced trio: CA · SCROLL · ANTHEM. */
 .hero__anthem {
@@ -1037,7 +1034,7 @@ ul { list-style: none; }
   }
 }
 
-/* Scroll indicator: the "line with a traveling dot" pattern — a glowing gold
+/* Scroll indicator: the "line with a traveling dot" pattern, a glowing gold
    ki-dot charges downward along a thin line. Centered with clear gaps from the
    CA / ANTHEM buttons, clickable (scrolls to #about), faded out at the footer. */
 .hero__scroll-hint {
@@ -1333,7 +1330,7 @@ ul { list-style: none; }
   pointer-events: none;
 }
 
-/* Lightning flash — a blue-white burst that stays alive while the quote is active */
+/* Lightning flash, a blue-white burst that stays alive while the quote is active */
 .inflection__flash {
   position: absolute;
   inset: 0;
@@ -2006,8 +2003,8 @@ ul { list-style: none; }
   color: rgba(255, 210, 48, 0.6);
 }
 
-/* ── 3D ring carousel: a circle of cards that slowly rotates; each card turns
-   to show a branded back as it passes around the far side. ── */
+/* 3D ring carousel: a circle of cards that slowly rotates; each card turns
+   to show a branded back as it passes around the far side. */
 .team__stage {
   --team-card-w: clamp(176px, 14vw, 224px);
   --team-card-h: calc(var(--team-card-w) * 1.26);
@@ -2043,7 +2040,7 @@ ul { list-style: none; }
   pointer-events: none;          /* clicks fall through to the cards */
 }
 
-/* The card is only a 3D container — no overflow/box styling here, because
+/* The card is only a 3D container, no overflow/box styling here, because
    overflow:hidden would flatten preserve-3d. JS sets rotateY()+translateZ(). */
 .team-card {
   position: absolute;
@@ -2170,7 +2167,7 @@ ul { list-style: none; }
   -webkit-backface-visibility: hidden;
 }
 
-/* ── Expanded profile: enlarge the card art (it carries each member's bio) ── */
+/* Expanded profile: enlarge the card art (it carries each member's bio) */
 .team-dialog {
   position: fixed;
   inset: 0;
@@ -3069,7 +3066,7 @@ ul { list-style: none; }
 .music__track.is-playing .music__icon--play  { display: none; }
 .music__track.is-playing .music__icon--pause { display: block; }
 
-/* Equalizer — animates only while the track plays */
+/* Equalizer, animates only while the track plays */
 .music__eq {
   flex: 0 0 auto;
   display: flex;
@@ -3201,7 +3198,7 @@ ul { list-style: none; }
 
   .inflection__flash { opacity: 0 !important; }
 
-  /* No carousel — show the copy as a normal, fully readable stack */
+  /* No carousel, show the copy as a normal, fully readable stack */
   .about__inner { height: auto !important; min-height: auto !important; overflow: visible !important; }
   .about__text { position: static !important; height: auto !important; }
   .about__text p {
@@ -3352,7 +3349,7 @@ ul { list-style: none; }
   }
 
   .about__rage-face {
-    /* Show the whole circular logo on mobile — contain, never crop the bottom */
+    /* Show the whole circular logo on mobile, contain, never crop the bottom */
     object-fit: contain;
     object-position: center;
     mask-image: radial-gradient(ellipse 100% 80% at 50% 50%, black 40%, transparent 90%);
@@ -3546,7 +3543,7 @@ ul { list-style: none; }
 
   .hero__anthem-btn { width: 58px; height: 58px; }
 
-  /* No hover on touch — the eq + pulse ring already signal play state, and the
+  /* No hover on touch, the eq + pulse ring already signal play state, and the
      label would crowd the centered scroll hint. */
   .hero__anthem-name { display: none; }
 

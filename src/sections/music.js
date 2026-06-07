@@ -1,4 +1,4 @@
-/* SAIYAN soundtrack — UI for the shared audio controller. The hero anthem
+/* SAIYAN soundtrack, UI for the shared audio controller. The hero anthem
    button drives the same controller, so the two views stay in lockstep. */
 import { audioPlayer } from './audio-controller.js'
 
