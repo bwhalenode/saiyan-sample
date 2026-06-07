@@ -39,9 +39,9 @@
   <canvas id="hero-canvas"></canvas>
 
   <!-- Scroll indicator (top-level so it isn't trapped in the hero stacking context) -->
-  <div class="hero__scroll-hint" id="scroll-hint" aria-label="Scroll down">
-    <span>SCROLL</span>
-  </div>
+  <button class="hero__scroll-hint" id="scroll-hint" type="button" aria-label="Scroll to content">
+    <span class="hero__scroll-track" aria-hidden="true"></span>
+  </button>
 
   <!-- ═══════════════ HERO ═══════════════ -->
   <section id="hero" class="section section--hero" data-section="hero">
@@ -131,6 +131,23 @@
         data-cursor="hover"
       >BUY</a>
     </div>
+  </div>
+
+  <!-- Hero anthem toggle (corner remote for "Awaken The Saiyan") -->
+  <div class="hero__anthem" id="hero-anthem-wrap">
+    <span class="hero__anthem-name" aria-hidden="true">AWAKEN THE SAIYAN</span>
+    <button
+      class="hero__anthem-btn"
+      id="hero-anthem"
+      type="button"
+      data-cursor="hover"
+      aria-pressed="false"
+      aria-label="Play the $SAIYAN anthem"
+    >
+      <svg class="hero__anthem-icon hero__anthem-icon--play" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="hero__anthem-icon hero__anthem-icon--pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+      <span class="hero__anthem-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    </button>
   </div>
 
   <!-- ═══════════════ ABOUT ═══════════════ -->

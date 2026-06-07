@@ -55,6 +55,14 @@ export function initTimeline(lenis) {
       scrollHint.classList.toggle('is-hidden', entry.isIntersecting)
     }, { threshold: 0 })
     hintIO.observe(footerEl)
+
+    // Clickable cue — anchor to the first section below the fold (UX best practice)
+    scrollHint.addEventListener('click', () => {
+      const about = document.getElementById('about')
+      if (!about) return
+      const visibleOffset = !isMobile ? window.innerHeight * 0.24 : 0
+      lenis.scrollTo(about.offsetTop + visibleOffset)
+    })
   }
 
   /* ─── Inflection quote reveal ─── */

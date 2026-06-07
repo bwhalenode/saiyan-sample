@@ -44,7 +44,7 @@ export function revealHero(scene) {
 
     if (prefersReduced) {
       gsap.set(['#hero-line-1', '#hero-line-2'], { y: 0 })
-      gsap.set('#hero-ca-bar', { opacity: 1, y: 0 })
+      gsap.set(['#hero-ca-bar', '#hero-anthem-wrap'], { opacity: 1, y: 0 })
       document.getElementById('scroll-hint')?.classList.add('is-visible')
       resolve()
       return
@@ -88,8 +88,8 @@ export function revealHero(scene) {
       ease: 'power4.out',
     }, '+=0.2')
 
-    /* Hero CA circle — 0.4 s after SAIYAN animation finishes */
-    tl.to('#hero-ca-bar', {
+    /* Hero CA circle + anthem toggle — 0.4 s after SAIYAN animation finishes */
+    tl.to(['#hero-ca-bar', '#hero-anthem-wrap'], {
       opacity: 1,
       y: 0,
       duration: 0.7,

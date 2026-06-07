@@ -854,42 +854,187 @@ ul { list-style: none; }
 
 .hero__ca-copy-label { font-family: var(--font-mono); }
 
-/* One consistent scroll indicator on EVERY breakpoint: thin gold lines flanking
-   the word SCROLL, fixed along the bottom row (level with the CA button), shown
-   with the CA reveal, and faded out when the footer enters view. */
+/* ── Hero anthem toggle ── corner remote that plays "Awaken The Saiyan".
+   Mirrors the CA circle (bottom-left) on the opposite corner so the hero base
+   reads as a balanced trio: CA · SCROLL · ANTHEM. */
+.hero__anthem {
+  position: fixed;
+  right: 5vw;
+  bottom: 32px;
+  z-index: 140;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: all;
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.hero__anthem-name {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  text-shadow: 0 0 18px rgba(255, 210, 48, 0.4);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(8px);
+  transition: opacity 0.28s, transform 0.28s var(--ease-out-expo);
+}
+
+.hero__anthem:hover .hero__anthem-name,
+.hero__anthem.is-playing .hero__anthem-name {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.hero__anthem-btn {
+  position: relative;
+  flex: 0 0 auto;
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 210, 48, 0.55);
+  background: rgba(5, 3, 6, 0.68);
+  color: var(--gold);
+  cursor: pointer;
+  box-shadow:
+    0 0 0 1px rgba(255, 210, 48, 0.08) inset,
+    0 0 28px rgba(255, 210, 48, 0.18);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.25s var(--ease-out-expo), border-color 0.25s, box-shadow 0.25s;
+}
+
+.hero__anthem-btn:hover {
+  transform: scale(1.06);
+  border-color: var(--gold);
+  box-shadow:
+    0 0 0 1px rgba(255, 210, 48, 0.16) inset,
+    0 0 42px rgba(255, 210, 48, 0.32);
+}
+
+.hero__anthem-btn:active { transform: scale(0.96); }
+
+/* Soft pulse ring while the anthem is playing */
+.hero__anthem-btn::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 210, 48, 0.5);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero__anthem.is-playing .hero__anthem-btn::after {
+  animation: anthem-ring 1.8s ease-out infinite;
+}
+
+@keyframes anthem-ring {
+  0%   { opacity: 0.55; transform: scale(1); }
+  100% { opacity: 0;    transform: scale(1.45); }
+}
+
+/* Icon swap: idle → play ▸ · playing → equalizer · playing+hover → pause */
+.hero__anthem-icon,
+.hero__anthem-eq { grid-area: 1 / 1; }
+.hero__anthem-icon--pause,
+.hero__anthem-eq { display: none; }
+
+.hero__anthem.is-playing .hero__anthem-icon--play { display: none; }
+.hero__anthem.is-playing .hero__anthem-eq { display: flex; }
+.hero__anthem.is-playing .hero__anthem-btn:hover .hero__anthem-eq { display: none; }
+.hero__anthem.is-playing .hero__anthem-btn:hover .hero__anthem-icon--pause { display: block; }
+
+.hero__anthem-eq {
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  width: 22px;
+  height: 20px;
+}
+
+.hero__anthem-eq i {
+  width: 3px;
+  height: 28%;
+  background: var(--gold);
+  border-radius: 1px;
+  animation: music-eq 0.9s ease-in-out infinite;
+}
+
+.hero__anthem-eq i:nth-child(2) { animation-delay: 0.15s; }
+.hero__anthem-eq i:nth-child(3) { animation-delay: 0.30s; }
+.hero__anthem-eq i:nth-child(4) { animation-delay: 0.45s; }
+
+/* Scroll indicator: the "line with a traveling dot" pattern — a glowing gold
+   ki-dot charges downward along a thin line. Centered with clear gaps from the
+   CA / ANTHEM buttons, clickable (scrolls to #about), faded out at the footer. */
 .hero__scroll-hint {
   position: fixed;
-  bottom: 34px;
+  bottom: 28px;
   left: 0;
   right: 0;
   margin: 0 auto;
-  width: min(70vw, 300px);
+  width: 34px;
+  height: 56px;
   z-index: 135;
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.3em;
-  color: var(--gold);
-  text-shadow: 0 0 18px rgba(255, 210, 48, 0.45);
-  pointer-events: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  pointer-events: auto;
+  cursor: pointer;
   opacity: 0;
   transition: opacity 0.45s ease;
-  animation: scroll-hint-bob 2.6s ease-in-out infinite;
 }
 
-.hero__scroll-hint span { white-space: nowrap; }
+.hero__scroll-track {
+  position: relative;
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 210, 48, 0) 0%,
+    rgba(255, 210, 48, 0.4) 50%,
+    rgba(255, 210, 48, 0) 100%
+  );
+  transition: background 0.3s;
+}
 
-.hero__scroll-hint::before,
-.hero__scroll-hint::after {
+/* The ki-dot that travels down the line */
+.hero__scroll-track::after {
   content: '';
-  flex: 1;
-  height: 1px;
-  background: rgba(255, 210, 48, 0.6);
-  box-shadow: 0 0 12px rgba(255, 210, 48, 0.3);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 10px 2px rgba(255, 210, 48, 0.85);
+  animation: scroll-ki 2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.hero__scroll-hint:hover .hero__scroll-track {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 210, 48, 0) 0%,
+    rgba(255, 210, 48, 0.7) 50%,
+    rgba(255, 210, 48, 0) 100%
+  );
+}
+
+@keyframes scroll-ki {
+  0%   { transform: translateY(0);    opacity: 0; }
+  18%  { opacity: 1; }
+  82%  { opacity: 1; }
+  100% { transform: translateY(46px); opacity: 0; }
 }
 
 .hero__scroll-hint.is-visible {
@@ -898,12 +1043,7 @@ ul { list-style: none; }
 
 .hero__scroll-hint.is-hidden {
   opacity: 0;
-}
-
-/* Transform-based bob — keeps opacity free for the footer fade (.is-hidden) */
-@keyframes scroll-hint-bob {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(4px); }
+  pointer-events: none;
 }
 
 /* ════════════════════════════════════════
@@ -2319,6 +2459,7 @@ ul { list-style: none; }
   .hero__headline-line { transform: none !important; }
   .hero__eyebrow { animation: none !important; }
   .hero__ca { opacity: 1 !important; transform: none !important; }
+  .hero__anthem { opacity: 1 !important; transform: none !important; }
   .about__eyebrow { opacity: 1 !important; }
   .about__image-col { transform: none !important; opacity: 1 !important; }
   .inflection__title,
@@ -2420,8 +2561,25 @@ ul { list-style: none; }
     display: none;
   }
 
+  /* Balance the two header clusters: shrink the brand mark so it sits at the
+     same visual height as the PLAY pill + social icons on the right. */
+  .nav__brand {
+    font-size: 17px;
+    gap: 8px;
+  }
+
+  .nav__logo {
+    width: 24px;
+    height: 24px;
+  }
+
   .nav__socials {
     display: flex;
+  }
+
+  .nav__socials a svg {
+    width: 20px;
+    height: 20px;
   }
 
   .about__inner {
@@ -2623,6 +2781,17 @@ ul { list-style: none; }
     height: 58px;
     font-size: 14px;
   }
+
+  .hero__anthem {
+    right: 6vw;
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .hero__anthem-btn { width: 58px; height: 58px; }
+
+  /* No hover on touch — the eq + pulse ring already signal play state, and the
+     label would crowd the centered scroll hint. */
+  .hero__anthem-name { display: none; }
 
   .hero__ca-panel {
     position: absolute;
