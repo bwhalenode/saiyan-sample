@@ -11,7 +11,8 @@ import { initAbout }       from './sections/about.js'
 import { initTokenomics }  from './sections/tokenomics.js'
 import { initTeam }        from './sections/team.js'
 import { initMusic }       from './sections/music.js'
-import { initHeroAnthem, startHeroAnthemMuted }  from './sections/hero-anthem.js'
+import { initHeroAnthem, startHeroAnthem }  from './sections/hero-anthem.js'
+import { initBuy }          from './sections/buy.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -23,6 +24,7 @@ async function bootstrap() {
   // The preloader runs its own timed reveal animation and calls onComplete when
   // it finishes; finishInit() then takes over and reveals the hero.
   const preloader = new AsciiPreloader({
+    onAwaken: () => startHeroAnthem(),   // play the anthem out loud on the tap gesture
     onComplete: () => finishInit(lenis, scene),
   })
 
@@ -45,9 +47,8 @@ async function finishInit(lenis, scene) {
   }
   requestAnimationFrame(loop)
 
-  // Anthem plays muted on handoff; the visible "TAP FOR SOUND" control unmutes it.
+  // Anthem already started on the preloader tap; wire the mute/unmute button.
   initHeroAnthem()
-  startHeroAnthemMuted()
 
   await revealHero(scene)
 
@@ -56,6 +57,7 @@ async function finishInit(lenis, scene) {
   initTokenomics()
   initTeam()
   initMusic()
+  initBuy()
 
   initTimeline(lenis)
 }

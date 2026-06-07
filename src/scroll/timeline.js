@@ -310,7 +310,7 @@ export function initTimeline(lenis) {
     { opacity: 0, y: 40 },
     { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out' },
   )
-  creatorTl.fromTo('.creator__workspace',
+  creatorTl.fromTo('.creator__forge',
     { opacity: 0, y: 70, scale: 0.96 },
     { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power3.out' },
     0.16,

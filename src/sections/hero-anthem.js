@@ -1,7 +1,7 @@
 /* Hero sound toggle, a corner mute/unmute for the shared soundtrack queue.
-   The queue auto-plays muted on load; this button only crosses (mute) or
-   uncrosses (unmute) the speaker. Unmuting counts as the user gesture browsers
-   require, and auto-advance through the playlist lives in the controller. */
+   The anthem starts playing out loud the moment the preloader is tapped (that
+   tap is the user gesture browsers require). This button then mutes (crossed
+   equalizer) or unmutes; auto-advance through the playlist lives in the controller. */
 import { audioPlayer } from './audio-controller.js'
 
 const ANTHEM_SRC = '/music/awaken-the-saiyan.mp3'
@@ -16,20 +16,13 @@ export function initHeroAnthem() {
   // If the soundtrack section isn't on this page, still loop at least the anthem.
   audioPlayer.setPlaylistIfEmpty?.([ANTHEM_SRC])
 
-  // The name of whatever track is currently loaded (falls back to the anthem).
-  const currentName = () => {
-    const row = [...document.querySelectorAll('.music__track')]
-      .find(r => audioPlayer.isCurrent(r.dataset.src))
-    return row?.querySelector('.music__name')?.textContent || 'AWAKEN THE SAIYAN'
-  }
-
   function render() {
     const on = audioPlayer.playing && !audioPlayer.muted   // sound audible
     wrap.classList.toggle('is-on', on)
     wrap.classList.toggle('is-muted', !on)
     btn.setAttribute('aria-pressed', String(on))
     btn.setAttribute('aria-label', on ? 'Mute the $SAIYAN soundtrack' : 'Unmute the $SAIYAN soundtrack')
-    if (nameEl) nameEl.textContent = on ? currentName() : 'TAP FOR SOUND'
+    if (nameEl) nameEl.textContent = on ? 'TAP TO MUTE' : 'TAP FOR SOUND'
   }
 
   // Pure mute toggle: unmute (resuming/starting the queue if needed), or mute.
@@ -48,7 +41,8 @@ export function initHeroAnthem() {
   render()
 }
 
-export function startHeroAnthemMuted() {
+// Called from the preloader tap (a user gesture) so the track plays out loud.
+export function startHeroAnthem() {
   audioPlayer.setPlaylistIfEmpty?.([ANTHEM_SRC])
-  audioPlayer.playMuted(ANTHEM_SRC)
+  audioPlayer.play(ANTHEM_SRC)
 }

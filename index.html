@@ -56,7 +56,7 @@
         <li><a href="#tokenomics">TOKENOMICS</a></li>
         <li><a href="#team">TEAM</a></li>
         <li><a class="nav__game-cta" href="/play.html">GAME</a></li>
-        <li><a href="https://app.uniswap.org/swap?outputCurrency=0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56" target="_blank" rel="noopener noreferrer">BUY</a></li>
+        <li><a href="https://app.uniswap.org/swap?outputCurrency=0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56" target="_blank" rel="noopener noreferrer" data-buy>BUY</a></li>
         <li>
           <a class="nav__icon-link" href="https://x.com/supersaiyancto" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -128,6 +128,7 @@
         href="https://app.uniswap.org/swap?outputCurrency=0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56"
         target="_blank"
         rel="noopener noreferrer"
+        data-buy
       >BUY</a>
     </div>
   </div>
@@ -201,12 +202,16 @@
     </div>
     <div class="tokenomics__cards" data-token-market aria-live="polite">
 
-      <div class="token-card">
+      <div class="token-card token-card--burn">
         <div class="token-card__inner">
+          <div class="token-card__flames" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
           <div class="token-card__corner token-card__corner--tl" aria-hidden="true"></div>
           <div class="token-card__corner token-card__corner--br" aria-hidden="true"></div>
-          <div class="token-card__label">SUPPLY</div>
-          <div class="token-card__value">1,000,000</div>
+          <div class="token-card__label">SUPPLY BURNED</div>
+          <div class="token-card__value" data-burn-pct>—</div>
+          <div class="token-card__signal" data-burn-available>LIVE ON-CHAIN</div>
         </div>
         <div class="token-card__shockwave" aria-hidden="true">
           <svg viewBox="0 0 200 200" width="200" height="200" fill="none" aria-hidden="true">
@@ -339,19 +344,7 @@
           <div class="htb__step">
             <div class="htb__step-bg-num" aria-hidden="true">01</div>
             <div class="htb__step-icon htb__step-icon--wallets" aria-hidden="true">
-              <!-- MetaMask Fox -->
-              <svg viewBox="0 0 100 100" width="52" height="52" fill="none">
-                <polygon points="50,8 85,25 85,65 50,90 15,65 15,25" fill="#E2761B" stroke="#E2761B" stroke-linejoin="round"/>
-                <polygon points="50,8 50,55 85,25" fill="#E4761B" stroke="#E4761B" stroke-linejoin="round"/>
-                <polygon points="50,8 15,25 50,55" fill="#F6851B" stroke="#F6851B" stroke-linejoin="round"/>
-                <polygon points="50,55 85,25 85,65" fill="#CD6116" stroke="#CD6116" stroke-linejoin="round"/>
-                <polygon points="50,55 15,65 15,25" fill="#E4761B" stroke="#E4761B" stroke-linejoin="round"/>
-                <polygon points="50,55 85,65 50,90" fill="#CD6116" stroke="#CD6116" stroke-linejoin="round"/>
-                <polygon points="50,55 15,65 50,90" fill="#E4761B" stroke="#E4761B" stroke-linejoin="round"/>
-                <circle cx="36" cy="44" r="5" fill="white"/>
-                <circle cx="64" cy="44" r="5" fill="white"/>
-              </svg>
-              <!-- Phantom -->
+              <img class="htb__wallet-logo" src="/images/metamask.svg" alt="" width="52" height="52" loading="lazy" />
               <img class="htb__wallet-logo" src="/images/phantom.png" alt="" width="52" height="52" loading="lazy" />
             </div>
             <div class="htb__step-num">STEP 01</div>
@@ -377,20 +370,13 @@
 
           <div class="htb__step">
             <div class="htb__step-bg-num" aria-hidden="true">03</div>
-            <div class="htb__step-icon" aria-hidden="true">
-              <!-- Uniswap unicorn simplified -->
-              <svg viewBox="0 0 100 100" width="56" height="56" fill="none">
-                <circle cx="50" cy="50" r="42" fill="#FF007A" opacity="0.15"/>
-                <path d="M35 70 Q50 30 65 70" stroke="#FF007A" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <path d="M42 55 Q50 20 58 55" stroke="#FF007A" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <circle cx="50" cy="32" r="6" fill="#FF007A"/>
-                <path d="M44 32 Q38 22 30 25" stroke="#FF007A" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <path d="M56 32 Q62 22 70 25" stroke="#FF007A" stroke-width="2" fill="none" stroke-linecap="round"/>
-              </svg>
+            <div class="htb__step-icon htb__step-icon--wallets" aria-hidden="true">
+              <img class="htb__wallet-logo" src="/images/uniswap.svg" alt="" width="52" height="52" loading="lazy" />
+              <img class="htb__wallet-logo" src="/images/phantom.png" alt="" width="52" height="52" loading="lazy" />
             </div>
             <div class="htb__step-num">STEP 03</div>
             <h3 class="htb__step-title">SWAP</h3>
-            <p class="htb__step-desc">Go to Uniswap, paste the $SAIYAN contract address, and swap your ETH. Set slippage to 1–2%. Welcome to the next form.</p>
+            <p class="htb__step-desc">Swap on Uniswap or right inside Phantom — paste the $SAIYAN contract address and swap your ETH. Set slippage to 1–2%. Welcome to the next form.</p>
           </div>
 
         </div>
@@ -488,112 +474,35 @@
 
     <div class="creator__inner">
       <div class="creator__intro">
-        <p class="creator__eyebrow">CREATE // DOWNLOAD // SHARE</p>
-        <h2 class="creator__title" id="creator-title">SAIYAN<br><span>CREATOR.</span></h2>
-        <p class="creator__text">Turn your image into a $SAIYAN profile picture or make a battle-ready meme. Add the aura, tune the crop, write your line, and download your PNG.</p>
+        <p class="creator__eyebrow">AI FORGE // INCOMING</p>
+        <h2 class="creator__title" id="creator-title">SAIYAN<br><span>AI CREATOR.</span></h2>
+        <p class="creator__text">Describe your warrior and let the forge do the rest — generate $SAIYAN PFPs and battle-ready memes from a single prompt, powered by AI. Dropping soon.</p>
+        <span class="creator__badge"><i></i> COMING SOON</span>
       </div>
 
-      <div class="creator__workspace" data-creator>
-        <div class="creator__preview-panel">
-          <div class="creator__canvas-wrap">
-            <canvas class="creator__canvas" width="1024" height="1024" aria-label="SAIYAN creator preview"></canvas>
-          </div>
-          <p class="creator__touch-help">Drag the image to position it. Pinch with two fingers to zoom in or out.</p>
-          <p class="creator__privacy">Your image appears in the preview only. Press download when it looks right.</p>
+      <div class="creator__forge" data-forge data-state="typing">
+        <div class="creator__forge-bar" aria-hidden="true">
+          <span class="creator__forge-dot"></span>
+          <span class="creator__forge-dot"></span>
+          <span class="creator__forge-dot"></span>
+          <span class="creator__forge-tag">SAIYAN&nbsp;AI</span>
         </div>
 
-        <form class="creator__controls" aria-label="SAIYAN creator controls">
-          <div class="creator__mode" role="tablist" aria-label="Creator mode">
-            <button class="creator__mode-btn is-active" type="button" data-mode="pfp" role="tab" aria-selected="true">PFP</button>
-            <button class="creator__mode-btn" type="button" data-mode="meme" role="tab" aria-selected="false">MEME</button>
-          </div>
+        <div class="creator__prompt">
+          <span class="creator__prompt-label">PROMPT</span>
+          <p class="creator__prompt-text"><span data-type></span><span class="creator__caret" aria-hidden="true"></span></p>
+        </div>
 
-          <div class="creator__field creator__field--upload">
-            <span>Upload Image</span>
-            <div class="creator__upload-control">
-              <button type="button" class="creator__upload-btn" data-upload-trigger aria-haspopup="true" aria-expanded="false">
-                <span class="creator__upload-plus" aria-hidden="true">+</span> Add Image
-              </button>
-              <div class="creator__upload-menu" data-upload-menu role="menu" hidden>
-                <button type="button" data-pick="camera" role="menuitem">Take Photo</button>
-                <button type="button" data-pick="gallery" role="menuitem">Choose from Library</button>
-              </div>
-            </div>
-            <input class="creator__upload" type="file" accept="image/*" hidden />
-            <input class="creator__camera" type="file" accept="image/*" capture="environment" hidden />
-          </div>
+        <div class="creator__forge-stage" aria-hidden="true">
+          <div class="creator__forge-preview" data-preview></div>
+          <span class="creator__thinking"><i></i><i></i><i></i></span>
+          <span class="creator__forge-soon">COMING&nbsp;SOON</span>
+        </div>
 
-          <div class="creator__adjustments">
-            <label class="creator__field">
-              <span>Zoom</span>
-              <input class="creator__zoom" type="range" min="0.7" max="2.2" step="0.01" value="1" />
-            </label>
-            <label class="creator__field">
-              <span>Move X</span>
-              <input class="creator__offset-x" type="range" min="-240" max="240" step="1" value="0" />
-            </label>
-            <label class="creator__field">
-              <span>Move Y</span>
-              <input class="creator__offset-y" type="range" min="-240" max="240" step="1" value="0" />
-            </label>
-          </div>
-
-          <label class="creator__field" data-meme-control hidden>
-            <span>Meme Background</span>
-            <select class="creator__template">
-              <option value="/images/hero-1.jpg">Hero Power</option>
-              <option value="/images/hero-1-mobile.webp">Mobile Aura</option>
-              <option value="/images/mid-page.webp">Blue Ki Burst</option>
-              <option value="/images/og-logo.jpg">Logo Strike</option>
-            </select>
-          </label>
-
-          <label class="creator__field creator__field--text" data-pfp-control>
-            <span>Custom Text</span>
-            <input class="creator__pfp-text" type="text" maxlength="28" placeholder="AWAKEN YOUR POWER" />
-          </label>
-
-          <label class="creator__field creator__field--text" data-meme-control hidden>
-            <span>Top Text</span>
-            <input class="creator__top-text" type="text" maxlength="42" placeholder="WHEN THE KI HITS" />
-          </label>
-
-          <label class="creator__field creator__field--text" data-meme-control hidden>
-            <span>Bottom Text</span>
-            <input class="creator__bottom-text" type="text" maxlength="42" placeholder="POWER LEVEL RISING" />
-          </label>
-
-          <label class="creator__field" data-meme-control hidden>
-            <span>Text Size</span>
-            <input class="creator__meme-size" type="range" min="44" max="86" step="1" value="68" />
-          </label>
-
-          <label class="creator__field" data-meme-control hidden>
-            <span>Text Style</span>
-            <select class="creator__meme-style">
-              <option value="gold">Gold Glow</option>
-              <option value="cream">Cream Impact</option>
-              <option value="blue">Blue Ki</option>
-            </select>
-          </label>
-
-          <div class="creator__toggles">
-            <label class="creator__toggle" data-pfp-control>
-              <input class="creator__frame-toggle" type="checkbox" checked />
-              <span>Gold aura frame</span>
-            </label>
-            <label class="creator__toggle" data-pfp-control>
-              <input class="creator__vignette-toggle" type="checkbox" checked />
-              <span>Dark vignette</span>
-            </label>
-            <label class="creator__toggle" data-pfp-control>
-              <input class="creator__lightning-toggle" type="checkbox" checked />
-              <span>Blue lightning</span>
-            </label>
-          </div>
-
-          <button class="creator__download" type="button">DOWNLOAD PNG</button>
-        </form>
+        <div class="creator__forge-foot" aria-hidden="true">
+          <span class="creator__forge-hint">PFP &amp; MEME generation</span>
+          <span class="creator__generate">GENERATE</span>
+        </div>
       </div>
     </div>
   </section>
@@ -710,8 +619,9 @@
         target="_blank"
         rel="noopener noreferrer"
         class="footer__buy-btn"
+        data-buy
       >
-        <span class="footer__buy-btn-text">BUY ON UNISWAP</span>
+        <span class="footer__buy-btn-text">BUY NOW</span>
         <span class="footer__buy-btn-lightning" aria-hidden="true"></span>
       </a>
 
@@ -757,6 +667,30 @@
       </div>
     </div>
   </section>
+
+  <!-- Buy modal (top-level so position:fixed isn't trapped by a transformed ancestor) -->
+  <div class="buy-modal" data-buy-modal hidden role="dialog" aria-modal="true" aria-label="Buy $SAIYAN">
+    <div class="buy-modal__panel">
+      <button class="buy-modal__close" type="button" data-buy-close aria-label="Close">&#10005;</button>
+      <h3 class="buy-modal__title">BUY <span>$SAIYAN</span></h3>
+      <p class="buy-modal__sub">Choose where to swap your ETH for $SAIYAN.</p>
+      <div class="buy-modal__options">
+        <a class="buy-modal__opt" href="https://app.uniswap.org/swap?outputCurrency=0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56&amp;chain=ethereum" target="_blank" rel="noopener noreferrer">
+          <img src="/images/uniswap.svg" alt="" width="46" height="46" />
+          <span class="buy-modal__opt-name">Uniswap</span>
+          <span class="buy-modal__opt-note">Swap with any wallet</span>
+        </a>
+        <button class="buy-modal__opt" type="button" data-buy-phantom>
+          <img src="/images/phantom.png" alt="" width="46" height="46" />
+          <span class="buy-modal__opt-name">Phantom</span>
+          <span class="buy-modal__opt-note">Open in Phantom</span>
+        </button>
+      </div>
+      <p class="buy-modal__notice" data-buy-notice hidden>
+        Phantom wallet not found. <a href="https://phantom.app/download" target="_blank" rel="noopener noreferrer">Get Phantom &rarr;</a>
+      </p>
+    </div>
+  </div>
 
   <script type="module" src="/src/main.js"></script>
   <script type="module" src="/src/sections/creator.js"></script>

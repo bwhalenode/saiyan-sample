@@ -55,7 +55,10 @@ export function initTeam() {
   let prev        = performance.now()
 
   function layout() {
-    const w = cards[0].getBoundingClientRect().width || 240
+    // offsetWidth = layout box width, unaffected by the 3D transforms on the card
+    // and ring (getBoundingClientRect would shrink to ~0 once a card is rotated,
+    // collapsing the radius and stacking every card on top of each other).
+    const w = cards[0].offsetWidth || 240
     radius = Math.round(w * RADIUS_K)
     cards.forEach((card, i) => {
       card.style.transform = `rotateY(${i * step}deg) translateZ(${radius}px)`

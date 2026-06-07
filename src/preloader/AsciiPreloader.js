@@ -19,8 +19,9 @@ function _canUseWebP() {
 const wait = ms => new Promise(r => setTimeout(r, ms))
 
 export class AsciiPreloader {
-  constructor({ onComplete }) {
+  constructor({ onComplete, onAwaken }) {
     this._onComplete  = onComplete
+    this._onAwaken    = onAwaken
     this._startTime   = 0
     this._rafId       = null
     this._p           = 0
@@ -213,6 +214,7 @@ export class AsciiPreloader {
   _onTap() {
     if (this._bursting || this._done) return
     this._bursting = true
+    this._onAwaken?.()   // start the anthem within the tap gesture so audio is allowed
     this._el.removeEventListener('click', this._tapHandler)
     window.removeEventListener('keydown', this._keyHandler)
     this._el.classList.remove('is-ready')
