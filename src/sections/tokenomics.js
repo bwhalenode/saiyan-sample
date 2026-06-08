@@ -97,13 +97,13 @@ function initOrbPress() {
     const run = event => {
       if (card.classList.contains('is-bursting')) return
 
-      const isChartLink = card.matches('a.token-card--market')
-      if (isChartLink) event.preventDefault()
+      const isTokenLink = card.matches('a.token-card')
+      if (isTokenLink) event.preventDefault()
 
       card.classList.add('is-bursting')
       window.setTimeout(() => card.classList.remove('is-bursting'), CHART_DELAY)
 
-      if (!isChartLink) return
+      if (!isTokenLink) return
 
       const target = card.getAttribute('target')
       const href = card.getAttribute('href')
