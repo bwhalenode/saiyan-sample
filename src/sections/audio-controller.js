@@ -8,6 +8,20 @@ const subs = new Set()
 const abs = src => new URL(src, location.origin).href
 const emit = () => subs.forEach(fn => fn())
 
+function playSrc(src) {
+  const a = ensure()
+  const next = abs(src)
+  if (a.src !== next) a.src = next
+  try { a.currentTime = 0 } catch {}
+  return a.play()
+}
+
+function nextTrackSrc() {
+  if (!playlist.length || !audio?.src) return null
+  const i = playlist.indexOf(audio.src)
+  return playlist[(i + 1) % playlist.length]
+}
+
 function ensure() {
   if (audio) return audio
   audio = new Audio()
@@ -17,9 +31,8 @@ function ensure() {
   audio.addEventListener('pause', emit)
   audio.addEventListener('timeupdate', emit)
   audio.addEventListener('ended', () => {
-    const i = playlist.indexOf(audio.src)
-    const next = playlist.length ? playlist[(i + 1) % playlist.length] : null
-    if (next) { audio.src = next; audio.play().catch(() => {}) }  // roll into the next anthem
+    const next = nextTrackSrc()
+    if (next) playSrc(next).catch(() => emit())
     emit()
   })
   window.addEventListener('pagehide', () => audio.pause(), { once: true })
@@ -46,9 +59,7 @@ export const audioPlayer = {
   isPlaying(src) { return this.isCurrent(src) && this.playing },
 
   play(src) {
-    const a = ensure()
-    if (a.src !== abs(src)) a.src = src
-    a.play().catch(() => emit())
+    playSrc(src).catch(() => emit())
   },
 
   playMuted(src) {
