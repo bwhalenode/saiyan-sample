@@ -105,6 +105,24 @@
 }
 .saiyan-gate__btn--primary:hover { filter: brightness(1.05); background: linear-gradient(135deg, var(--gold-white, #fff5c2), var(--gold, #ffd230) 40%, var(--gold-hot, #ffa800)); }
 
+/* Official-style Telegram button: blue with the white paper-plane logo */
+.saiyan-gate__btn--tg {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-color: transparent;
+  background: linear-gradient(180deg, #2aabee, #229ed9);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.saiyan-gate__btn--tg:hover {
+  filter: none;
+  background: linear-gradient(180deg, #36b3f0, #1f95cf);
+  box-shadow: 0 8px 22px rgba(34, 158, 217, 0.35);
+}
+.saiyan-gate__btn--tg svg { width: 18px; height: 18px; flex: none; }
+
 .saiyan-gate__btn--shake { animation: saiyan-gate-shake 0.45s ease; }
 
 /* Waiting-for-Telegram spinner */

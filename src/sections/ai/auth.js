@@ -90,7 +90,7 @@ function openConnect() {
       'Connect Telegram',
       'Connect with the official Saiyan bot to unlock Saiyan AI. No phone number — it just opens your Telegram app.',
     )
-    const btn = primaryButton('Connect Telegram', startConnect)
+    const btn = telegramButton('Connect Telegram', startConnect)
     card.appendChild(wrapRow(btn))
   })
 }
@@ -113,7 +113,7 @@ function showWaiting(nonce, joinUrl) {
       'We opened the Saiyan bot in a new tab. Tap Start there — this updates automatically.',
     )
     card.appendChild(spinner())
-    const retry = ghostButton('Reopen Telegram', () => window.open(`https://t.me/${cfg.botUsername}?start=${nonce}`, '_blank', 'noopener'))
+    const retry = telegramButton('Reopen Telegram', () => window.open(`https://t.me/${cfg.botUsername}?start=${nonce}`, '_blank', 'noopener'))
     card.appendChild(wrapRow(retry))
   })
 
@@ -145,7 +145,7 @@ function showWaiting(nonce, joinUrl) {
 function openConnectExpired() {
   openModal((card) => {
     heading(card, 'SAIYAN AI', 'Connection timed out', 'No worries — start the connection again.')
-    card.appendChild(wrapRow(primaryButton('Connect Telegram', startConnect)))
+    card.appendChild(wrapRow(telegramButton('Connect Telegram', startConnect)))
   })
 }
 
@@ -158,7 +158,7 @@ function openJoin(user, joinUrl, recheck) {
       'Join the Saiyan group',
       `Connected as ${userLabel(user)}. Join the Saiyan Telegram to unlock Saiyan AI — this updates once you're in.`,
     )
-    const join = primaryButton('Join Saiyan Telegram', () => {
+    const join = telegramButton('Join Saiyan Telegram', () => {
       if (joinUrl) window.open(joinUrl, '_blank', 'noopener')
     })
     const again = ghostButton('Check again', async () => {
@@ -278,6 +278,21 @@ function ghostButton(label, onClick) {
   b.className = 'saiyan-gate__btn'
   b.type = 'button'
   b.textContent = label
+  b.addEventListener('click', onClick)
+  return b
+}
+
+// Official-style Telegram button: blue with the white paper-plane logo inline.
+function telegramButton(label, onClick) {
+  const b = document.createElement('button')
+  b.className = 'saiyan-gate__btn saiyan-gate__btn--tg'
+  b.type = 'button'
+  b.innerHTML =
+    '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
+    '<path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>'
+  const span = document.createElement('span')
+  span.textContent = label
+  b.appendChild(span)
   b.addEventListener('click', onClick)
   return b
 }
