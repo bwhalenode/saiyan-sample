@@ -37,7 +37,7 @@ export function initTimeline(lenis) {
     pinType: document.body.style.transform ? 'transform' : 'fixed',
   })
 
-  document.querySelectorAll('.nav__links a[href^="#"], .nav__brand[href^="#"]').forEach(link => {
+  document.querySelectorAll('.nav__links a[href^="#"], .nav__socials a[href^="#"], .nav__brand[href^="#"]').forEach(link => {
     link.addEventListener('click', e => {
       const href = link.getAttribute('href')
       const target = document.querySelector(href)
