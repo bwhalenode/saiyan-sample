@@ -162,125 +162,300 @@
   color: rgba(255, 247, 224, 0.5);
 }
 
-.creator__prompt {
-  display: grid;
+/* ── Mode tabs (Multi-Motivation is the centrepiece) ── */
+.creator__modes {
+  display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  padding: 16px 18px;
-  border: 1px solid rgba(74, 216, 255, 0.18);
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.42);
 }
 
-.creator__prompt-label {
+.creator__mode {
+  flex: 1 1 auto;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 210, 48, 0.22);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.3);
+  color: rgba(255, 247, 224, 0.55);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.creator__mode:hover { color: var(--ink); border-color: rgba(255, 210, 48, 0.4); }
+
+.creator__mode.is-active {
+  background: linear-gradient(135deg, rgba(255, 210, 48, 0.95), rgba(255, 168, 0, 0.86));
+  border-color: transparent;
+  color: #070405;
+  box-shadow: 0 8px 24px rgba(255, 168, 0, 0.2);
+}
+
+/* ── Views (input / loading / reveal) ── */
+.creator__view { display: none; flex-direction: column; gap: 14px; }
+.creator__forge[data-state='input']   .creator__view--input   { display: flex; }
+.creator__forge[data-state='loading'] .creator__view--loading { display: flex; }
+.creator__forge[data-state='reveal']  .creator__view--reveal  { display: flex; }
+
+/* Input */
+.creator__label {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.24em;
-  color: rgba(74, 216, 255, 0.7);
+  color: var(--electric, #4ad8ff);
 }
 
-.creator__prompt-text {
-  min-height: 3.2em;
-  margin: 0;
-  font-family: var(--font-mono);
-  font-size: 15px;
-  line-height: 1.5;
-  color: var(--ink);
-}
-
-.creator__caret {
-  display: inline-block;
-  width: 2px;
-  height: 1.05em;
-  margin-left: 2px;
-  vertical-align: text-bottom;
-  background: var(--gold);
-  animation: creator-caret 1s steps(1) infinite;
-}
-
-@keyframes creator-caret {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-}
-
-/* preview stage where the AI image will land */
-.creator__forge-stage {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  aspect-ratio: 16 / 10;
+.creator__input {
+  width: 100%;
+  resize: none;
+  padding: 13px 15px;
+  border: 1px solid rgba(74, 216, 255, 0.2);
   border-radius: 14px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 210, 48, 0.16);
-  background:
-    radial-gradient(circle at 50% 45%, rgba(255, 210, 48, 0.07), transparent 60%),
-    repeating-linear-gradient(45deg, rgba(255, 210, 48, 0.03) 0 12px, transparent 12px 24px),
-    #020104;
+  background: rgba(0, 0, 0, 0.42);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* Blurred "fake" outputs that flash up while a prompt is being typed */
-.creator__forge-preview {
+.creator__input::placeholder { color: rgba(255, 247, 224, 0.32); }
+.creator__input:focus { border-color: rgba(255, 210, 48, 0.6); box-shadow: 0 0 22px rgba(255, 210, 48, 0.12); }
+
+/* Guided questions (shown per mode) */
+.creator__guided { display: none; flex-direction: column; gap: 8px; }
+.creator__forge[data-mode='motivation'] [data-guided='aura'] { display: flex; }
+.creator__forge[data-mode='pfp'] [data-guided='aura'],
+.creator__forge[data-mode='pfp'] [data-guided='upload'] { display: flex; }
+
+.creator__guided-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: rgba(255, 247, 224, 0.5);
+}
+
+.creator__chips { display: flex; flex-wrap: wrap; gap: 7px; }
+
+.creator__chip {
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 210, 48, 0.22);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.3);
+  color: rgba(255, 247, 224, 0.6);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.creator__chip:hover { color: var(--ink); border-color: rgba(255, 210, 48, 0.45); }
+.creator__chip.is-active { border-color: var(--gold); color: var(--gold); background: rgba(255, 210, 48, 0.1); }
+
+.creator__upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  padding: 10px 16px;
+  border: 1px solid rgba(74, 216, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(74, 216, 255, 0.06);
+  color: var(--electric, #4ad8ff);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.creator__upload.has-file { border-color: var(--gold); color: var(--gold); }
+.creator__upload-plus { font-size: 15px; line-height: 1; }
+
+/* ── Loading: charging ki ── */
+.creator__view--loading { align-items: center; padding: 22px 0 4px; }
+
+.creator__ki { position: relative; width: 130px; height: 130px; display: grid; place-items: center; }
+
+.creator__ki-core {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, var(--gold-white), var(--gold) 45%, var(--gold-hot) 80%);
+  box-shadow: 0 0 38px 7px rgba(255, 168, 0, 0.6), 0 0 80px 16px rgba(255, 210, 48, 0.3);
+  animation: creator-ki-core 1.1s ease-in-out infinite;
+}
+
+.creator__ki-ring {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
-  filter: blur(24px) saturate(1.35);
-  transform: scale(1.25);
-  opacity: 0;
-  transition: opacity 0.5s ease, background-image 0.3s;
+  border-radius: 50%;
+  border: 2px solid rgba(74, 216, 255, 0.5);
+  animation: creator-ki-ring 1.8s ease-out infinite;
 }
+.creator__ki-ring:nth-child(2) { border-color: rgba(255, 210, 48, 0.55); animation-delay: 0.6s; }
 
-.creator__forge-soon {
-  position: relative;
-  z-index: 1;
-  font-family: var(--font-display);
-  font-size: clamp(26px, 4vw, 40px);
-  letter-spacing: 0.14em;
-  color: rgba(255, 247, 224, 0.18);
-  transition: opacity 0.4s ease, transform 0.4s ease, text-shadow 0.4s, color 0.4s;
-}
-
-/* "generating" dots, shown only while the forge is thinking */
-.creator__thinking {
+.creator__ki-spark {
   position: absolute;
+  width: 4px;
+  height: 15px;
+  border-radius: 2px;
+  background: linear-gradient(var(--electric, #4ad8ff), transparent);
+  animation: creator-ki-spark 1.2s ease-in-out infinite;
+}
+.creator__ki-spark--1 { transform: rotate(0deg) translateY(-58px); }
+.creator__ki-spark--2 { transform: rotate(120deg) translateY(-58px); background: linear-gradient(var(--gold), transparent); animation-delay: 0.3s; }
+.creator__ki-spark--3 { transform: rotate(240deg) translateY(-58px); animation-delay: 0.6s; }
+
+.creator__loading-text {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  text-shadow: 0 0 18px rgba(255, 210, 48, 0.4);
+  text-align: center;
+}
+
+.creator__meter { width: 70%; height: 3px; border-radius: 2px; background: rgba(255, 247, 224, 0.1); overflow: hidden; }
+.creator__meter i { display: block; height: 100%; width: 40%; background: linear-gradient(90deg, var(--gold-hot), var(--gold), var(--electric, #4ad8ff)); animation: creator-meter 1.3s var(--ease-out-expo) infinite; }
+
+@keyframes creator-ki-core { 0%, 100% { transform: scale(0.86); } 50% { transform: scale(1.14); } }
+@keyframes creator-ki-ring { 0% { transform: scale(0.4); opacity: 0.9; } 100% { transform: scale(1.15); opacity: 0; } }
+@keyframes creator-ki-spark { 0%, 100% { opacity: 0.15; } 50% { opacity: 0.95; } }
+@keyframes creator-meter { 0% { transform: translateX(-120%); } 100% { transform: translateX(360%); } }
+
+/* ── Reveal: video (motivation) vs concept (pfp/meme) ── */
+.creator__stage, .creator__concept { display: none; }
+.creator__forge[data-output='video']   .creator__stage   { display: block; }
+.creator__forge[data-output='concept'] .creator__concept { display: flex; }
+
+.creator__stage {
+  position: relative;
+  width: min(240px, 64%);
+  margin: 0 auto;
+  aspect-ratio: 9 / 16;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 210, 48, 0.22);
+  background: #020104;
+  box-shadow: inset 0 0 34px rgba(255, 210, 48, 0.12), 0 18px 44px rgba(0, 0, 0, 0.5);
+}
+
+.creator__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+.creator__forge.has-video .creator__video { display: block; }
+
+.creator__stage::after {
+  content: 'LOADING…';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: rgba(255, 247, 224, 0.4);
+}
+.creator__forge.has-video .creator__stage::after { content: none; }
+
+.creator__stage-mark {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  width: 44px;
+  height: 44px;
+  padding: 5px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: rgba(5, 3, 6, 0.94);
+  border: 1px solid rgba(255, 210, 48, 0.45);
   z-index: 2;
   display: none;
-  gap: 8px;
+  pointer-events: none;
 }
+.creator__forge.has-video .creator__stage-mark { display: block; }
 
-/* Typing: blurred fake preview shows, COMING SOON stays faint behind it */
-.creator__forge[data-state='typing'] .creator__forge-preview { opacity: 0.85; }
-
-/* Generating: COMING SOON flashes up, the fake preview dims */
-.creator__forge[data-state='thinking'] .creator__forge-preview { opacity: 0.28; }
-.creator__forge[data-state='thinking'] .creator__thinking { display: flex; }
-.creator__forge[data-state='thinking'] .creator__forge-soon {
-  opacity: 0.95;
-  transform: scale(1.05);
-  color: rgba(255, 247, 224, 0.7);
-  text-shadow: 0 0 26px rgba(255, 210, 48, 0.4);
-}
-
-.creator__thinking i {
-  width: 11px;
-  height: 11px;
+.creator__stage-dl,
+.creator__stage-sound {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  display: none;
+  place-items: center;
   border-radius: 50%;
-  background: var(--gold);
-  animation: creator-think 1s ease-in-out infinite;
+  border: 1px solid rgba(255, 210, 48, 0.5);
+  background: rgba(5, 3, 6, 0.72);
+  color: var(--gold);
+  cursor: pointer;
+  z-index: 3;
+  backdrop-filter: blur(6px);
+  transition: transform 0.2s, border-color 0.2s;
+}
+.creator__stage-dl { top: 10px; right: 10px; text-decoration: none; }
+.creator__stage-sound { bottom: 10px; left: 10px; }
+.creator__forge.has-video .creator__stage-dl { display: grid; }
+.creator__stage-sound[hidden] { display: none; }
+.creator__forge.has-video .creator__stage-sound:not([hidden]) { display: grid; }
+.creator__stage-dl:hover, .creator__stage-sound:hover { transform: scale(1.08); border-color: var(--gold); }
+
+.creator__sound-icon { grid-area: 1 / 1; }
+.creator__sound-icon--off { display: none; }
+.creator__stage-sound.is-muted .creator__sound-icon--on { display: none; }
+.creator__stage-sound.is-muted .creator__sound-icon--off { display: block; }
+
+/* Concept output (PFP / Meme — prompt the API will receive) */
+.creator__concept { flex-direction: column; gap: 10px; }
+
+.creator__concept-tag {
+  align-self: center;
+  padding: 5px 12px;
+  border: 1px solid rgba(74, 216, 255, 0.4);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--electric, #4ad8ff);
 }
 
-.creator__thinking i:nth-child(2) { animation-delay: 0.16s; }
-.creator__thinking i:nth-child(3) { animation-delay: 0.32s; }
-
-@keyframes creator-think {
-  0%, 100% { opacity: 0.3; transform: translateY(0); }
-  50%      { opacity: 1;   transform: translateY(-6px); }
+.creator__concept-box {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgba(255, 210, 48, 0.18);
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 210, 48, 0.06), transparent 70%),
+    rgba(0, 0, 0, 0.42);
 }
 
+.creator__concept-mark { color: var(--gold); font-size: 18px; }
+
+.creator__concept-prompt {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.65;
+  color: rgba(255, 247, 224, 0.82);
+}
+
+.creator__caption {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.6vw, 28px);
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+  color: var(--gold);
+  text-align: center;
+  text-shadow: 0 0 26px rgba(255, 210, 48, 0.28);
+}
+
+/* ── Foot + buttons ── */
 .creator__forge-foot {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
 }
 
 .creator__forge-hint {
@@ -291,14 +466,61 @@
 }
 
 .creator__generate {
-  padding: 11px 22px;
+  padding: 12px 26px;
+  border: 0;
   border-radius: 999px;
-  background: linear-gradient(135deg, rgba(255, 210, 48, 0.4), rgba(255, 168, 0, 0.32));
-  color: rgba(255, 247, 224, 0.55);
+  background: linear-gradient(135deg, var(--gold-white), var(--gold) 40%, var(--gold-hot));
+  color: #080507;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(255, 168, 0, 0.24);
+  transition: transform 0.2s var(--ease-out-expo), box-shadow 0.2s, filter 0.2s;
+}
+.creator__generate:hover { transform: translateY(-2px); filter: brightness(1.05); box-shadow: 0 16px 36px rgba(255, 168, 0, 0.34); }
+.creator__generate:active { transform: translateY(0); }
+
+.creator__again {
+  padding: 10px 22px;
+  border: 1px solid rgba(255, 210, 48, 0.5);
+  border-radius: 999px;
+  background: rgba(255, 210, 48, 0.06);
+  color: var(--gold);
   font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 0.16em;
-  cursor: not-allowed;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.creator__again:hover { background: rgba(255, 210, 48, 0.14); border-color: var(--gold); }
+
+/* ── Powered by Heidrun ── */
+.creator__powered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 2px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 210, 48, 0.12);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: rgba(255, 247, 224, 0.45);
+}
+
+.creator__powered-logo {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255, 210, 48, 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .creator__ki-core, .creator__ki-ring, .creator__ki-spark, .creator__meter i, .creator__badge i { animation: none; }
 }
 
 .creator__workspace {

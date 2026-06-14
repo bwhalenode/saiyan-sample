@@ -3,8 +3,23 @@ dist
 .DS_Store
 *.local
 
+# Private infrastructure lives in E:\saiyan-ai-infra, not the public website repo
+bots/
+server/
+shared/
+saiyan-ai-infra/
+
+# Env files — never commit real secrets (keep the .env.example files)
+.env
+.env.local
+**/.env
+**/.env.local
+
 # Local Claude Code settings & machine-specific tool permissions
 .claude/
+
+# Local agent/IDE scratch captures
+.codex-remote-attachments/
 
 # Throwaway QA/screenshot captures (root-level only)
 /desktop-*.png

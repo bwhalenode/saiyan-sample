@@ -1,60 +1,220 @@
 import './creator.css'
+import { AI_CONFIG, DEFAULT_MODE } from './ai/config.js'
+import { buildPrompt } from './ai/prompts.js'
+import { generate } from './ai/service.js'
+import { ensureAccess } from './ai/auth.js'
 
-/* AI creator teaser: a fake prompt box that types Saiyan prompts, "thinks",
-   then clears and types the next one. Placeholder until the server-side AI
-   image generation ships. */
+/* SAIYAN AI panel controller.
+   Multi-Motivation is the centrepiece (mood -> cinematic Super Saiyan video).
+   PFP and Meme are secondary: they build a structured prompt and show it until
+   the image API is wired. All generation goes through ai/service.js, so the only
+   thing to change when the backend lands is AI_CONFIG.demoMode. */
 const forge = document.querySelector('[data-forge]')
-const typeEl = forge?.querySelector('[data-type]')
 
-if (forge && typeEl) {
-  const PROMPTS = [
-    'turn my pfp into a golden $SAIYAN warrior',
-    'ascended aura, blue lightning, glowing eyes',
-    'make a $SAIYAN meme, diamond hands, max power',
-    'battle-ready $SAIYAN, gold flames, cinematic',
-    'my cat as a super $SAIYAN, ultra detailed',
-    'epic $SAIYAN energy blast, hype, to the moon',
-  ]
-
-  // Blurred site assets stand in as "fake" generated outputs behind COMING SOON.
-  const FAKES = [
-    '/images/hero-1.webp',
-    '/images/mid-page.webp',
-    '/images/og-logo.jpg',
-    '/images/logo.webp',
-    '/images/team/team-meekro.jpg',
-    '/images/team/team-atreyu.jpg',
-  ]
-
-  const preview = forge.querySelector('[data-preview]')
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+if (forge) {
   const wait = ms => new Promise(r => setTimeout(r, ms))
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  if (reduced) {
-    typeEl.textContent = PROMPTS[0]
-    if (preview) preview.style.backgroundImage = `url('${FAKES[0]}')`
-  } else {
-    ;(async function loop() {
-      let i = 0
-      while (true) {
-        const prompt = PROMPTS[i]
-        if (preview) preview.style.backgroundImage = `url('${FAKES[i % FAKES.length]}')`
-        forge.dataset.state = 'typing'
-        for (let c = 1; c <= prompt.length; c++) {
-          typeEl.textContent = prompt.slice(0, c)
-          await wait(45 + Math.random() * 55)
-        }
-        await wait(700)
-        forge.dataset.state = 'thinking'   // "generating": COMING SOON flashes up
-        await wait(1600)
-        forge.dataset.state = 'typing'
-        for (let c = prompt.length; c >= 0; c--) {
-          typeEl.textContent = prompt.slice(0, c)
-          await wait(22)
-        }
-        await wait(350)
-        i = (i + 1) % PROMPTS.length
-      }
-    })()
+  const $ = sel => forge.querySelector(sel)
+  const labelEl = $('[data-prompt-label]')
+  const inputEl = $('[data-input]')
+  const hintEl = $('[data-hint]')
+  const loadingTextEl = $('[data-loading-text]')
+  const captionEl = $('[data-caption]')
+  const resultHintEl = $('[data-result-hint]')
+  const conceptPromptEl = $('[data-concept-prompt]')
+  const video = $('[data-video]')
+  const soundBtn = $('[data-sound]')
+  const downloadEl = $('[data-download]')
+  const uploadInput = $('[data-upload]')
+  const uploadLabel = $('[data-upload-label]')
+
+  const MODE_UI = {
+    motivation: {
+      label: 'HOW ARE YOU FEELING?',
+      placeholder: 'Describe your mood today… e.g. “I feel like giving up”',
+      hint: 'Mood → motivational video',
+      loading: ['READING YOUR ENERGY…', 'CHANNELLING THE KI…', 'AWAKENING YOUR COMEBACK…', 'POWERING UP…'],
+      ms: 4000,
+      requireInput: true,
+    },
+    pfp: {
+      label: 'AWAKEN YOUR SAIYAN PFP',
+      placeholder: 'Optional style notes… e.g. “battle scars, scouter, hood”',
+      hint: 'Photo → Saiyan PFP',
+      loading: ['READING YOUR PHOTO…', 'SHAPING YOUR WARRIOR…', 'POWERING UP…'],
+      ms: 2600,
+      requireInput: false,
+    },
+    meme: {
+      label: 'YOUR MEME IDEA',
+      placeholder: 'e.g. “when the chart dumps but you keep buying”',
+      hint: 'Idea → $SAIYAN meme',
+      loading: ['READING THE ROOM…', 'COOKING THE MEME…', 'POWERING UP…'],
+      ms: 2600,
+      requireInput: true,
+    },
   }
+
+  const CAPTIONS = [
+    'Pain is fuel. Rise, ascend, and prove them wrong.',
+    'Down today, unstoppable tomorrow. Channel the Ki.',
+    'Every fall sets up a stronger comeback.',
+    'The fire you feel is your power waking up.',
+  ]
+
+  const state = { mode: DEFAULT_MODE, aura: 'golden', uploadUrl: null }
+  let loadingTimer = null
+
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)]
+
+  /* ── Mode switching ── */
+  function setMode(mode) {
+    if (!MODE_UI[mode]) return
+    state.mode = mode
+    forge.dataset.mode = mode
+    forge.dataset.state = 'input'
+
+    forge.querySelectorAll('[data-mode-btn]').forEach(b => {
+      const on = b.dataset.modeBtn === mode
+      b.classList.toggle('is-active', on)
+      b.setAttribute('aria-selected', String(on))
+    })
+
+    const ui = MODE_UI[mode]
+    labelEl.textContent = ui.label
+    inputEl.placeholder = ui.placeholder
+    hintEl.textContent = ui.hint
+  }
+
+  forge.querySelectorAll('[data-mode-btn]').forEach(btn => {
+    btn.addEventListener('click', () => setMode(btn.dataset.modeBtn))
+  })
+
+  /* ── Guided: aura chips ── */
+  forge.querySelectorAll('[data-aura-btn]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.aura = btn.dataset.auraBtn
+      forge.querySelectorAll('[data-aura-btn]').forEach(b =>
+        b.classList.toggle('is-active', b === btn))
+    })
+  })
+
+  /* ── Guided: PFP photo upload (preview only; nothing leaves the browser) ── */
+  if (uploadInput) {
+    uploadInput.addEventListener('change', () => {
+      const file = uploadInput.files && uploadInput.files[0]
+      if (!file) return
+      if (state.uploadUrl) URL.revokeObjectURL(state.uploadUrl)
+      state.uploadUrl = URL.createObjectURL(file)
+      uploadLabel.textContent = file.name.length > 22 ? file.name.slice(0, 20) + '…' : file.name
+      uploadLabel.closest('.creator__upload')?.classList.add('has-file')
+    })
+  }
+
+  /* ── Generate ── */
+  async function run() {
+    const ui = MODE_UI[state.mode]
+    const text = inputEl.value.trim()
+    if (ui.requireInput && !text) { inputEl.focus(); return }
+
+    // Telegram login + Saiyan membership gate. No-op (returns true) until the
+    // backend is configured, so the demo keeps working without secrets.
+    const allowed = await ensureAccess()
+    if (!allowed) return
+
+    const payload = buildPrompt(state.mode, text, { aura: state.aura, hasUpload: !!state.uploadUrl })
+
+    startLoading(ui)
+    let result
+    try {
+      ;[result] = await Promise.all([generate(state.mode, payload), wait(reduced ? 400 : ui.ms)])
+    } catch (e) {
+      result = { demo: true, mode: state.mode, output: AI_CONFIG.modes[state.mode].output, asset: null, ready: false, prompt: payload }
+    }
+    reveal(result, payload)
+  }
+
+  function startLoading(ui) {
+    forge.dataset.state = 'loading'
+    let i = 0
+    loadingTextEl.textContent = ui.loading[0]
+    clearInterval(loadingTimer)
+    if (reduced) return
+    loadingTimer = setInterval(() => {
+      i = (i + 1) % ui.loading.length
+      loadingTextEl.textContent = ui.loading[i]
+    }, Math.max(700, Math.floor(ui.ms / ui.loading.length)))
+  }
+
+  function reveal(result, payload) {
+    clearInterval(loadingTimer)
+
+    if (result.output === 'video' && result.asset) {
+      forge.dataset.output = 'video'
+      captionEl.textContent = pick(CAPTIONS)
+      resultHintEl.textContent = result.demo ? 'Demo · sample output' : 'Generated'
+      playVideo(result.asset)
+    } else {
+      // PFP / Meme: no image API yet — show the structured prompt that WILL be sent.
+      forge.dataset.output = 'concept'
+      conceptPromptEl.textContent = payload.prompt
+      captionEl.textContent = state.mode === 'pfp'
+        ? 'Your Saiyan PFP is awakened.'
+        : 'Your $SAIYAN meme is ready.'
+      resultHintEl.textContent = 'Blueprint ready'
+    }
+
+    forge.dataset.state = 'reveal'
+  }
+
+  /* ── Video output (Multi-Motivation) ── */
+  function setSound(muted) {
+    if (!video) return
+    video.muted = muted
+    soundBtn.classList.toggle('is-muted', muted)
+    soundBtn.setAttribute('aria-label', muted ? 'Unmute' : 'Mute')
+  }
+
+  function playVideo(src) {
+    forge.classList.remove('has-video')
+    soundBtn.hidden = true
+    if (downloadEl) downloadEl.setAttribute('href', src)
+    video.setAttribute('src', src)
+
+    video.onloadeddata = () => {
+      forge.classList.add('has-video')
+      video.muted = false                       // the GENERATE click is the gesture
+      const p = video.play()
+      if (p && p.then) {
+        p.then(() => { setSound(false); soundBtn.hidden = false })
+         .catch(() => { setSound(true); video.play().catch(() => {}); soundBtn.hidden = false })
+      } else { setSound(false); soundBtn.hidden = false }
+    }
+    video.onerror = () => { forge.classList.remove('has-video') }  // missing file -> placeholder
+    video.load()
+  }
+
+  soundBtn?.addEventListener('click', () => {
+    const next = !video.muted
+    setSound(next)
+    if (!next) video.play().catch(() => {})
+  })
+
+  /* ── Reset ── */
+  function reset() {
+    clearInterval(loadingTimer)
+    try { video && video.pause() } catch (e) {}
+    forge.classList.remove('has-video')
+    forge.dataset.state = 'input'
+    inputEl.focus()
+  }
+
+  $('[data-generate]')?.addEventListener('click', run)
+  $('[data-again]')?.addEventListener('click', reset)
+  inputEl.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') run()
+  })
+
+  setMode(DEFAULT_MODE)
 }

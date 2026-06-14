@@ -1,0 +1,120 @@
+/* Saiyan access gate modal. Scoped under .saiyan-gate so it never collides with
+   the creator panel or site chrome. Uses the site's design tokens. */
+
+.saiyan-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(3, 2, 5, 0.78);
+  backdrop-filter: blur(6px);
+  animation: saiyan-gate-fade 0.2s ease;
+}
+
+.saiyan-gate__card {
+  position: relative;
+  width: min(420px, 100%);
+  padding: 30px 26px 26px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 210, 48, 0.28);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 210, 48, 0.1), transparent 70%),
+    #0b0709;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  animation: saiyan-gate-pop 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.saiyan-gate__close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(255, 247, 224, 0.5);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.saiyan-gate__close:hover { color: var(--gold, #ffd230); }
+
+.saiyan-gate__kicker {
+  margin: 0 0 6px;
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  color: var(--electric, #4ad8ff);
+}
+
+.saiyan-gate__title {
+  margin: 0 0 10px;
+  font-family: var(--font-display, sans-serif);
+  font-size: clamp(22px, 4vw, 28px);
+  letter-spacing: 0.02em;
+  color: var(--gold, #ffd230);
+}
+
+.saiyan-gate__text {
+  margin: 0 auto 18px;
+  max-width: 32ch;
+  font-family: var(--font-mono, monospace);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: rgba(255, 247, 224, 0.7);
+}
+
+.saiyan-gate__widget {
+  display: flex;
+  justify-content: center;
+  min-height: 46px;
+}
+
+.saiyan-gate__row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.saiyan-gate__btn {
+  padding: 11px 20px;
+  border: 1px solid rgba(255, 210, 48, 0.5);
+  border-radius: 999px;
+  background: rgba(255, 210, 48, 0.06);
+  color: var(--gold, #ffd230);
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+.saiyan-gate__btn:hover { background: rgba(255, 210, 48, 0.14); border-color: var(--gold, #ffd230); }
+
+.saiyan-gate__btn--primary {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--gold-white, #fff5c2), var(--gold, #ffd230) 40%, var(--gold-hot, #ffa800));
+  color: #080507;
+  font-weight: 700;
+}
+.saiyan-gate__btn--primary:hover { filter: brightness(1.05); background: linear-gradient(135deg, var(--gold-white, #fff5c2), var(--gold, #ffd230) 40%, var(--gold-hot, #ffa800)); }
+
+.saiyan-gate__btn--shake { animation: saiyan-gate-shake 0.45s ease; }
+
+@keyframes saiyan-gate-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes saiyan-gate-pop { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes saiyan-gate-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .saiyan-gate, .saiyan-gate__card, .saiyan-gate__btn--shake { animation: none; }
+}
