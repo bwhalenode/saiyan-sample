@@ -107,8 +107,34 @@
 
 .saiyan-gate__btn--shake { animation: saiyan-gate-shake 0.45s ease; }
 
+/* Waiting-for-Telegram spinner */
+.saiyan-gate__spinner {
+  width: 40px;
+  height: 40px;
+  margin: 4px auto 16px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 210, 48, 0.18);
+  border-top-color: var(--gold, #ffd230);
+  animation: saiyan-gate-spin 0.9s linear infinite;
+}
+
+/* Connected username chip shown in the panel's top bar */
+.creator__tg-chip {
+  margin-left: auto;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(74, 216, 255, 0.45);
+  background: rgba(74, 216, 255, 0.08);
+  color: var(--electric, #4ad8ff);
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
 @keyframes saiyan-gate-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes saiyan-gate-pop { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes saiyan-gate-spin { to { transform: rotate(360deg); } }
 @keyframes saiyan-gate-shake {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-6px); }
@@ -116,5 +142,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .saiyan-gate, .saiyan-gate__card, .saiyan-gate__btn--shake { animation: none; }
+  .saiyan-gate, .saiyan-gate__card, .saiyan-gate__btn--shake, .saiyan-gate__spinner { animation: none; }
 }
