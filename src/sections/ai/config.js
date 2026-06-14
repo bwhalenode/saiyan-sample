@@ -30,7 +30,7 @@ export const AI_CONFIG = {
   // Motivation is video-first; PFP/Meme are image when their API is wired.
   modes: {
     motivation: {
-      label: 'MULTI-MOTIVATION',
+      label: 'MOOD → POWER UP',
       output: 'video',
       demoAsset: '/videos/motivation-demo.mp4',
       ready: true,                 // works as a product demo right now
