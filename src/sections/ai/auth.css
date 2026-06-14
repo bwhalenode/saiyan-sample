@@ -138,8 +138,11 @@
 
 /* Connected username chip shown in the panel's top bar */
 .creator__tg-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   margin-left: auto;
-  padding: 3px 10px;
+  padding: 3px 6px 3px 10px;
   border-radius: 999px;
   border: 1px solid rgba(74, 216, 255, 0.45);
   background: rgba(74, 216, 255, 0.08);
@@ -149,6 +152,23 @@
   letter-spacing: 0.06em;
   white-space: nowrap;
 }
+
+.creator__tg-chip-x {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(74, 216, 255, 0.16);
+  color: var(--electric, #4ad8ff);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.creator__tg-chip-x:hover { background: var(--electric, #4ad8ff); color: #061015; }
 
 @keyframes saiyan-gate-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes saiyan-gate-pop { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: none; } }

@@ -205,7 +205,34 @@ function showChip(user) {
     chip.className = 'creator__tg-chip'
     bar.appendChild(chip)
   }
-  chip.textContent = userLabel(user)
+  chip.textContent = ''
+  const name = document.createElement('span')
+  name.textContent = userLabel(user)
+  const x = document.createElement('button')
+  x.type = 'button'
+  x.className = 'creator__tg-chip-x'
+  x.textContent = '×'
+  x.title = 'Disconnect / switch account'
+  x.setAttribute('aria-label', 'Disconnect Telegram')
+  x.addEventListener('click', disconnect)
+  chip.append(name, x)
+}
+
+function removeChip() {
+  const chip = document.querySelector('.creator__tg-chip')
+  if (chip) chip.remove()
+}
+
+// Clears the server session + cookie (on the API domain), then reopens Connect so
+// the user can link a different Telegram account.
+async function disconnect() {
+  try {
+    await apiPost('/api/auth/logout')
+  } catch {
+    /* ignore — we still reset the UI */
+  }
+  removeChip()
+  openConnect()
 }
 
 /* ── Modal + small UI helpers (scoped .saiyan-gate*) ── */
