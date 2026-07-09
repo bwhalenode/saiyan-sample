@@ -23,6 +23,7 @@ if (forge) {
   const captionEl = $('[data-caption]')
   const resultHintEl = $('[data-result-hint]')
   const conceptPromptEl = $('[data-concept-prompt]')
+  const conceptTagEl = $('[data-concept-tag]')
   const video = $('[data-video]')
   const imageEl = $('[data-image]')
   const soundBtn = $('[data-sound]')
@@ -158,7 +159,7 @@ if (forge) {
     insufficient_credits: 'You are out of credits. More power is coming soon, warrior.',
     daily_limit: 'You hit the daily limit. Rest up and return stronger tomorrow.',
     job_in_progress: 'One creation at a time. Your last one is still charging.',
-    blocked_by_safety: 'That idea could not pass the guardians. Try a different one.',
+    blocked_by_safety: 'That wording did not pass the content check. Nothing was spent. Try saying it a different way.',
     not_logged_in: 'Connect your Telegram to power up.',
     not_member: 'Join the Saiyan Telegram to unlock creations.',
     timed_out: 'The forge took too long. Nothing was spent. Try again.',
@@ -170,9 +171,10 @@ if (forge) {
 
     if (result.error) {
       forge.dataset.output = 'concept'
+      if (conceptTagEl) conceptTagEl.textContent = 'POWER CHECK'
       conceptPromptEl.textContent = ERROR_COPY[result.error] || 'The forge misfired. Nothing was spent. Try again in a moment.'
-      captionEl.textContent = 'Hold on'
-      resultHintEl.textContent = 'Try again'
+      captionEl.textContent = 'Not this time'
+      resultHintEl.textContent = 'Nothing was spent'
     } else if (result.output === 'video' && result.asset) {
       forge.dataset.output = 'video'
       captionEl.textContent = pick(CAPTIONS)
@@ -188,6 +190,7 @@ if (forge) {
     } else {
       // Demo path for PFP / Meme: show the structured prompt that WILL be sent.
       forge.dataset.output = 'concept'
+      if (conceptTagEl) conceptTagEl.textContent = 'SAIYAN BLUEPRINT'
       conceptPromptEl.textContent = payload.prompt
       captionEl.textContent = state.mode === 'pfp'
         ? 'Your Saiyan PFP is awakened.'
