@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>$SAIYAN — Mood to Motivation (Local Demo)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="sample-badge" aria-hidden="true">SAMPLE / LOCAL DEMO</div>
+
+  <!-- Disclaimer strip -->
+  <div class="disclaimer">
+    Not affiliated with Dragon Ball, Toei Animation, or Akira Toriyama — original, community-driven art &amp; concepts. Invest responsibly.
+  </div>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <a class="nav__brand" href="#">
+      <img class="nav__logo" src="assets/logo.png" alt="" />
+      <span>$SAIYAN</span>
+    </a>
+    <ul class="nav__links">
+      <li><a href="#">HOME</a></li>
+      <li><a href="#">ABOUT</a></li>
+      <li><a href="#">TOKENOMICS</a></li>
+      <li><a href="#">TEAM</a></li>
+      <li><a class="nav__game" href="#">GAME</a></li>
+      <li><a href="#">BUY</a></li>
+      <li>
+        <a class="nav__icon" href="https://x.com/supersaiyancto" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+      </li>
+      <li>
+        <a class="nav__icon" href="https://t.me/SAIYANonETHPortal" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Creator section -->
+  <section class="creator">
+    <div class="creator__bg" aria-hidden="true"></div>
+
+    <div class="creator__inner">
+      <!-- LEFT -->
+      <div class="creator__intro">
+        <p class="creator__eyebrow">AI FORGE // MOTIVATION</p>
+        <h1 class="creator__title">SAIYAN<br><span>AI CREATOR.</span></h1>
+        <p class="creator__text">
+          Tell the forge how you feel and it answers back. Type your mood and let
+          $SAIYAN charge it into a motivational power-up — pain into power, doubt
+          into drive.
+        </p>
+
+        <div class="creator__modes" role="tablist" aria-label="Creator mode">
+          <button class="creator__mode" type="button" role="tab" aria-selected="false">PFP</button>
+          <button class="creator__mode" type="button" role="tab" aria-selected="false">MEME</button>
+          <button class="creator__mode is-active" type="button" role="tab" aria-selected="true">MOOD&nbsp;TO&nbsp;MOTIVATION</button>
+        </div>
+      </div>
+
+      <!-- RIGHT: terminal panel -->
+      <div class="forge" data-forge data-state="input">
+        <div class="forge__bar" aria-hidden="true">
+          <span class="forge__dot"></span>
+          <span class="forge__dot"></span>
+          <span class="forge__dot"></span>
+          <span class="forge__tag">SAIYAN&nbsp;AI</span>
+        </div>
+
+        <!-- 1) INPUT -->
+        <div class="forge__view forge__view--input">
+          <label class="forge__label" for="mood">HOW ARE YOU FEELING?</label>
+          <textarea
+            id="mood"
+            class="forge__input"
+            rows="3"
+            maxlength="180"
+            placeholder="Describe your mood today…"
+          ></textarea>
+          <div class="forge__foot">
+            <span class="forge__hint">Describe your mood</span>
+            <button class="forge__generate" type="button" data-generate>GENERATE</button>
+          </div>
+        </div>
+
+        <!-- 2) LOADING -->
+        <div class="forge__view forge__view--loading">
+          <div class="ki" aria-hidden="true">
+            <span class="ki__ring"></span>
+            <span class="ki__ring"></span>
+            <span class="ki__core"></span>
+            <span class="ki__spark ki__spark--1"></span>
+            <span class="ki__spark ki__spark--2"></span>
+            <span class="ki__spark ki__spark--3"></span>
+          </div>
+          <p class="forge__loading-text" data-loading-text>READING YOUR ENERGY…</p>
+          <div class="forge__bar-meter" aria-hidden="true"><i></i></div>
+        </div>
+
+        <!-- 3) REVEAL -->
+        <div class="forge__view forge__view--reveal">
+          <div class="forge__stage">
+            <video
+              class="forge__video"
+              data-video
+              playsinline
+              loop
+              preload="metadata"
+            ></video>
+
+            <img class="forge__watermark" src="assets/logo.png" alt="" aria-hidden="true" />
+
+            <a class="forge__download" href="assets/motivation.mp4" download="saiyan-motivation.mp4" aria-label="Download video">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 3v12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M7 11l5 5 5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5 20h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </a>
+
+            <div class="forge__placeholder" data-placeholder>
+              <span class="forge__placeholder-mark">▶</span>
+              <span class="forge__placeholder-title">DROP motivation.mp4 IN /assets</span>
+              <span class="forge__placeholder-note">mood-sample/assets/motivation.mp4 · 9:16</span>
+            </div>
+
+            <button class="forge__sound" type="button" data-sound aria-label="Mute sound" hidden>
+              <svg class="forge__sound-icon forge__sound-icon--on" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 9v6h4l5 4V5L8 9H4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M17 8c1.2 1.1 1.8 2.5 1.8 4s-.6 2.9-1.8 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M19.5 5.5A9 9 0 0 1 22 12a9 9 0 0 1-2.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+              <svg class="forge__sound-icon forge__sound-icon--off" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 9v6h4l5 4V5L8 9H4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M17 9l4 4m0-4l-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <p class="forge__caption" data-caption>Pain is fuel. Rise, ascend, and prove them wrong.</p>
+
+          <div class="forge__foot">
+            <span class="forge__hint">Your motivation, forged</span>
+            <button class="forge__again" type="button" data-again>TRY AGAIN</button>
+          </div>
+        </div>
+
+        <!-- Powered by Heidrun -->
+        <div class="forge__powered">
+          <img class="forge__powered-logo" src="assets/heidrun.jpg" alt="" aria-hidden="true" onerror="this.style.display='none'" />
+          <span>POWERED BY HEIDRUN</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fixed CA circle (bottom-left) -->
+  <div class="ca" id="ca" data-ca>
+    <button class="ca__trigger" type="button" data-ca-trigger aria-label="Show contract address">CA</button>
+    <div class="ca__panel">
+      <span class="ca__label">CA</span>
+      <span class="ca__addr" data-ca-addr>0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56</span>
+      <button class="ca__copy" type="button" data-ca-copy>COPY</button>
+      <a class="ca__buy" href="#">BUY</a>
+    </div>
+  </div>
+
+  <!-- Fixed anthem/music circle (bottom-right) -->
+  <div class="anthem" id="anthem" data-anthem data-on="true">
+    <span class="anthem__name" data-anthem-name>TAP TO MUTE</span>
+    <button class="anthem__btn" type="button" data-anthem-btn aria-label="Mute the soundtrack">
+      <span class="anthem__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="anthem__slash" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
