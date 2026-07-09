@@ -14,14 +14,18 @@ const AUTH = {
 // Only gate generation once the backend + bot username are configured.
 AUTH.enabled = Boolean(AUTH.apiBase && AUTH.botUsername)
 
-export const AI_CONFIG = {
-  // While true the UI runs on built-in demo output (no network/API calls).
-  // Flip to false once the backend route below is live.
-  demoMode: true,
+// Where live generation lives (our own backend; it holds the provider keys).
+// Defaults to the auth backend since they are the same server. Unset -> demo.
+const GEN_BASE = import.meta.env.VITE_AI_API_BASE || import.meta.env.VITE_AUTH_API_BASE || ''
 
-  // Future server endpoint (added later). The browser calls THIS, never a
-  // provider directly, so no key is ever exposed client-side. Example: '/api/ai'.
-  apiBase: '',
+export const AI_CONFIG = {
+  // Demo mode is automatic: no backend configured -> built-in demo output.
+  // Configure VITE_AUTH_API_BASE (or VITE_AI_API_BASE) -> real generation.
+  demoMode: !GEN_BASE,
+
+  // Our server endpoint. The browser calls THIS, never a provider directly,
+  // so no key is ever exposed client-side.
+  apiBase: GEN_BASE,
 
   // Telegram login + membership gate in front of generation (see ai/auth.js).
   auth: AUTH,

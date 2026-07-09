@@ -327,10 +327,23 @@
 @keyframes creator-ki-spark { 0%, 100% { opacity: 0.15; } 50% { opacity: 0.95; } }
 @keyframes creator-meter { 0% { transform: translateX(-120%); } 100% { transform: translateX(360%); } }
 
-/* ── Reveal: video (motivation) vs concept (pfp/meme) ── */
+/* ── Reveal: video (motivation), image (pfp/meme live) or concept (demo) ── */
 .creator__stage, .creator__concept { display: none; }
 .creator__forge[data-output='video']   .creator__stage   { display: block; }
+.creator__forge[data-output='image']   .creator__stage   { display: block; }
 .creator__forge[data-output='concept'] .creator__concept { display: flex; }
+
+/* Generated images are square, so the stage relaxes from 9:16 to 1:1. */
+.creator__forge[data-output='image'] .creator__stage {
+  aspect-ratio: 1 / 1;
+  width: min(300px, 84%);
+}
+
+.creator__image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+.creator__forge.has-image .creator__image { display: block; }
+.creator__forge.has-image .creator__stage::after { content: none; }
+.creator__forge.has-image .creator__stage-mark { display: block; }
+.creator__forge.has-image .creator__stage-dl { display: grid; }
 
 .creator__stage {
   position: relative;

@@ -24,6 +24,7 @@ if (forge) {
   const resultHintEl = $('[data-result-hint]')
   const conceptPromptEl = $('[data-concept-prompt]')
   const video = $('[data-video]')
+  const imageEl = $('[data-image]')
   const soundBtn = $('[data-sound]')
   const downloadEl = $('[data-download]')
   const uploadInput = $('[data-upload]')
@@ -34,7 +35,7 @@ if (forge) {
       label: 'HOW ARE YOU FEELING?',
       placeholder: 'Describe your mood today… e.g. “I feel like giving up”',
       hint: 'Mood → motivational video',
-      loading: ['READING YOUR ENERGY…', 'CHANNELLING THE KI…', 'AWAKENING YOUR COMEBACK…', 'POWERING UP…'],
+      loading: ['READING YOUR ENERGY…', 'CHANNELLING THE KI…', 'AWAKENING YOUR COMEBACK…', 'POWERING UP…', 'RENDERING YOUR SHORT…', 'ALMOST THERE, STAY STRONG…'],
       ms: 4000,
       requireInput: true,
     },
@@ -42,7 +43,7 @@ if (forge) {
       label: 'AWAKEN YOUR SAIYAN PFP',
       placeholder: 'Optional style notes… e.g. “battle scars, scouter, hood”',
       hint: 'Photo → Saiyan PFP',
-      loading: ['READING YOUR PHOTO…', 'SHAPING YOUR WARRIOR…', 'POWERING UP…'],
+      loading: ['SHAPING YOUR WARRIOR…', 'CHARGING THE AURA…', 'POWERING UP…', 'FORGING THE FINAL FORM…'],
       ms: 2600,
       requireInput: false,
     },
@@ -50,7 +51,7 @@ if (forge) {
       label: 'YOUR MEME IDEA',
       placeholder: 'e.g. “when the chart dumps but you keep buying”',
       hint: 'Idea → $SAIYAN meme',
-      loading: ['READING THE ROOM…', 'COOKING THE MEME…', 'POWERING UP…'],
+      loading: ['READING THE ROOM…', 'COOKING THE MEME…', 'POWERING UP…', 'ADDING THE PUNCHLINE…'],
       ms: 2600,
       requireInput: true,
     },
@@ -123,16 +124,21 @@ if (forge) {
     const allowed = await ensureAccess()
     if (!allowed) return
 
-    const payload = buildPrompt(state.mode, text, { aura: state.aura, hasUpload: !!state.uploadUrl })
+    const built = buildPrompt(state.mode, text, { aura: state.aura, hasUpload: !!state.uploadUrl })
+    const payload = { input: text, opts: { aura: state.aura }, built }
 
     startLoading(ui)
     let result
     try {
       ;[result] = await Promise.all([generate(state.mode, payload), wait(reduced ? 400 : ui.ms)])
     } catch (e) {
-      result = { demo: true, mode: state.mode, output: AI_CONFIG.modes[state.mode].output, asset: null, ready: false, prompt: payload }
+      if (AI_CONFIG.demoMode) {
+        result = { demo: true, mode: state.mode, output: AI_CONFIG.modes[state.mode].output, asset: null, ready: false, prompt: built }
+      } else {
+        result = { error: e?.code || 'generation_failed', mode: state.mode }
+      }
     }
-    reveal(result, payload)
+    reveal(result, built)
   }
 
   function startLoading(ui) {
@@ -147,16 +153,40 @@ if (forge) {
     }, Math.max(700, Math.floor(ui.ms / ui.loading.length)))
   }
 
+  // Friendly copy for live-generation errors. Nothing is spent on a failure.
+  const ERROR_COPY = {
+    insufficient_credits: 'You are out of credits. More power is coming soon, warrior.',
+    daily_limit: 'You hit the daily limit. Rest up and return stronger tomorrow.',
+    job_in_progress: 'One creation at a time. Your last one is still charging.',
+    blocked_by_safety: 'That idea could not pass the guardians. Try a different one.',
+    not_logged_in: 'Connect your Telegram to power up.',
+    not_member: 'Join the Saiyan Telegram to unlock creations.',
+    timed_out: 'The forge took too long. Nothing was spent. Try again.',
+    ai_disabled: 'Saiyan AI is recharging. Check back soon.',
+  }
+
   function reveal(result, payload) {
     clearInterval(loadingTimer)
 
-    if (result.output === 'video' && result.asset) {
+    if (result.error) {
+      forge.dataset.output = 'concept'
+      conceptPromptEl.textContent = ERROR_COPY[result.error] || 'The forge misfired. Nothing was spent. Try again in a moment.'
+      captionEl.textContent = 'Hold on'
+      resultHintEl.textContent = 'Try again'
+    } else if (result.output === 'video' && result.asset) {
       forge.dataset.output = 'video'
       captionEl.textContent = pick(CAPTIONS)
       resultHintEl.textContent = result.demo ? 'Demo · sample output' : 'Generated'
       playVideo(result.asset)
+    } else if (result.output === 'image' && result.asset) {
+      forge.dataset.output = 'image'
+      captionEl.textContent = state.mode === 'pfp'
+        ? 'Your Saiyan PFP is awakened.'
+        : 'Your $SAIYAN meme is ready.'
+      resultHintEl.textContent = result.free ? 'Generated · free creation' : 'Generated'
+      showImage(result.asset)
     } else {
-      // PFP / Meme: no image API yet — show the structured prompt that WILL be sent.
+      // Demo path for PFP / Meme: show the structured prompt that WILL be sent.
       forge.dataset.output = 'concept'
       conceptPromptEl.textContent = payload.prompt
       captionEl.textContent = state.mode === 'pfp'
@@ -168,6 +198,20 @@ if (forge) {
     forge.dataset.state = 'reveal'
   }
 
+  /* ── Image output (PFP / Meme, live generation) ── */
+  function showImage(src) {
+    forge.classList.remove('has-video', 'has-image')
+    soundBtn.hidden = true
+    if (downloadEl) {
+      downloadEl.setAttribute('href', src)
+      downloadEl.setAttribute('download', state.mode === 'pfp' ? 'saiyan-pfp.png' : 'saiyan-meme.png')
+    }
+    if (!imageEl) return
+    imageEl.onload = () => forge.classList.add('has-image')
+    imageEl.onerror = () => forge.classList.remove('has-image')
+    imageEl.src = src
+  }
+
   /* ── Video output (Multi-Motivation) ── */
   function setSound(muted) {
     if (!video) return
@@ -177,9 +221,12 @@ if (forge) {
   }
 
   function playVideo(src) {
-    forge.classList.remove('has-video')
+    forge.classList.remove('has-video', 'has-image')
     soundBtn.hidden = true
-    if (downloadEl) downloadEl.setAttribute('href', src)
+    if (downloadEl) {
+      downloadEl.setAttribute('href', src)
+      downloadEl.setAttribute('download', 'saiyan-motivation.mp4')
+    }
     video.setAttribute('src', src)
 
     video.onloadeddata = () => {
@@ -205,7 +252,7 @@ if (forge) {
   function reset() {
     clearInterval(loadingTimer)
     try { video && video.pause() } catch (e) {}
-    forge.classList.remove('has-video')
+    forge.classList.remove('has-video', 'has-image')
     forge.dataset.state = 'input'
     inputEl.focus()
   }
