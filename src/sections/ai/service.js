@@ -32,7 +32,7 @@ export async function generate(mode, payload) {
     method: 'POST',
     credentials: 'include',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ mode, input: payload.input, opts: payload.opts }),
+    body: JSON.stringify({ mode, input: payload.input, opts: payload.opts, image: payload.image }),
   })
   const started = await res.json().catch(() => ({}))
   if (!res.ok || !started.ok) {

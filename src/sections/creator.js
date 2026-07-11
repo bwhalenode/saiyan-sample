@@ -65,7 +65,7 @@ if (forge) {
     'The fire you feel is your power waking up.',
   ]
 
-  const state = { mode: DEFAULT_MODE, aura: 'golden', uploadUrl: null }
+  const state = { mode: DEFAULT_MODE, aura: 'golden', uploadData: null }
   let loadingTimer = null
 
   const pick = arr => arr[Math.floor(Math.random() * arr.length)]
@@ -102,15 +102,33 @@ if (forge) {
     })
   })
 
-  /* ── Guided: PFP photo upload (preview only; nothing leaves the browser) ── */
+  /* ── Guided: PFP photo upload. Downscaled in the browser and sent with the
+     generation request so the backend can do the Saiyan transformation while
+     keeping the person recognizable. ── */
   if (uploadInput) {
     uploadInput.addEventListener('change', () => {
       const file = uploadInput.files && uploadInput.files[0]
       if (!file) return
-      if (state.uploadUrl) URL.revokeObjectURL(state.uploadUrl)
-      state.uploadUrl = URL.createObjectURL(file)
-      uploadLabel.textContent = file.name.length > 22 ? file.name.slice(0, 20) + '…' : file.name
-      uploadLabel.closest('.creator__upload')?.classList.add('has-file')
+      const img = new Image()
+      const url = URL.createObjectURL(file)
+      img.onload = () => {
+        const max = 768
+        const scale = Math.min(1, max / Math.max(img.width, img.height))
+        const canvas = document.createElement('canvas')
+        canvas.width = Math.max(1, Math.round(img.width * scale))
+        canvas.height = Math.max(1, Math.round(img.height * scale))
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
+        state.uploadData = canvas.toDataURL('image/jpeg', 0.88)
+        URL.revokeObjectURL(url)
+        uploadLabel.textContent = file.name.length > 22 ? file.name.slice(0, 20) + '…' : file.name
+        uploadLabel.closest('.creator__upload')?.classList.add('has-file')
+      }
+      img.onerror = () => {
+        URL.revokeObjectURL(url)
+        state.uploadData = null
+        uploadLabel.textContent = 'Could not read photo'
+      }
+      img.src = url
     })
   }
 
@@ -125,8 +143,9 @@ if (forge) {
     const allowed = await ensureAccess()
     if (!allowed) return
 
-    const built = buildPrompt(state.mode, text, { aura: state.aura, hasUpload: !!state.uploadUrl })
+    const built = buildPrompt(state.mode, text, { aura: state.aura, hasUpload: !!state.uploadData })
     const payload = { input: text, opts: { aura: state.aura }, built }
+    if (state.mode === 'pfp' && state.uploadData) payload.image = state.uploadData
 
     startLoading(ui)
     let result
