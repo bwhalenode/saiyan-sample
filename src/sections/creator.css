@@ -373,17 +373,17 @@
 }
 .creator__forge.has-video .creator__stage::after { content: none; }
 
+/* The logo asset is already a circular badge, so no extra ring or background:
+   just the clean mark with a shadow for readability on bright frames. */
 .creator__stage-mark {
   position: absolute;
-  right: 6px;
-  bottom: 6px;
-  width: 44px;
-  height: 44px;
-  padding: 5px;
+  right: 10px;
+  bottom: 10px;
+  width: 46px;
+  height: 46px;
   object-fit: contain;
   border-radius: 50%;
-  background: rgba(5, 3, 6, 0.94);
-  border: 1px solid rgba(255, 210, 48, 0.45);
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.85));
   z-index: 2;
   display: none;
   pointer-events: none;
@@ -412,6 +412,7 @@
 .creator__stage-sound[hidden] { display: none; }
 .creator__forge.has-video .creator__stage-sound:not([hidden]) { display: grid; }
 .creator__stage-dl:hover, .creator__stage-sound:hover { transform: scale(1.08); border-color: var(--gold); }
+.creator__stage-dl.is-busy { opacity: 0.6; pointer-events: none; }
 
 .creator__sound-icon { grid-area: 1 / 1; }
 .creator__sound-icon--off { display: none; }

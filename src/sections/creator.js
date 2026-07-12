@@ -270,6 +270,32 @@ if (forge) {
     if (!next) video.play().catch(() => {})
   })
 
+  /* ── Direct download. The download attribute is ignored cross-origin, so the
+     asset is fetched as a blob and saved straight to the device. ── */
+  downloadEl?.addEventListener('click', async (e) => {
+    const href = downloadEl.getAttribute('href')
+    if (!href || href === '#') return
+    e.preventDefault()
+    downloadEl.classList.add('is-busy')
+    try {
+      const res = await fetch(href)
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = downloadEl.getAttribute('download') || 'saiyan-creation'
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      setTimeout(() => URL.revokeObjectURL(url), 4000)
+    } catch (err) {
+      // Fallback: let the browser open it normally.
+      window.open(href, '_blank', 'noopener')
+    } finally {
+      downloadEl.classList.remove('is-busy')
+    }
+  })
+
   /* ── Reset ── */
   function reset() {
     clearInterval(loadingTimer)
