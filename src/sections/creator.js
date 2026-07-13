@@ -1,14 +1,12 @@
 import './creator.css'
-import { AI_CONFIG, DEFAULT_MODE } from './ai/config.js'
-import { buildPrompt } from './ai/prompts.js'
+import { DEFAULT_MODE } from './ai/config.js'
 import { generate } from './ai/service.js'
 import { ensureAccess } from './ai/auth.js'
 
-/* SAIYAN AI panel controller.
-   Multi-Motivation is the centrepiece (mood -> cinematic Super Saiyan video).
-   PFP and Meme are secondary: they build a structured prompt and show it until
-   the image API is wired. All generation goes through ai/service.js, so the only
-   thing to change when the backend lands is AI_CONFIG.demoMode. */
+/* SAIYAN CREATOR panel controller.
+   Mood -> Power Up is the centrepiece (a chosen team character answers the
+   user's situation in a cinematic video); Meme and PFP ride the same flow.
+   All generation goes through ai/service.js to our own backend. */
 const forge = document.querySelector('[data-forge]')
 
 if (forge) {
@@ -152,8 +150,7 @@ if (forge) {
     const allowed = await ensureAccess()
     if (!allowed) return
 
-    const built = buildPrompt(state.mode, text, { aura: state.aura, hasUpload: !!state.uploadData })
-    const payload = { input: text, opts: { aura: state.aura, character: state.character }, built }
+    const payload = { input: text, opts: { aura: state.aura, character: state.character } }
     if (state.mode === 'pfp' && state.uploadData) payload.image = state.uploadData
 
     startLoading(ui)
@@ -161,13 +158,10 @@ if (forge) {
     try {
       ;[result] = await Promise.all([generate(state.mode, payload), wait(reduced ? 400 : ui.ms)])
     } catch (e) {
-      if (AI_CONFIG.demoMode) {
-        result = { demo: true, mode: state.mode, output: AI_CONFIG.modes[state.mode].output, asset: null, ready: false, prompt: built }
-      } else {
-        result = { error: e?.code || 'generation_failed', mode: state.mode }
-      }
+      // Real error, real retry. The prompt, mode and character stay as they are.
+      result = { error: e?.code || 'generation_failed', mode: state.mode }
     }
-    reveal(result, built)
+    reveal(result)
   }
 
   function startLoading(ui) {
@@ -191,10 +185,11 @@ if (forge) {
     not_logged_in: 'Connect your Telegram to power up.',
     not_member: 'Join the Saiyan Telegram to unlock creations.',
     timed_out: 'The forge took too long. Nothing was spent. Try again.',
-    ai_disabled: 'Saiyan AI is recharging. Check back soon.',
+    ai_disabled: 'The creator is recharging. Check back soon.',
+    service_unavailable: 'The creator is offline right now. Nothing was spent. Try again shortly.',
   }
 
-  function reveal(result, payload) {
+  function reveal(result) {
     clearInterval(loadingTimer)
 
     if (result.error) {
@@ -207,9 +202,7 @@ if (forge) {
       forge.dataset.output = 'video'
       // The character's actual spoken line is the caption when we have it.
       captionEl.textContent = result.meta?.line ? `“${result.meta.line}”` : pick(CAPTIONS)
-      resultHintEl.textContent = result.demo
-        ? 'Demo · sample output'
-        : `${result.meta?.character ? result.meta.character + ' · ' : ''}Generated`
+      resultHintEl.textContent = `${result.meta?.character ? result.meta.character + ' · ' : ''}Generated`
       playVideo(result.asset)
     } else if (result.output === 'image' && result.asset) {
       forge.dataset.output = 'image'
@@ -219,14 +212,12 @@ if (forge) {
       resultHintEl.textContent = `${result.meta?.character ? result.meta.character + ' · ' : ''}${result.free ? 'Generated · free creation' : 'Generated'}`
       showImage(result.asset)
     } else {
-      // Demo path for PFP / Meme: show the structured prompt that WILL be sent.
+      // No asset and no specific error code: treat as a failed generation.
       forge.dataset.output = 'concept'
-      if (conceptTagEl) conceptTagEl.textContent = 'SAIYAN BLUEPRINT'
-      conceptPromptEl.textContent = payload.prompt
-      captionEl.textContent = state.mode === 'pfp'
-        ? 'Your Saiyan PFP is awakened.'
-        : 'Your $SAIYAN meme is ready.'
-      resultHintEl.textContent = 'Blueprint ready'
+      if (conceptTagEl) conceptTagEl.textContent = 'POWER CHECK'
+      conceptPromptEl.textContent = 'The forge misfired. Nothing was spent. Try again in a moment.'
+      captionEl.textContent = 'Not this time'
+      resultHintEl.textContent = 'Nothing was spent'
     }
 
     forge.dataset.state = 'reveal'

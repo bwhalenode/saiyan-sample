@@ -1,8 +1,8 @@
-/* SAIYAN AI — service layer. The ONE seam between the UI and generation.
-   Demo mode (no backend configured): returns built-in demo results instantly.
-   Live mode: POST /api/ai/generate on our backend -> poll /api/ai/status until
-   the job finishes -> resolve with the asset URL. The provider keys live only
-   on that server; the browser never sees them. */
+/* SAIYAN CREATOR — service layer. The ONE seam between the UI and generation.
+   POST /api/ai/generate on our backend -> poll /api/ai/status until the job
+   finishes -> resolve with the asset URL. The provider keys live only on that
+   server; the browser never sees them. No demo fallback: if the backend is
+   unreachable the caller gets a real, retryable error. */
 import { AI_CONFIG } from './config.js'
 import { authHeaders } from './token.js'
 
@@ -19,14 +19,10 @@ class GenError extends Error {
 
 /**
  * @param {'motivation'|'pfp'|'meme'} mode
- * @param {{ input:string, opts:{aura:string}, built:object }} payload
+ * @param {{ input:string, opts:{aura:string, character:string}, image?:string }} payload
  */
 export async function generate(mode, payload) {
-  const modeCfg = AI_CONFIG.modes[mode]
-
-  if (AI_CONFIG.demoMode || !AI_CONFIG.apiBase) {
-    return demoResult(mode, modeCfg, payload)
-  }
+  if (!AI_CONFIG.apiBase) throw new GenError('service_unavailable')
 
   // Start the job.
   const res = await fetch(`${base()}/api/ai/generate`, {
@@ -62,22 +58,8 @@ export async function generate(mode, payload) {
         asset: `${base()}${s.assetUrl}`,
         free: started.free,
         meta: s.meta || null, // { character, line }
-        prompt: payload.built,
       }
     }
   }
   throw new GenError('timed_out')
-}
-
-function demoResult(mode, modeCfg, payload) {
-  // Resolve quickly; the visible "charging" time is paced by the UI so the
-  // power-up animation always reads, independent of real latency.
-  return Promise.resolve({
-    demo: true,
-    mode,
-    output: modeCfg.output,
-    asset: modeCfg.demoAsset,
-    ready: modeCfg.ready,
-    prompt: payload.built || payload,
-  })
 }

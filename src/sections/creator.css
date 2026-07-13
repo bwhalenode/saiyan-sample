@@ -84,6 +84,13 @@
   text-shadow: 0 0 36px rgba(255, 210, 48, 0.38);
 }
 
+/* The AI inside SAIYAN is the only deliberate AI highlight on the page. */
+.creator__title em {
+  font-style: normal;
+  color: var(--gold);
+  text-shadow: 0 0 36px rgba(255, 210, 48, 0.38);
+}
+
 .creator__text {
   max-width: 560px;
   margin-top: 22px;
@@ -91,36 +98,6 @@
   font-family: var(--font-mono);
   font-size: 13px;
   line-height: 1.8;
-}
-
-/* "Coming soon" badge */
-.creator__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 24px;
-  padding: 9px 16px;
-  border: 1px solid rgba(255, 210, 48, 0.45);
-  border-radius: 999px;
-  background: rgba(255, 210, 48, 0.08);
-  color: var(--gold);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.22em;
-}
-
-.creator__badge i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 0 10px 2px rgba(255, 210, 48, 0.7);
-  animation: creator-badge-pulse 1.8s ease-in-out infinite;
-}
-
-@keyframes creator-badge-pulse {
-  0%, 100% { opacity: 0.45; transform: scale(0.85); }
-  50%      { opacity: 1;    transform: scale(1.15); }
 }
 
 /* ── AI prompt-box teaser ── */
@@ -572,7 +549,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .creator__ki-core, .creator__ki-ring, .creator__ki-spark, .creator__meter i, .creator__badge i { animation: none; }
+  .creator__ki-logo, .creator__ki-ring, .creator__ki-spark, .creator__meter i { animation: none; }
 }
 
 .creator__workspace {
