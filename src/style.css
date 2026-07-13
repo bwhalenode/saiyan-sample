@@ -3422,6 +3422,7 @@ ul { list-style: none; }
   .nav {
     top: 38px;
     padding: 14px 24px;
+    gap: 14px;
   }
 
   .nav__links {
@@ -3433,6 +3434,9 @@ ul { list-style: none; }
   .nav__brand {
     font-size: 17px;
     gap: 8px;
+    min-width: 0;
+    white-space: nowrap;
+    flex: 0 1 auto;
   }
 
   .nav__logo {
@@ -3442,11 +3446,20 @@ ul { list-style: none; }
 
   .nav__socials {
     display: flex;
+    flex: 0 0 auto;
+    gap: clamp(10px, 2.8vw, 16px);
   }
 
   .nav__socials a svg {
     width: 20px;
     height: 20px;
+  }
+
+  .nav__socials .nav__game-link {
+    display: inline-flex;
+    justify-content: center;
+    min-width: 50px;
+    padding-inline: 9px;
   }
 
   .about__inner {
@@ -3890,6 +3903,37 @@ ul { list-style: none; }
 }
 
 @media (max-width: 540px) {
+  .nav {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+
+  .nav__brand {
+    gap: 7px;
+    font-size: clamp(14px, 4.5vw, 17px);
+  }
+
+  .nav__logo {
+    width: 22px;
+    height: 22px;
+  }
+
+  .nav__socials {
+    gap: clamp(8px, 2.8vw, 12px);
+  }
+
+  .nav__socials .nav__game-link {
+    min-width: 0;
+    padding: 6px 8px;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+  }
+
+  .nav__socials a svg {
+    width: 19px;
+    height: 19px;
+  }
+
   .tokenomics__cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
