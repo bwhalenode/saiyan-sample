@@ -229,6 +229,55 @@
 .creator__forge[data-mode='motivation'] [data-guided='aura'] { display: flex; }
 .creator__forge[data-mode='pfp'] [data-guided='aura'],
 .creator__forge[data-mode='pfp'] [data-guided='upload'] { display: flex; }
+.creator__forge[data-mode='motivation'] [data-guided='character'],
+.creator__forge[data-mode='meme'] [data-guided='character'] { display: flex; }
+
+/* Team character selector: who creates and delivers the content */
+.creator__chars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+}
+
+.creator__char {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 2px 5px;
+  border: 1px solid rgba(255, 210, 48, 0.16);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+}
+
+.creator__char img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.creator__char span {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  color: rgba(255, 247, 224, 0.55);
+  white-space: nowrap;
+}
+
+.creator__char:hover { border-color: rgba(255, 210, 48, 0.4); transform: translateY(-1px); }
+.creator__char:hover span { color: var(--ink); }
+
+.creator__char.is-active {
+  border-color: var(--gold);
+  background: rgba(255, 210, 48, 0.08);
+}
+.creator__char.is-active img { border-color: var(--gold); }
+.creator__char.is-active span { color: var(--gold); }
 
 .creator__guided-label {
   font-family: var(--font-mono);

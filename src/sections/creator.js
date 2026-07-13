@@ -65,7 +65,7 @@ if (forge) {
     'The fire you feel is your power waking up.',
   ]
 
-  const state = { mode: DEFAULT_MODE, aura: 'golden', uploadData: null }
+  const state = { mode: DEFAULT_MODE, aura: 'golden', character: 'meketa', uploadData: null }
   let loadingTimer = null
 
   const pick = arr => arr[Math.floor(Math.random() * arr.length)]
@@ -98,6 +98,15 @@ if (forge) {
     btn.addEventListener('click', () => {
       state.aura = btn.dataset.auraBtn
       forge.querySelectorAll('[data-aura-btn]').forEach(b =>
+        b.classList.toggle('is-active', b === btn))
+    })
+  })
+
+  /* ── Guided: team character (meme + motivation; Meketa is the default) ── */
+  forge.querySelectorAll('[data-char-btn]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.character = btn.dataset.charBtn
+      forge.querySelectorAll('[data-char-btn]').forEach(b =>
         b.classList.toggle('is-active', b === btn))
     })
   })
@@ -144,7 +153,7 @@ if (forge) {
     if (!allowed) return
 
     const built = buildPrompt(state.mode, text, { aura: state.aura, hasUpload: !!state.uploadData })
-    const payload = { input: text, opts: { aura: state.aura }, built }
+    const payload = { input: text, opts: { aura: state.aura, character: state.character }, built }
     if (state.mode === 'pfp' && state.uploadData) payload.image = state.uploadData
 
     startLoading(ui)
