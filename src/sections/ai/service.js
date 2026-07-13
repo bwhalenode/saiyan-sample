@@ -61,6 +61,7 @@ export async function generate(mode, payload) {
         output: s.kind === 'video' ? 'video' : 'image',
         asset: `${base()}${s.assetUrl}`,
         free: started.free,
+        meta: s.meta || null, // { character, line }
         prompt: payload.built,
       }
     }

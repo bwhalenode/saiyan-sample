@@ -224,9 +224,9 @@
 .creator__input::placeholder { color: rgba(255, 247, 224, 0.32); }
 .creator__input:focus { border-color: rgba(255, 210, 48, 0.6); box-shadow: 0 0 22px rgba(255, 210, 48, 0.12); }
 
-/* Guided questions (shown per mode) */
+/* Guided questions (shown per mode). Motivation videos pick their atmosphere
+   automatically, so the aura selector only appears for PFP. */
 .creator__guided { display: none; flex-direction: column; gap: 8px; }
-.creator__forge[data-mode='motivation'] [data-guided='aura'] { display: flex; }
 .creator__forge[data-mode='pfp'] [data-guided='aura'],
 .creator__forge[data-mode='pfp'] [data-guided='upload'] { display: flex; }
 .creator__forge[data-mode='motivation'] [data-guided='character'],
@@ -328,14 +328,15 @@
 
 .creator__ki { position: relative; width: 130px; height: 130px; display: grid; place-items: center; }
 
-.creator__ki-core {
+/* Project logo pulsing at the centre of the loader: premium and controlled. */
+.creator__ki-logo {
   position: absolute;
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 40%, var(--gold-white), var(--gold) 45%, var(--gold-hot) 80%);
-  box-shadow: 0 0 38px 7px rgba(255, 168, 0, 0.6), 0 0 80px 16px rgba(255, 210, 48, 0.3);
-  animation: creator-ki-core 1.1s ease-in-out infinite;
+  filter: drop-shadow(0 0 18px rgba(255, 210, 48, 0.55)) drop-shadow(0 0 42px rgba(255, 168, 0, 0.28));
+  animation: creator-ki-logo 2.2s ease-in-out infinite;
 }
 
 .creator__ki-ring {
@@ -371,7 +372,10 @@
 .creator__meter { width: 70%; height: 3px; border-radius: 2px; background: rgba(255, 247, 224, 0.1); overflow: hidden; }
 .creator__meter i { display: block; height: 100%; width: 40%; background: linear-gradient(90deg, var(--gold-hot), var(--gold), var(--electric, #4ad8ff)); animation: creator-meter 1.3s var(--ease-out-expo) infinite; }
 
-@keyframes creator-ki-core { 0%, 100% { transform: scale(0.86); } 50% { transform: scale(1.14); } }
+@keyframes creator-ki-logo {
+  0%, 100% { transform: scale(0.94); filter: drop-shadow(0 0 12px rgba(255, 210, 48, 0.4)) drop-shadow(0 0 30px rgba(255, 168, 0, 0.18)); }
+  50%      { transform: scale(1.06); filter: drop-shadow(0 0 22px rgba(255, 210, 48, 0.65)) drop-shadow(0 0 52px rgba(255, 168, 0, 0.34)); }
+}
 @keyframes creator-ki-ring { 0% { transform: scale(0.4); opacity: 0.9; } 100% { transform: scale(1.15); opacity: 0; } }
 @keyframes creator-ki-spark { 0%, 100% { opacity: 0.15; } 50% { opacity: 0.95; } }
 @keyframes creator-meter { 0% { transform: translateX(-120%); } 100% { transform: translateX(360%); } }
@@ -391,7 +395,6 @@
 .creator__image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
 .creator__forge.has-image .creator__image { display: block; }
 .creator__forge.has-image .creator__stage::after { content: none; }
-.creator__forge.has-image .creator__stage-mark { display: block; }
 .creator__forge.has-image .creator__stage-dl { display: grid; }
 
 .creator__stage {
@@ -422,22 +425,8 @@
 }
 .creator__forge.has-video .creator__stage::after { content: none; }
 
-/* The logo asset is already a circular badge, so no extra ring or background:
-   just the clean mark with a shadow for readability on bright frames. */
-.creator__stage-mark {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  width: 46px;
-  height: 46px;
-  object-fit: contain;
-  border-radius: 50%;
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.85));
-  z-index: 2;
-  display: none;
-  pointer-events: none;
-}
-.creator__forge.has-video .creator__stage-mark { display: block; }
+/* No watermark overlay on generated media: results stay clean, branding lives
+   in the interface around them. */
 
 .creator__stage-dl,
 .creator__stage-sound {

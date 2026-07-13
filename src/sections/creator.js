@@ -34,11 +34,11 @@ if (forge) {
   const MODE_UI = {
     motivation: {
       label: 'HOW ARE YOU FEELING?',
-      placeholder: 'Describe your mood today… e.g. “I feel like giving up”',
-      hint: 'Mood → motivational video',
-      loading: ['READING YOUR ENERGY…', 'CHANNELLING THE KI…', 'AWAKENING YOUR COMEBACK…', 'POWERING UP…', 'RENDERING YOUR SHORT…', 'ALMOST THERE, STAY STRONG…'],
+      placeholder: 'Your mood, a problem, a goal… e.g. “I keep delaying my launch”. Empty = surprise me.',
+      hint: 'Your Saiyan responds to you',
+      loading: ['READING YOUR ENERGY…', 'CHOOSING YOUR SAIYAN RESPONSE…', 'BUILDING THE SCENE…', 'POWERING UP…', 'FINALISING YOUR VIDEO…'],
       ms: 4000,
-      requireInput: true,
+      requireInput: false,
     },
     pfp: {
       label: 'AWAKEN YOUR SAIYAN PFP',
@@ -205,15 +205,18 @@ if (forge) {
       resultHintEl.textContent = 'Nothing was spent'
     } else if (result.output === 'video' && result.asset) {
       forge.dataset.output = 'video'
-      captionEl.textContent = pick(CAPTIONS)
-      resultHintEl.textContent = result.demo ? 'Demo · sample output' : 'Generated'
+      // The character's actual spoken line is the caption when we have it.
+      captionEl.textContent = result.meta?.line ? `“${result.meta.line}”` : pick(CAPTIONS)
+      resultHintEl.textContent = result.demo
+        ? 'Demo · sample output'
+        : `${result.meta?.character ? result.meta.character + ' · ' : ''}Generated`
       playVideo(result.asset)
     } else if (result.output === 'image' && result.asset) {
       forge.dataset.output = 'image'
       captionEl.textContent = state.mode === 'pfp'
         ? 'Your Saiyan PFP is awakened.'
         : 'Your $SAIYAN meme is ready.'
-      resultHintEl.textContent = result.free ? 'Generated · free creation' : 'Generated'
+      resultHintEl.textContent = `${result.meta?.character ? result.meta.character + ' · ' : ''}${result.free ? 'Generated · free creation' : 'Generated'}`
       showImage(result.asset)
     } else {
       // Demo path for PFP / Meme: show the structured prompt that WILL be sent.
