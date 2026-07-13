@@ -87,9 +87,9 @@ function openConnect() {
   openModal((card) => {
     heading(
       card,
-      'SAIYAN AI',
+      'SAIYAN CREATOR',
       'Connect Telegram',
-      'Connect with the official Saiyan bot to unlock Saiyan AI. No phone number — it just opens your Telegram app.',
+      'Connect with the official Saiyan bot to unlock the Saiyan Creator. No phone number — it just opens your Telegram app.',
     )
     const btn = telegramButton('Connect Telegram', startConnect)
     card.appendChild(wrapRow(btn))
@@ -146,7 +146,7 @@ function showWaiting(nonce, joinUrl) {
 
 function openConnectExpired() {
   openModal((card) => {
-    heading(card, 'SAIYAN AI', 'Connection timed out', 'No worries — start the connection again.')
+    heading(card, 'SAIYAN CREATOR', 'Connection timed out', 'No worries — start the connection again.')
     card.appendChild(wrapRow(telegramButton('Connect Telegram', startConnect)))
   })
 }
@@ -158,7 +158,7 @@ function openJoin(user, joinUrl, recheck) {
       card,
       'ONE STEP LEFT',
       'Join the Saiyan group',
-      `Connected as ${userLabel(user)}. Join the Saiyan Telegram to unlock Saiyan AI — this updates once you're in.`,
+      `Connected as ${userLabel(user)}. Join the Saiyan Telegram to unlock creations — this updates once you're in.`,
     )
     const join = telegramButton('Join Saiyan Telegram', () => {
       if (joinUrl) window.open(joinUrl, '_blank', 'noopener')
@@ -188,7 +188,7 @@ function openJoin(user, joinUrl, recheck) {
 
 function openNotice(message) {
   openModal((card) => {
-    heading(card, 'SAIYAN AI', 'Hold on', message)
+    heading(card, 'SAIYAN CREATOR', 'Hold on', message)
     card.appendChild(wrapRow(primaryButton('OK', () => finish(false))))
   })
 }
