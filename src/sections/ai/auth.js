@@ -9,19 +9,20 @@
 
 import './auth.css'
 import { AI_CONFIG } from './config.js'
+import { setToken, authHeaders } from './token.js'
 
 const cfg = AI_CONFIG.auth
 const api = (path) => `${cfg.apiBase.replace(/\/$/, '')}${path}`
 
 async function apiGet(path) {
-  const res = await fetch(api(path), { credentials: 'include' })
+  const res = await fetch(api(path), { credentials: 'include', headers: authHeaders() })
   return res.json()
 }
 async function apiPost(path, body) {
   const res = await fetch(api(path), {
     method: 'POST',
     credentials: 'include',
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json', ...authHeaders() },
     body: JSON.stringify(body || {}),
   })
   return res.json()
@@ -132,6 +133,7 @@ function showWaiting(nonce, joinUrl) {
     }
     if (res.linked) {
       stopPoll()
+      if (res.token) setToken(res.token) // survives cookie-blocking browsers
       showChip(res.user)
       if (res.isMember) return finish(true)
       // Linked but not in the group yet — re-check via the nonce after they join.
@@ -231,6 +233,7 @@ async function disconnect() {
   } catch {
     /* ignore — we still reset the UI */
   }
+  setToken('')
   removeChip()
   openConnect()
 }

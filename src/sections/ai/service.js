@@ -4,6 +4,7 @@
    the job finishes -> resolve with the asset URL. The provider keys live only
    on that server; the browser never sees them. */
 import { AI_CONFIG } from './config.js'
+import { authHeaders } from './token.js'
 
 const base = () => AI_CONFIG.apiBase.replace(/\/$/, '')
 const wait = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -31,7 +32,7 @@ export async function generate(mode, payload) {
   const res = await fetch(`${base()}/api/ai/generate`, {
     method: 'POST',
     credentials: 'include',
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json', ...authHeaders() },
     body: JSON.stringify({ mode, input: payload.input, opts: payload.opts, image: payload.image }),
   })
   const started = await res.json().catch(() => ({}))
@@ -48,6 +49,7 @@ export async function generate(mode, payload) {
     await wait(interval)
     const sr = await fetch(`${base()}/api/ai/status?jobId=${encodeURIComponent(started.jobId)}`, {
       credentials: 'include',
+      headers: authHeaders(),
     })
     const s = await sr.json().catch(() => ({}))
     if (!sr.ok || !s.ok) throw new GenError(s.error || `http_${sr.status}`)
