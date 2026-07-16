@@ -139,6 +139,78 @@
   color: rgba(255, 247, 224, 0.5);
 }
 
+/* Gallery button in the panel bar */
+.creator__gallery-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 10px;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 210, 48, 0.3);
+  border-radius: 999px;
+  background: rgba(255, 210, 48, 0.05);
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.creator__gallery-btn:hover { background: rgba(255, 210, 48, 0.12); border-color: var(--gold); }
+
+/* Gallery modal grid (inside the shared gate modal) */
+.saiyan-gate__card--gallery { width: min(560px, 100%); text-align: left; }
+.saiyan-gate__card--gallery .saiyan-gate__kicker,
+.saiyan-gate__card--gallery .saiyan-gate__title { text-align: center; }
+
+.creator__gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  max-height: 56vh;
+  overflow-y: auto;
+  padding: 4px 2px;
+}
+
+.creator__gallery-item {
+  position: relative;
+  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 210, 48, 0.2);
+  background: #020104;
+  aspect-ratio: 1 / 1;
+  text-decoration: none;
+  transition: border-color 0.2s, transform 0.15s;
+}
+.creator__gallery-item:hover { border-color: var(--gold); transform: translateY(-2px); }
+
+.creator__gallery-item img,
+.creator__gallery-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.creator__gallery-item span {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(5, 3, 6, 0.8);
+  color: var(--gold);
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 640px) {
+  .creator__gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .creator__gallery-btn span { display: none; }
+}
+
 /* ── Mode tabs: one segmented control, three segments, never wraps ── */
 .creator__modes {
   display: grid;
@@ -212,7 +284,23 @@
 .creator__forge[data-mode='pfp'] [data-guided='aura'],
 .creator__forge[data-mode='pfp'] [data-guided='upload'] { display: flex; }
 .creator__forge[data-mode='motivation'] [data-guided='character'],
-.creator__forge[data-mode='meme'] [data-guided='character'] { display: flex; }
+.creator__forge[data-mode='pfp'] [data-guided='character'] { display: flex; }
+
+/* "Custom" tile (your own subject / uploaded photo) only exists in PFP mode. */
+.creator__char--custom { display: none; }
+.creator__forge[data-mode='pfp'] .creator__char--custom { display: flex; }
+.creator__char--custom i {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 210, 48, 0.5);
+  color: var(--gold);
+  font-size: 18px;
+  font-style: normal;
+}
+.creator__char--custom.is-active i { border-style: solid; border-color: var(--gold); }
 
 /* Team character selector: who creates and delivers the content */
 .creator__chars {

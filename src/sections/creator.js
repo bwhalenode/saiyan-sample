@@ -1,7 +1,8 @@
 import './creator.css'
-import { DEFAULT_MODE } from './ai/config.js'
+import { DEFAULT_MODE, AI_CONFIG } from './ai/config.js'
 import { generate } from './ai/service.js'
 import { ensureAccess } from './ai/auth.js'
+import { authHeaders } from './ai/token.js'
 
 /* SAIYAN CREATOR panel controller.
    Mood -> Power Up is the centrepiece (a chosen team character answers the
@@ -40,8 +41,8 @@ if (forge) {
     },
     pfp: {
       label: 'AWAKEN YOUR SAIYAN PFP',
-      placeholder: 'Optional style notes… e.g. “battle scars, scouter, hood”',
-      hint: 'Photo → Saiyan PFP',
+      placeholder: 'Describe your PFP… e.g. “cyber samurai with a scar”. Add a photo or pick a character.',
+      hint: 'Prompt, photo or character → PFP',
       loading: ['SHAPING YOUR WARRIOR…', 'CHARGING THE AURA…', 'POWERING UP…', 'FORGING THE FINAL FORM…'],
       ms: 2600,
       requireInput: false,
@@ -85,6 +86,16 @@ if (forge) {
     labelEl.textContent = ui.label
     inputEl.placeholder = ui.placeholder
     hintEl.textContent = ui.hint
+
+    // PFP defaults to Custom (own subject/photo); video needs a real character.
+    if (mode === 'pfp' && state.character !== 'custom') selectCharacter('custom')
+    if (mode === 'motivation' && state.character === 'custom') selectCharacter('meketa')
+  }
+
+  function selectCharacter(id) {
+    state.character = id
+    forge.querySelectorAll('[data-char-btn]').forEach(b =>
+      b.classList.toggle('is-active', b.dataset.charBtn === id))
   }
 
   forge.querySelectorAll('[data-mode-btn]').forEach(btn => {
@@ -100,13 +111,9 @@ if (forge) {
     })
   })
 
-  /* ── Guided: team character (meme + motivation; Meketa is the default) ── */
+  /* ── Guided: team character (video: Meketa default; PFP: Custom default) ── */
   forge.querySelectorAll('[data-char-btn]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.character = btn.dataset.charBtn
-      forge.querySelectorAll('[data-char-btn]').forEach(b =>
-        b.classList.toggle('is-active', b === btn))
-    })
+    btn.addEventListener('click', () => selectCharacter(btn.dataset.charBtn))
   })
 
   /* ── Guided: PFP photo upload. Downscaled in the browser and sent with the
@@ -307,6 +314,71 @@ if (forge) {
     forge.dataset.state = 'input'
     inputEl.focus()
   }
+
+  /* ── Gallery: the logged-in user's past creations ── */
+  async function openGallery() {
+    const base = AI_CONFIG.apiBase.replace(/\/$/, '')
+    if (!base) return
+
+    const overlay = document.createElement('div')
+    overlay.className = 'saiyan-gate'
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove() })
+    const card = document.createElement('div')
+    card.className = 'saiyan-gate__card saiyan-gate__card--gallery'
+    card.setAttribute('role', 'dialog')
+    card.innerHTML =
+      '<button class="saiyan-gate__close" type="button" aria-label="Close">×</button>' +
+      '<p class="saiyan-gate__kicker">SAIYAN CREATOR</p>' +
+      '<h3 class="saiyan-gate__title">My creations</h3>' +
+      '<div class="creator__gallery-grid"><p class="saiyan-gate__text">Loading…</p></div>'
+    card.querySelector('.saiyan-gate__close').addEventListener('click', () => overlay.remove())
+    overlay.appendChild(card)
+    document.body.appendChild(overlay)
+
+    const grid = card.querySelector('.creator__gallery-grid')
+    try {
+      const res = await fetch(`${base}/api/ai/history`, { credentials: 'include', headers: authHeaders() })
+      const data = await res.json()
+      if (!res.ok || !data.ok) throw new Error(data.error || 'failed')
+      grid.textContent = ''
+      if (!data.items.length) {
+        grid.innerHTML = '<p class="saiyan-gate__text">Nothing here yet. Generate your first creation.</p>'
+        return
+      }
+      for (const item of data.items) {
+        const tile = document.createElement('a')
+        tile.className = 'creator__gallery-item'
+        tile.href = `${base}${item.assetUrl}`
+        tile.target = '_blank'
+        tile.rel = 'noopener'
+        if (item.kind === 'video') {
+          const v = document.createElement('video')
+          v.src = `${base}${item.assetUrl}`
+          v.muted = true
+          v.playsInline = true
+          v.preload = 'metadata'
+          v.addEventListener('mouseenter', () => v.play().catch(() => {}))
+          v.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0 })
+          tile.appendChild(v)
+        } else {
+          const img = document.createElement('img')
+          img.src = `${base}${item.assetUrl}`
+          img.loading = 'lazy'
+          img.alt = item.mode
+          tile.appendChild(img)
+        }
+        const label = document.createElement('span')
+        const d = new Date(item.createdAt)
+        label.textContent = `${item.mode === 'motivation' ? 'VIDEO' : item.mode.toUpperCase()} · ${d.getDate()}/${d.getMonth() + 1}`
+        tile.appendChild(label)
+        grid.appendChild(tile)
+      }
+    } catch {
+      grid.innerHTML = '<p class="saiyan-gate__text">Could not load your creations. Connect Telegram and try again.</p>'
+    }
+  }
+
+  document.querySelector('[data-gallery]')?.addEventListener('click', openGallery)
 
   $('[data-generate]')?.addEventListener('click', run)
   $('[data-again]')?.addEventListener('click', reset)
