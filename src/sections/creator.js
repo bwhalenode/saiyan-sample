@@ -35,8 +35,10 @@ if (forge) {
       label: 'HOW ARE YOU FEELING?',
       placeholder: 'Your mood, a problem, a goal… e.g. “I keep delaying my launch”. Empty = surprise me.',
       hint: 'Your Saiyan responds to you',
-      loading: ['READING YOUR ENERGY…', 'CHOOSING YOUR SAIYAN RESPONSE…', 'BUILDING THE SCENE…', 'POWERING UP…', 'FINALISING YOUR VIDEO…'],
+      loading: ['BUILD STARTED…', 'IMAGINATION RUNNING…', 'SCENES TAKING SHAPE…', 'FRAMES RENDERING…', 'VOICE AND SOUND SYNCING…', 'READY SHORTLY…'],
       ms: 4000,
+      cycleMs: 4200,
+      note: 'Video generation takes 1 to 2 minutes',
       requireInput: false,
     },
     pfp: {
@@ -45,6 +47,8 @@ if (forge) {
       hint: 'Prompt, photo or character → PFP',
       loading: ['SHAPING YOUR WARRIOR…', 'CHARGING THE AURA…', 'POWERING UP…', 'FORGING THE FINAL FORM…'],
       ms: 2600,
+      cycleMs: 1100,
+      note: 'Usually ready in under a minute',
       requireInput: false,
     },
     meme: {
@@ -53,6 +57,8 @@ if (forge) {
       hint: 'Idea → $SAIYAN meme',
       loading: ['READING THE ROOM…', 'COOKING THE MEME…', 'POWERING UP…', 'ADDING THE PUNCHLINE…'],
       ms: 2600,
+      cycleMs: 1100,
+      note: 'Usually ready in under a minute',
       requireInput: true,
     },
   }
@@ -64,7 +70,7 @@ if (forge) {
     'The fire you feel is your power waking up.',
   ]
 
-  const state = { mode: DEFAULT_MODE, aura: 'golden', character: 'meketa', uploadData: null }
+  const state = { mode: DEFAULT_MODE, aura: 'golden', character: 'meketa', uploadData: null, uploadPromise: null }
   let loadingTimer = null
 
   const pick = arr => arr[Math.floor(Math.random() * arr.length)]
@@ -123,26 +129,40 @@ if (forge) {
     uploadInput.addEventListener('change', () => {
       const file = uploadInput.files && uploadInput.files[0]
       if (!file) return
-      const img = new Image()
-      const url = URL.createObjectURL(file)
-      img.onload = () => {
-        const max = 768
-        const scale = Math.min(1, max / Math.max(img.width, img.height))
-        const canvas = document.createElement('canvas')
-        canvas.width = Math.max(1, Math.round(img.width * scale))
-        canvas.height = Math.max(1, Math.round(img.height * scale))
-        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
-        state.uploadData = canvas.toDataURL('image/jpeg', 0.88)
-        URL.revokeObjectURL(url)
-        uploadLabel.textContent = file.name.length > 22 ? file.name.slice(0, 20) + '…' : file.name
-        uploadLabel.closest('.creator__upload')?.classList.add('has-file')
-      }
-      img.onerror = () => {
-        URL.revokeObjectURL(url)
-        state.uploadData = null
-        uploadLabel.textContent = 'Could not read photo'
-      }
-      img.src = url
+      uploadLabel.textContent = 'Reading photo…'
+      // Kept as a promise so Generate can WAIT for it: clicking generate right
+      // after picking a file must never silently drop the photo.
+      state.uploadPromise = new Promise((resolve) => {
+        const img = new Image()
+        const url = URL.createObjectURL(file)
+        img.onload = () => {
+          const max = 768
+          const scale = Math.min(1, max / Math.max(img.width, img.height))
+          const canvas = document.createElement('canvas')
+          canvas.width = Math.max(1, Math.round(img.width * scale))
+          canvas.height = Math.max(1, Math.round(img.height * scale))
+          canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
+          state.uploadData = canvas.toDataURL('image/jpeg', 0.88)
+          URL.revokeObjectURL(url)
+          uploadLabel.textContent = file.name.length > 18 ? file.name.slice(0, 16) + '…' : file.name
+          const chip = uploadLabel.closest('.creator__upload')
+          chip?.classList.add('has-file')
+          // Visible proof the photo is attached: thumbnail in the chip.
+          const thumb = chip?.querySelector('[data-upload-thumb]')
+          if (thumb) {
+            thumb.src = state.uploadData
+            thumb.hidden = false
+          }
+          resolve(true)
+        }
+        img.onerror = () => {
+          URL.revokeObjectURL(url)
+          state.uploadData = null
+          uploadLabel.textContent = 'Could not read photo'
+          resolve(false)
+        }
+        img.src = url
+      })
     })
   }
 
@@ -156,6 +176,10 @@ if (forge) {
     // backend is configured, so the demo keeps working without secrets.
     const allowed = await ensureAccess()
     if (!allowed) return
+
+    // A just-picked photo may still be processing: wait for it so it is never
+    // silently dropped from the request.
+    if (state.mode === 'pfp' && state.uploadPromise) await state.uploadPromise
 
     const payload = { input: text, opts: { aura: state.aura, character: state.character } }
     if (state.mode === 'pfp' && state.uploadData) payload.image = state.uploadData
@@ -175,12 +199,15 @@ if (forge) {
     forge.dataset.state = 'loading'
     let i = 0
     loadingTextEl.textContent = ui.loading[0]
+    const noteEl = $('[data-loading-note]')
+    if (noteEl) noteEl.textContent = ui.note || ''
     clearInterval(loadingTimer)
     if (reduced) return
     loadingTimer = setInterval(() => {
-      i = (i + 1) % ui.loading.length
+      // Hold on the final message instead of looping back to the start.
+      i = Math.min(i + 1, ui.loading.length - 1)
       loadingTextEl.textContent = ui.loading[i]
-    }, Math.max(700, Math.floor(ui.ms / ui.loading.length)))
+    }, ui.cycleMs || 1200)
   }
 
   // Friendly copy for live-generation errors. Nothing is spent on a failure.

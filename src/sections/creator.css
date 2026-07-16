@@ -287,8 +287,8 @@
 .creator__forge[data-mode='pfp'] [data-guided='character'] { display: flex; }
 
 /* "Custom" tile (your own subject / uploaded photo) only exists in PFP mode. */
-.creator__char--custom { display: none; }
-.creator__forge[data-mode='pfp'] .creator__char--custom { display: flex; }
+.creator__chars .creator__char--custom { display: none; }
+.creator__forge[data-mode='pfp'] .creator__chars .creator__char--custom { display: flex; }
 .creator__char--custom i {
   display: grid;
   place-items: center;
@@ -439,8 +439,28 @@
   text-align: center;
 }
 
+.creator__loading-note {
+  margin-top: -4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 247, 224, 0.45);
+  text-align: center;
+}
+
+.creator__upload-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid rgba(255, 210, 48, 0.6);
+}
+
 .creator__meter { width: 70%; height: 3px; border-radius: 2px; background: rgba(255, 247, 224, 0.1); overflow: hidden; }
 .creator__meter i { display: block; height: 100%; width: 40%; background: linear-gradient(90deg, var(--gold-hot), var(--gold), var(--electric, #4ad8ff)); animation: creator-meter 1.3s var(--ease-out-expo) infinite; }
+
+/* Videos take 1-2 minutes: the pulse slows down so it reads calm, not stuck. */
+.creator__forge[data-mode='motivation'] .creator__ki-logo { animation-duration: 3.6s; }
 
 @keyframes creator-ki-logo {
   0%, 100% { transform: scale(0.94); filter: drop-shadow(0 0 12px rgba(255, 210, 48, 0.4)) drop-shadow(0 0 30px rgba(255, 168, 0, 0.18)); }
