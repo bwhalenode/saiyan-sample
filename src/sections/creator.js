@@ -70,7 +70,7 @@ if (forge) {
     'The fire you feel is your power waking up.',
   ]
 
-  const state = { mode: DEFAULT_MODE, aura: 'golden', character: 'meketa', uploadData: null, uploadPromise: null }
+  const state = { mode: DEFAULT_MODE, aura: 'golden', character: 'meketa', captions: true, uploadData: null, uploadPromise: null }
   let loadingTimer = null
 
   const pick = arr => arr[Math.floor(Math.random() * arr.length)]
@@ -113,6 +113,16 @@ if (forge) {
     btn.addEventListener('click', () => {
       state.aura = btn.dataset.auraBtn
       forge.querySelectorAll('[data-aura-btn]').forEach(b =>
+        b.classList.toggle('is-active', b === btn))
+    })
+  })
+
+  /* ── Guided: meme caption on/off. Burned-in text can bury a strong image,
+     so the user decides before generating. ── */
+  forge.querySelectorAll('[data-captions-btn]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.captions = btn.dataset.captionsBtn === 'on'
+      forge.querySelectorAll('[data-captions-btn]').forEach(b =>
         b.classList.toggle('is-active', b === btn))
     })
   })
@@ -181,7 +191,7 @@ if (forge) {
     // silently dropped from the request.
     if (state.mode === 'pfp' && state.uploadPromise) await state.uploadPromise
 
-    const payload = { input: text, opts: { aura: state.aura, character: state.character } }
+    const payload = { input: text, opts: { aura: state.aura, character: state.character, captions: state.captions } }
     if (state.mode === 'pfp' && state.uploadData) payload.image = state.uploadData
 
     startLoading(ui)

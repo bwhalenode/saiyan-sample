@@ -27,3 +27,5 @@ saiyan-ai-infra/
 
 # Local source-staging for build assets (shipped copies live in public/)
 build-assets/
+.vercel
+.env*

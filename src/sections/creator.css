@@ -285,6 +285,8 @@
 .creator__forge[data-mode='pfp'] [data-guided='upload'] { display: flex; }
 .creator__forge[data-mode='motivation'] [data-guided='character'],
 .creator__forge[data-mode='pfp'] [data-guided='character'] { display: flex; }
+/* Captions can crowd a strong meme image, so meme mode gets the choice. */
+.creator__forge[data-mode='meme'] [data-guided='captions'] { display: flex; }
 
 /* "Custom" tile (your own subject / uploaded photo) only exists in PFP mode. */
 .creator__chars .creator__char--custom { display: none; }
