@@ -28,10 +28,35 @@ async function apiPost(path, body) {
   return res.json()
 }
 
-// Show the connected username on load if a session already exists.
+// Returning users are recognised automatically: the session lives in a 30-day
+// cookie plus a token that survives cookie-blocking browsers. On load, either
+// the connected chip appears (no action needed) or the LOG IN button shows.
+// A different Telegram account goes through the full connect + join gate.
 if (cfg.enabled) {
-  apiGet('/api/session').then((s) => s && s.user && showChip(s.user)).catch(() => {})
+  apiGet('/api/session')
+    .then((s) => (s && s.user ? showChip(s.user) : showLoginBtn()))
+    .catch(() => showLoginBtn())
 }
+
+function loginBtn() {
+  return document.querySelector('[data-login]')
+}
+
+function showLoginBtn() {
+  const b = loginBtn()
+  if (b) b.hidden = false
+}
+
+function hideLoginBtn() {
+  const b = loginBtn()
+  if (b) b.hidden = true
+}
+
+// LOG IN runs the same gate as Generate, minus the generation: existing
+// session resolves instantly, otherwise the Telegram connect flow opens.
+loginBtn()?.addEventListener('click', () => {
+  ensureAccess().catch(() => {})
+})
 
 let grant = null // resolve() of the in-flight ensureAccess promise
 let pollTimer = null
@@ -199,6 +224,7 @@ function userLabel(user) {
 }
 
 function showChip(user) {
+  hideLoginBtn()
   const bar = document.querySelector('.creator__forge-bar')
   if (!bar) return
   let chip = bar.querySelector('.creator__tg-chip')
@@ -223,6 +249,7 @@ function showChip(user) {
 function removeChip() {
   const chip = document.querySelector('.creator__tg-chip')
   if (chip) chip.remove()
+  showLoginBtn()
 }
 
 // Clears the server session + cookie (on the API domain), then reopens Connect so

@@ -70,7 +70,7 @@ if (forge) {
     'The fire you feel is your power waking up.',
   ]
 
-  const state = { mode: DEFAULT_MODE, aura: 'golden', character: 'meketa', captions: true, style: 'cinematic', uploadData: null, uploadPromise: null }
+  const state = { mode: DEFAULT_MODE, aura: 'golden', character: 'meketa', captions: true, style: 'cinematic', transform: 'golden', uploadData: null, uploadPromise: null }
   let loadingTimer = null
 
   const pick = arr => arr[Math.floor(Math.random() * arr.length)]
@@ -113,6 +113,15 @@ if (forge) {
     btn.addEventListener('click', () => {
       state.aura = btn.dataset.auraBtn
       forge.querySelectorAll('[data-aura-btn]').forEach(b =>
+        b.classList.toggle('is-active', b === btn))
+    })
+  })
+
+  /* ── Guided: super form. The power-up hair colour the user wants. ── */
+  forge.querySelectorAll('[data-transform-btn]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.transform = btn.dataset.transformBtn
+      forge.querySelectorAll('[data-transform-btn]').forEach(b =>
         b.classList.toggle('is-active', b === btn))
     })
   })
@@ -201,7 +210,7 @@ if (forge) {
     // silently dropped from the request.
     if (state.mode === 'pfp' && state.uploadPromise) await state.uploadPromise
 
-    const payload = { input: text, opts: { aura: state.aura, character: state.character, captions: state.captions, style: state.style } }
+    const payload = { input: text, opts: { aura: state.aura, character: state.character, captions: state.captions, style: state.style, transform: state.transform } }
     if (state.mode === 'pfp' && state.uploadData) payload.image = state.uploadData
 
     startLoading(ui)

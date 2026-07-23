@@ -139,6 +139,25 @@
   color: rgba(255, 247, 224, 0.5);
 }
 
+/* Log in button in the panel bar (hidden once the TG chip is shown) */
+.creator__login-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 10px;
+  padding: 4px 10px;
+  border: 1px solid rgba(74, 216, 255, 0.4);
+  border-radius: 999px;
+  background: rgba(74, 216, 255, 0.06);
+  color: var(--electric, #4ad8ff);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.creator__login-btn:hover { background: rgba(74, 216, 255, 0.14); border-color: var(--electric, #4ad8ff); }
+
 /* Gallery button in the panel bar */
 .creator__gallery-btn {
   display: inline-flex;
@@ -285,6 +304,8 @@
 .creator__forge[data-mode='pfp'] [data-guided='upload'] { display: flex; }
 .creator__forge[data-mode='motivation'] [data-guided='character'],
 .creator__forge[data-mode='pfp'] [data-guided='character'] { display: flex; }
+/* Super form (power-up hair colour) is a motivation-only choice. */
+.creator__forge[data-mode='motivation'] [data-guided='transform'] { display: flex; }
 /* Video look is a motivation-only choice. */
 .creator__forge[data-mode='motivation'] [data-guided='style'] { display: flex; }
 /* Captions can crowd a strong meme image, so meme mode gets the choice. */
