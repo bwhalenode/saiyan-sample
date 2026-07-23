@@ -306,8 +306,6 @@
 .creator__forge[data-mode='pfp'] [data-guided='character'] { display: flex; }
 /* Super form (power-up hair colour) is a motivation-only choice. */
 .creator__forge[data-mode='motivation'] [data-guided='transform'] { display: flex; }
-/* Video look is a motivation-only choice. */
-.creator__forge[data-mode='motivation'] [data-guided='style'] { display: flex; }
 /* Captions can crowd a strong meme image, so meme mode gets the choice. */
 .creator__forge[data-mode='meme'] [data-guided='captions'] { display: flex; }
 
