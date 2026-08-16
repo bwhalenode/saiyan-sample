@@ -23,8 +23,7 @@ export function initTeam() {
   const step    = 360 / N
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
 
-  const dImg  = dialog?.querySelector('.team-dialog__image')
-  const dName = dialog?.querySelector('.team-dialog__name')
+  const dImg = dialog?.querySelector('.team-dialog__image')
 
   // Give each card a branded back face so it reads as a real card turning
   // around the ring (front = member art, back = $SAIYAN mark).
@@ -134,7 +133,6 @@ export function initTeam() {
     const img = card.querySelector('.team-card__image-wrap img')
     dImg.src = img?.currentSrc || img?.src || ''
     dImg.alt = card.dataset.name || ''
-    if (dName) dName.textContent = card.dataset.name || ''
     dialog.showModal()
   }
 
