@@ -24,14 +24,14 @@ export class Lightning {
 
     // Material pool
     this._matCore = new THREE.LineBasicMaterial({
-      color:      0xffffff,
+      color:      0xe4ffb0, // lime-white core (Robinhood Chain neon)
       blending:   THREE.AdditiveBlending,
       depthWrite: false,
       transparent: true,
       opacity:    0.9,
     })
     this._matGlow = new THREE.LineBasicMaterial({
-      color:      0x4ad8ff,
+      color:      0x9dff00, // neon lime glow
       blending:   THREE.AdditiveBlending,
       depthWrite: false,
       transparent: true,
