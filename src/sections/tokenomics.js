@@ -8,8 +8,18 @@ export function initTokenomics() {
   })
 
   initOrbPress()
-  initMarketPulse()
-  initBurnTracker()
+  // Pre-launch on Robinhood Chain: no live market/on-chain data yet. Show N/A
+  // while keeping the orbs' titles + animation. Re-enable initMarketPulse() and
+  // initBurnTracker() (and point TOKEN_ADDRESS at the Robinhood Chain contract)
+  // once the token is live.
+  setStatOrbsPending()
+}
+
+function setStatOrbsPending() {
+  ;['[data-market-price]', '[data-market-cap]', '[data-market-volume]', '[data-market-liquidity]', '[data-burn-pct]']
+    .forEach(sel => document.querySelectorAll(sel).forEach(el => { el.textContent = 'N/A' }))
+  const avail = document.querySelector('[data-burn-available]')
+  if (avail) avail.textContent = 'AT LAUNCH'
 }
 
 const TOKEN_ADDRESS = '0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56'

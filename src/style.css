@@ -454,14 +454,14 @@ ul { list-style: none; }
   letter-spacing: 0.05em;
   text-shadow:
     0 0 20px rgba(255, 210, 48, 0.6),
-    0 0 28px rgba(74, 216, 255, 0.12);
+    0 0 28px rgba(60, 220, 130, 0.12);
   transition: text-shadow 0.3s;
 }
 
 .nav__brand:hover {
   text-shadow:
     0 0 30px rgba(255, 210, 48, 0.9),
-    0 0 38px rgba(74, 216, 255, 0.2);
+    0 0 38px rgba(60, 220, 130, 0.2);
 }
 
 .nav__logo {
@@ -470,7 +470,7 @@ ul { list-style: none; }
   object-fit: contain;
   filter:
     drop-shadow(0 0 14px rgba(255, 210, 48, 0.4))
-    drop-shadow(0 0 18px rgba(74, 216, 255, 0.16));
+    drop-shadow(0 0 18px rgba(60, 220, 130, 0.16));
 }
 
 .nav__links {
@@ -522,7 +522,7 @@ ul { list-style: none; }
   height: 18px;
   line-height: 0;
   color: rgba(255, 247, 224, 0.58);
-  filter: drop-shadow(0 0 10px rgba(74, 216, 255, 0.08));
+  filter: drop-shadow(0 0 10px rgba(60, 220, 130, 0.08));
   transition: color 0.2s, filter 0.2s, transform 0.2s;
 }
 
@@ -570,7 +570,7 @@ ul { list-style: none; }
   display: flex;
   align-items: center;
   color: rgba(255, 247, 224, 0.48);
-  filter: drop-shadow(0 0 10px rgba(74, 216, 255, 0.08));
+  filter: drop-shadow(0 0 10px rgba(60, 220, 130, 0.08));
   transition: color 0.2s, filter 0.2s, transform 0.2s;
 }
 
@@ -1094,7 +1094,7 @@ ul { list-style: none; }
   z-index: 2;
   background:
     radial-gradient(ellipse 46% 46% at 77% 58%, rgba(255, 210, 48, 0.18) 0%, transparent 66%),
-    radial-gradient(ellipse 38% 42% at 82% 58%, rgba(74, 216, 255, 0.12) 0%, transparent 72%),
+    radial-gradient(ellipse 38% 42% at 82% 58%, rgba(60, 220, 130, 0.12) 0%, transparent 72%),
     radial-gradient(ellipse 70% 48% at 50% 100%, rgba(255, 168, 0, 0.07) 0%, transparent 68%),
     linear-gradient(180deg, rgba(5, 3, 6, 0.82) 0%, #080609 44%, #020103 100%);
   overflow: hidden;
@@ -1107,7 +1107,7 @@ ul { list-style: none; }
   pointer-events: none;
   background:
     linear-gradient(90deg, rgba(255, 210, 48, 0.045) 1px, transparent 1px) 0 0 / 112px 112px,
-    linear-gradient(rgba(74, 216, 255, 0.035) 1px, transparent 1px) 0 0 / 112px 112px;
+    linear-gradient(rgba(60, 220, 130, 0.035) 1px, transparent 1px) 0 0 / 112px 112px;
   mask-image: radial-gradient(ellipse at 78% 58%, black 0%, transparent 72%);
   opacity: 0.5;
 }
@@ -1255,7 +1255,7 @@ ul { list-style: none; }
   border: 1px solid rgba(255, 210, 48, 0.2);
   box-shadow:
     0 0 44px rgba(255, 210, 48, 0.14),
-    inset 0 0 48px rgba(74, 216, 255, 0.08);
+    inset 0 0 48px rgba(60, 220, 130, 0.08);
   opacity: 0.75;
 }
 
@@ -1273,7 +1273,7 @@ ul { list-style: none; }
     saturate(1.12)
     brightness(1.12)
     drop-shadow(0 0 34px rgba(255, 210, 48, 0.18))
-    drop-shadow(0 0 26px rgba(74, 216, 255, 0.1));
+    drop-shadow(0 0 26px rgba(60, 220, 130, 0.1));
 }
 
 /* ════════════════════════════════════════
@@ -1500,7 +1500,7 @@ ul { list-style: none; }
 
 .tokenomics__pulse-status {
   position: relative;
-  color: rgba(74, 216, 255, 0.86);
+  color: rgba(60, 220, 130, 0.86);
   padding-left: 14px;
 }
 
@@ -1611,10 +1611,10 @@ ul { list-style: none; }
   margin-top: 10px;
   font-size: 18px;
   letter-spacing: 0.14em;
-  color: #4ad8ff;
+  color: #3cdc82;
   text-shadow:
     0 2px 6px rgba(0, 0, 0, 0.85),
-    0 0 16px rgba(74, 216, 255, 0.5);
+    0 0 16px rgba(60, 220, 130, 0.5);
 }
 
 .token-card__flames {
@@ -1670,7 +1670,7 @@ ul { list-style: none; }
 }
 
 .token-card .token-card__shockwave::after {
-  border: 2px solid rgba(74, 216, 255, 0.85);
+  border: 2px solid rgba(60, 220, 130, 0.85);
 }
 
 .token-card.is-bursting .token-card__shockwave::before { animation: burn-ring 0.6s ease-out both; }
@@ -1699,22 +1699,22 @@ ul { list-style: none; }
 }
 
 .token-card--market .token-card__inner {
-  border-color: rgba(74, 216, 255, 0.46);
+  border-color: rgba(60, 220, 130, 0.46);
   background:
     radial-gradient(circle at 34% 24%, rgba(255, 245, 194, 0.36) 0%, rgba(255, 210, 48, 0.13) 18%, transparent 38%),
-    radial-gradient(circle at 72% 32%, rgba(74, 216, 255, 0.2) 0%, transparent 32%),
-    radial-gradient(circle at 50% 62%, rgba(255, 168, 0, 0.2) 0%, rgba(74, 216, 255, 0.075) 42%, rgba(5, 3, 6, 0.7) 100%);
+    radial-gradient(circle at 72% 32%, rgba(60, 220, 130, 0.2) 0%, transparent 32%),
+    radial-gradient(circle at 50% 62%, rgba(255, 168, 0, 0.2) 0%, rgba(60, 220, 130, 0.075) 42%, rgba(5, 3, 6, 0.7) 100%);
   box-shadow:
     inset 0 0 34px rgba(255, 210, 48, 0.16),
-    inset 0 0 74px rgba(74, 216, 255, 0.12),
-    0 0 28px rgba(74, 216, 255, 0.16),
+    inset 0 0 74px rgba(60, 220, 130, 0.12),
+    0 0 28px rgba(60, 220, 130, 0.16),
     0 0 74px rgba(255, 210, 48, 0.11);
 }
 
 .token-card--market .token-card__inner::before {
   border-color: rgba(174, 236, 255, 0.22);
   box-shadow:
-    inset 0 0 22px rgba(74, 216, 255, 0.12),
+    inset 0 0 22px rgba(60, 220, 130, 0.12),
     inset 0 0 30px rgba(255, 210, 48, 0.08);
 }
 
@@ -1726,8 +1726,8 @@ ul { list-style: none; }
   border-color: rgba(174, 236, 255, 0.88);
   box-shadow:
     inset 0 0 40px rgba(255, 210, 48, 0.24),
-    inset 0 0 86px rgba(74, 216, 255, 0.2),
-    0 10px 34px rgba(74, 216, 255, 0.26),
+    inset 0 0 86px rgba(60, 220, 130, 0.2),
+    0 10px 34px rgba(60, 220, 130, 0.26),
     0 18px 92px rgba(255, 210, 48, 0.18);
 }
 
@@ -1786,7 +1786,7 @@ ul { list-style: none; }
   color: var(--gold-white);
   text-shadow:
     0 0 18px rgba(255, 210, 48, 0.42),
-    0 0 24px rgba(74, 216, 255, 0.18);
+    0 0 24px rgba(60, 220, 130, 0.18);
 }
 
 .token-card__signal {
@@ -1796,7 +1796,7 @@ ul { list-style: none; }
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 0.22em;
-  color: rgba(74, 216, 255, 0.78);
+  color: rgba(60, 220, 130, 0.78);
 }
 
 .token-card.is-bursting {
@@ -1847,7 +1847,7 @@ ul { list-style: none; }
   border: 1px solid rgba(255, 210, 48, 0.24);
   background:
     radial-gradient(ellipse 42% 120% at 8% 0%, rgba(255, 210, 48, 0.12), transparent 68%),
-    radial-gradient(ellipse 36% 100% at 92% 100%, rgba(74, 216, 255, 0.08), transparent 72%),
+    radial-gradient(ellipse 36% 100% at 92% 100%, rgba(60, 220, 130, 0.08), transparent 72%),
     rgba(5, 3, 6, 0.78);
   box-shadow:
     inset 0 0 34px rgba(255, 210, 48, 0.045),
@@ -1890,7 +1890,7 @@ ul { list-style: none; }
 
 .tokenomics__market-status {
   position: relative;
-  color: rgba(74, 216, 255, 0.86);
+  color: rgba(60, 220, 130, 0.86);
   padding-left: 14px;
 }
 
@@ -1940,7 +1940,7 @@ ul { list-style: none; }
   letter-spacing: 0.03em;
   text-shadow:
     0 0 14px rgba(255, 210, 48, 0.36),
-    0 0 24px rgba(74, 216, 255, 0.08);
+    0 0 24px rgba(60, 220, 130, 0.08);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1983,7 +1983,7 @@ ul { list-style: none; }
   z-index: 2;
   background:
     radial-gradient(ellipse 55% 70% at 50% 46%, rgba(255, 210, 48, 0.075) 0%, transparent 70%),
-    radial-gradient(ellipse 36% 54% at 74% 58%, rgba(74, 216, 255, 0.045) 0%, transparent 74%),
+    radial-gradient(ellipse 36% 54% at 74% 58%, rgba(60, 220, 130, 0.045) 0%, transparent 74%),
     var(--bg);
   display: flex;
   flex-direction: column;
@@ -2347,7 +2347,7 @@ ul { list-style: none; }
     transparent 0deg,
     transparent 54deg,
     rgba(255, 210, 48, 0.88) 78deg,
-    rgba(74, 216, 255, 0.72) 94deg,
+    rgba(60, 220, 130, 0.72) 94deg,
     transparent 128deg,
     transparent 360deg
   );
@@ -2526,7 +2526,7 @@ ul { list-style: none; }
   padding: 104px 5vw;
   background:
     radial-gradient(ellipse 54% 72% at 76% 52%, rgba(255, 210, 48, 0.14) 0%, transparent 70%),
-    radial-gradient(ellipse 34% 54% at 78% 54%, rgba(74, 216, 255, 0.065) 0%, transparent 72%),
+    radial-gradient(ellipse 34% 54% at 78% 54%, rgba(60, 220, 130, 0.065) 0%, transparent 72%),
     var(--bg);
 }
 
@@ -2659,7 +2659,7 @@ ul { list-style: none; }
   border-radius: clamp(22px, 2.6vw, 38px);
   background:
     radial-gradient(circle at 50% 31%, rgba(255, 210, 48, 0.22) 0%, transparent 32%),
-    radial-gradient(ellipse at 70% 70%, rgba(74, 216, 255, 0.1), transparent 52%),
+    radial-gradient(ellipse at 70% 70%, rgba(60, 220, 130, 0.1), transparent 52%),
     linear-gradient(145deg, rgba(255, 210, 48, 0.09), rgba(5, 3, 6, 0.94) 58%);
   box-shadow:
     inset 0 0 50px rgba(255, 210, 48, 0.08),
@@ -2773,14 +2773,14 @@ ul { list-style: none; }
   width: 48px;
   height: 48px;
   margin: 2px 0;
-  border: 1px solid rgba(74, 216, 255, 0.48);
+  border: 1px solid rgba(60, 220, 130, 0.48);
   border-radius: 50%;
   color: var(--gold);
   background:
-    radial-gradient(circle, rgba(74, 216, 255, 0.18), transparent 70%),
+    radial-gradient(circle, rgba(60, 220, 130, 0.18), transparent 70%),
     rgba(5, 3, 6, 0.55);
   box-shadow:
-    0 0 24px rgba(74, 216, 255, 0.16),
+    0 0 24px rgba(60, 220, 130, 0.16),
     0 0 30px rgba(255, 210, 48, 0.12);
   transition: transform 0.25s var(--ease-out-expo), border-color 0.25s;
 }
@@ -3128,7 +3128,7 @@ ul { list-style: none; }
   padding: clamp(90px, 12vh, 150px) 5vw;
   background:
     radial-gradient(ellipse 58% 54% at 50% 24%, rgba(255, 210, 48, 0.12) 0%, transparent 68%),
-    radial-gradient(ellipse 42% 54% at 82% 58%, rgba(74, 216, 255, 0.095) 0%, transparent 74%),
+    radial-gradient(ellipse 42% 54% at 82% 58%, rgba(60, 220, 130, 0.095) 0%, transparent 74%),
     radial-gradient(ellipse 60% 44% at 18% 78%, rgba(255, 168, 0, 0.07) 0%, transparent 72%),
     linear-gradient(180deg, #080508 0%, #050306 48%, #070509 100%);
 }
@@ -3139,8 +3139,8 @@ ul { list-style: none; }
   pointer-events: none;
   background:
     linear-gradient(90deg, rgba(255, 210, 48, 0.04) 1px, transparent 1px) 0 0 / 108px 108px,
-    linear-gradient(rgba(74, 216, 255, 0.03) 1px, transparent 1px) 0 0 / 108px 108px,
-    radial-gradient(ellipse 40% 50% at 82% 52%, rgba(74, 216, 255, 0.08) 0%, transparent 70%);
+    linear-gradient(rgba(60, 220, 130, 0.03) 1px, transparent 1px) 0 0 / 108px 108px,
+    radial-gradient(ellipse 40% 50% at 82% 52%, rgba(60, 220, 130, 0.08) 0%, transparent 70%);
   mask-image: radial-gradient(ellipse at 50% 48%, black 0%, transparent 76%);
   opacity: 0.8;
 }
@@ -3205,7 +3205,7 @@ ul { list-style: none; }
   border: 1px solid rgba(255, 210, 48, 0.14);
   border-radius: 18px;
   background:
-    linear-gradient(135deg, rgba(255, 210, 48, 0.04), rgba(74, 216, 255, 0.025)),
+    linear-gradient(135deg, rgba(255, 210, 48, 0.04), rgba(60, 220, 130, 0.025)),
     rgba(255, 247, 224, 0.022);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -3498,7 +3498,7 @@ ul { list-style: none; }
   .section--about {
     background:
       radial-gradient(ellipse 68% 38% at 50% 79%, rgba(255, 210, 48, 0.18) 0%, transparent 70%),
-      radial-gradient(ellipse 58% 34% at 58% 78%, rgba(74, 216, 255, 0.12) 0%, transparent 74%),
+      radial-gradient(ellipse 58% 34% at 58% 78%, rgba(60, 220, 130, 0.12) 0%, transparent 74%),
       linear-gradient(180deg, rgba(5, 3, 6, 0.84) 0%, #080609 46%, #020103 100%);
   }
 
