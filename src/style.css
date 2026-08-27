@@ -1314,8 +1314,8 @@ ul { list-style: none; }
   opacity: 0;
   mix-blend-mode: screen;
   background:
-    radial-gradient(ellipse 72% 56% at 50% 42%, rgba(196, 240, 255, 0.62) 0%, transparent 62%),
-    linear-gradient(180deg, rgba(120, 210, 255, 0.22) 0%, transparent 55%);
+    radial-gradient(ellipse 72% 56% at 50% 42%, rgba(210, 255, 150, 0.62) 0%, transparent 62%),
+    linear-gradient(180deg, rgba(140, 240, 60, 0.22) 0%, transparent 55%);
 }
 
 .section--inflection.is-live .inflection__flash {
@@ -1333,13 +1333,13 @@ ul { list-style: none; }
   transform: translateX(-50%);
   opacity: 0.95;
   background:
-    linear-gradient(110deg, transparent 0 23%, rgba(174, 236, 255, 0.95) 24% 25%, transparent 26% 100%),
-    linear-gradient(139deg, transparent 0 37%, rgba(255, 255, 255, 0.9) 38% 39%, transparent 40% 100%),
-    linear-gradient(62deg, transparent 0 52%, rgba(74, 216, 255, 0.86) 53% 54%, transparent 55% 100%),
-    linear-gradient(124deg, transparent 0 68%, rgba(216, 248, 255, 0.84) 69% 70%, transparent 71% 100%);
+    linear-gradient(110deg, transparent 0 23%, rgba(190, 255, 110, 0.95) 24% 25%, transparent 26% 100%),
+    linear-gradient(139deg, transparent 0 37%, rgba(235, 255, 190, 0.9) 38% 39%, transparent 40% 100%),
+    linear-gradient(62deg, transparent 0 52%, rgba(140, 255, 40, 0.86) 53% 54%, transparent 55% 100%),
+    linear-gradient(124deg, transparent 0 68%, rgba(215, 255, 160, 0.84) 69% 70%, transparent 71% 100%);
   filter:
-    drop-shadow(0 0 10px rgba(174, 236, 255, 0.95))
-    drop-shadow(0 0 26px rgba(74, 216, 255, 0.72));
+    drop-shadow(0 0 10px rgba(190, 255, 110, 0.95))
+    drop-shadow(0 0 26px rgba(140, 255, 40, 0.72));
   clip-path: polygon(0 44%, 18% 39%, 28% 45%, 43% 34%, 51% 48%, 68% 38%, 80% 46%, 100% 41%, 100% 55%, 80% 59%, 68% 52%, 51% 64%, 43% 50%, 28% 61%, 18% 53%, 0 58%);
 }
 
@@ -1375,7 +1375,7 @@ ul { list-style: none; }
   inset: -12% -8%;
   z-index: -1;
   opacity: 0.6;
-  background: radial-gradient(ellipse at 50% 52%, rgba(255, 210, 48, 0.2), rgba(74, 216, 255, 0.1) 36%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 52%, rgba(255, 210, 48, 0.2), rgba(140, 255, 40, 0.12) 36%, transparent 70%);
   filter: blur(26px);
 }
 
@@ -1401,7 +1401,7 @@ ul { list-style: none; }
   filter: blur(10px) brightness(1.4);
   text-shadow:
     0 0 18px rgba(255, 210, 48, 0.36),
-    0 0 26px rgba(74, 216, 255, 0.18);
+    0 0 26px rgba(140, 255, 40, 0.2);
   will-change: transform, opacity, filter, text-shadow;
 }
 
@@ -2452,6 +2452,37 @@ ul { list-style: none; }
   font-size: 13px;
   line-height: 1.7;
   color: rgba(255, 247, 224, 0.5);
+}
+
+.htb__step-desc strong { color: rgba(180, 255, 60, 0.92); font-weight: 600; }
+
+/* Key message: you need ETH on Robinhood Chain specifically */
+.htb__key-note {
+  max-width: 640px;
+  margin: 46px auto 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border: 1px solid rgba(157, 255, 0, 0.32);
+  border-radius: 14px;
+  background: rgba(157, 255, 0, 0.06);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: rgba(255, 247, 224, 0.72);
+  text-align: left;
+}
+.htb__key-note strong { color: rgba(180, 255, 60, 0.95); font-weight: 600; }
+.htb__key-badge {
+  flex: 0 0 auto;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #b4ff3c, #00c805);
+  color: #052b02;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
 }
 
 .htb__ca-repeat {
