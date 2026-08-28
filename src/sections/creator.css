@@ -119,9 +119,25 @@
 }
 
 .creator__forge-bar {
+  position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
+  min-height: 28px;
+}
+
+.creator__forge-lights {
+  position: absolute;
+  left: 0;
+  display: inline-flex;
   gap: 7px;
+}
+
+.creator__forge-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .creator__forge-dot {
@@ -131,21 +147,12 @@
   background: rgba(158, 232, 75, 0.32);
 }
 
-.creator__forge-tag {
-  margin-left: auto;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.26em;
-  color: rgba(255, 247, 224, 0.5);
-}
-
 /* Log in button in the panel bar (hidden once the TG chip is shown) */
 .creator__login-btn {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
   gap: 5px;
-  margin-left: 10px;
   padding: 4px 10px;
   border: 1px solid rgba(74, 216, 255, 0.4);
   border-radius: 999px;
@@ -166,7 +173,6 @@
   flex: 0 0 auto;
   align-items: center;
   gap: 5px;
-  margin-left: 10px;
   padding: 4px 10px;
   border: 1px solid rgba(158, 232, 75, 0.3);
   border-radius: 999px;
@@ -185,6 +191,12 @@
 .saiyan-gate__card--gallery { width: min(560px, 100%); text-align: left; }
 .saiyan-gate__card--gallery .saiyan-gate__kicker,
 .saiyan-gate__card--gallery .saiyan-gate__title { text-align: center; }
+.creator__gallery-grid > .saiyan-gate__text {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: min(32ch, 100%);
+  text-align: center;
+}
 
 .creator__gallery-grid {
   display: grid;
@@ -231,24 +243,23 @@
 
 @media (max-width: 640px) {
   .creator__gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .creator__login-btn,
+  .creator__gallery-btn { padding: 6px 9px; }
+}
 
-  /* Keep the destination explicit on phones. The Telegram mark is familiar;
-     the generic grid icon is not specific enough to communicate creations. */
+@media (max-width: 380px) {
+  .creator__forge-lights { display: none; }
+}
+
+@media (max-width: 340px) {
   .creator__login-btn {
     width: 28px;
     height: 28px;
     justify-content: center;
-    margin-left: 6px;
     padding: 0;
   }
   .creator__login-btn svg { width: 13px; height: 13px; }
   .creator__login-btn span { display: none; }
-  .creator__gallery-btn { margin-left: 4px; padding: 6px 9px; }
-}
-
-@media (max-width: 420px) {
-  /* Decorative identity yields before the useful account destinations do. */
-  .creator__forge-tag { display: none; }
 }
 
 /* ── Mode tabs: one segmented control, three segments, never wraps ── */
