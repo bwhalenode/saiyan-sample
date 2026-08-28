@@ -1280,6 +1280,11 @@ ul { list-style: none; }
    INFLECTION (mid-page)
    ════════════════════════════════════════ */
 .section--inflection {
+  /* This quote deliberately keeps the original Saiyan-gold identity while the
+     surrounding section and attribution follow the current green theme. */
+  --quote-gold-hot: #FFA800;
+  --quote-gold: #FFD230;
+  --quote-gold-white: #FFF5C2;
   position: relative;
   height: 100vh;
   z-index: 2;
@@ -1386,22 +1391,22 @@ ul { list-style: none; }
   word-spacing: 0.08em;
   line-height: 1.02;
   text-align: center;
-  filter: drop-shadow(0 4px 30px rgba(95, 184, 0, 0.4));
+  filter: drop-shadow(0 4px 30px rgba(255, 168, 0, 0.4));
 }
 
-/* Each word is its own gold-gradient unit so it can strike in independently */
+/* Each word is its own original gold-gradient unit so it can strike in independently. */
 .inflection__word {
   display: inline-block;
   opacity: 0;
   transform: translateY(60%);
-  background: linear-gradient(90deg, var(--gold-hot) 0%, var(--gold) 50%, var(--gold-white) 100%);
+  background: linear-gradient(90deg, var(--quote-gold-hot) 0%, var(--quote-gold) 50%, var(--quote-gold-white) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   filter: blur(10px) brightness(1.4);
   text-shadow:
-    0 0 18px rgba(158, 232, 75, 0.36),
-    0 0 26px rgba(140, 255, 40, 0.2);
+    0 0 18px rgba(255, 210, 48, 0.36),
+    0 0 26px rgba(74, 216, 255, 0.18);
   will-change: transform, opacity, filter, text-shadow;
 }
 
@@ -2465,9 +2470,7 @@ ul { list-style: none; }
   width: min(640px, 100%);
   box-sizing: border-box;
   margin: 46px auto 0;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  display: block;
   padding: 16px 18px;
   border: 1px solid rgba(157, 255, 0, 0.32);
   border-radius: 14px;
@@ -2480,9 +2483,14 @@ ul { list-style: none; }
   overflow-wrap: break-word;
 }
 .htb__key-note strong { color: rgba(180, 255, 60, 0.95); font-weight: 600; }
+.htb__key-copy {
+  display: block;
+  width: min(44ch, 100%);
+  margin: 10px auto 0;
+  text-align: center;
+}
 .htb__key-badge {
-  flex: 0 0 auto;
-  margin-top: 1px;
+  display: inline-flex;
   padding: 4px 9px;
   border-radius: 999px;
   background: linear-gradient(135deg, #b4ff3c, #00c805);
@@ -2494,9 +2502,6 @@ ul { list-style: none; }
 }
 @media (max-width: 560px) {
   .htb__key-note {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
     padding: 14px 15px;
     font-size: 12px;
   }
