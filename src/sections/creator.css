@@ -142,6 +142,7 @@
 /* Log in button in the panel bar (hidden once the TG chip is shown) */
 .creator__login-btn {
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
   gap: 5px;
   margin-left: 10px;
@@ -153,6 +154,7 @@
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 0.14em;
+  white-space: nowrap;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
 }
@@ -161,6 +163,7 @@
 /* Gallery button in the panel bar */
 .creator__gallery-btn {
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
   gap: 5px;
   margin-left: 10px;
@@ -172,6 +175,7 @@
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 0.14em;
+  white-space: nowrap;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
 }
@@ -227,7 +231,24 @@
 
 @media (max-width: 640px) {
   .creator__gallery-grid { grid-template-columns: repeat(2, 1fr); }
-  .creator__gallery-btn span { display: none; }
+
+  /* Keep the destination explicit on phones. The Telegram mark is familiar;
+     the generic grid icon is not specific enough to communicate creations. */
+  .creator__login-btn {
+    width: 28px;
+    height: 28px;
+    justify-content: center;
+    margin-left: 6px;
+    padding: 0;
+  }
+  .creator__login-btn svg { width: 13px; height: 13px; }
+  .creator__login-btn span { display: none; }
+  .creator__gallery-btn { margin-left: 4px; padding: 6px 9px; }
+}
+
+@media (max-width: 420px) {
+  /* Decorative identity yields before the useful account destinations do. */
+  .creator__forge-tag { display: none; }
 }
 
 /* ── Mode tabs: one segmented control, three segments, never wraps ── */
