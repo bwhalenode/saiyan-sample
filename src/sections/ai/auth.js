@@ -225,13 +225,13 @@ function userLabel(user) {
 
 function showChip(user) {
   hideLoginBtn()
-  const bar = document.querySelector('.creator__forge-bar')
-  if (!bar) return
-  let chip = bar.querySelector('.creator__tg-chip')
+  const actions = document.querySelector('.creator__forge-actions')
+  if (!actions) return
+  let chip = actions.querySelector('.creator__tg-chip')
   if (!chip) {
     chip = document.createElement('span')
     chip.className = 'creator__tg-chip'
-    bar.appendChild(chip)
+    actions.insertBefore(chip, actions.querySelector('[data-gallery]'))
   }
   chip.textContent = ''
   const name = document.createElement('span')
