@@ -2470,9 +2470,7 @@ ul { list-style: none; }
   width: min(640px, 100%);
   box-sizing: border-box;
   margin: 46px auto 0;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  display: block;
   padding: 16px 18px;
   border: 1px solid rgba(157, 255, 0, 0.32);
   border-radius: 14px;
@@ -2485,9 +2483,14 @@ ul { list-style: none; }
   overflow-wrap: break-word;
 }
 .htb__key-note strong { color: rgba(180, 255, 60, 0.95); font-weight: 600; }
+.htb__key-copy {
+  display: block;
+  width: min(44ch, 100%);
+  margin: 10px auto 0;
+  text-align: center;
+}
 .htb__key-badge {
-  flex: 0 0 auto;
-  margin-top: 1px;
+  display: inline-flex;
   padding: 4px 9px;
   border-radius: 999px;
   background: linear-gradient(135deg, #b4ff3c, #00c805);
@@ -2499,9 +2502,6 @@ ul { list-style: none; }
 }
 @media (max-width: 560px) {
   .htb__key-note {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
     padding: 14px 15px;
     font-size: 12px;
   }
