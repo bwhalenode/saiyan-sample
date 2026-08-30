@@ -3065,7 +3065,7 @@ ul { list-style: none; }
   transform: translateY(-3px);
 }
 
-/* Real brand marks (DexTools hex, DexScreener owl) as currentColor mask icons,
+/* Real brand marks as currentColor mask icons,
    so they tint cream → gold like the inline-SVG socials around them. */
 .footer__brand-icon {
   display: inline-block;
@@ -3077,6 +3077,7 @@ ul { list-style: none; }
 }
 .footer__brand-icon--dextools    { --logo: url('/images/dextools.png'); }
 .footer__brand-icon--dexscreener { --logo: url('/images/dexscreener.png'); }
+.footer__brand-icon--pons        { --logo: url('/images/pons.png'); }
 
 .footer__disclaimer {
   font-size: 10px;
