@@ -8,99 +8,20 @@ export function initTokenomics() {
   })
 
   initOrbPress()
-  // Pre-launch on Robinhood Chain: no live market/on-chain data yet. Show N/A
-  // while keeping the orbs' titles + animation. Re-enable initMarketPulse() and
-  // initBurnTracker() (and point TOKEN_ADDRESS at the Robinhood Chain contract)
-  // once the token is live.
-  setStatOrbsPending()
+  setBurnStatPending()
+  initMarketPulse()
 }
 
-function setStatOrbsPending() {
-  ;['[data-market-price]', '[data-market-cap]', '[data-market-volume]', '[data-market-liquidity]', '[data-burn-pct]']
-    .forEach(sel => document.querySelectorAll(sel).forEach(el => { el.textContent = 'N/A' }))
+function setBurnStatPending() {
+  document.querySelectorAll('[data-burn-pct]').forEach(el => { el.textContent = 'N/A' })
   const avail = document.querySelector('[data-burn-available]')
-  if (avail) avail.textContent = 'AT LAUNCH'
+  if (avail) avail.textContent = 'VIEW EXPLORER'
 }
 
-const TOKEN_ADDRESS = '0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56'
-const DEXSCREENER_TOKEN_URL = `https://api.dexscreener.com/latest/dex/tokens/${TOKEN_ADDRESS}`
+const TOKEN_ADDRESS = '0xd242d6CC65eA378D3eD99FBf82Ef8784D9cF9ff6'
+const DEXSCREENER_PAIR_ID = '0xdc9e3d0bf5bed81d536218063fd726f4d9b8cf03d93e767d043ca5ef58e2f4db'
+const DEXSCREENER_PAIR_URL = `https://api.dexscreener.com/latest/dex/pairs/robinhood/${DEXSCREENER_PAIR_ID}`
 const CHART_DELAY = 620
-
-// CORS-friendly public RPCs (no API key); tried in order until one answers.
-const RPC_ENDPOINTS = [
-  'https://ethereum-rpc.publicnode.com',
-  'https://eth.drpc.org',
-  'https://rpc.mevblocker.io',
-  'https://eth.merkle.io',
-]
-// Burns on this token are sent to the dead/zero addresses (total supply is fixed),
-// so "burned" = the balance held at those addresses.
-const BURN_ADDRESSES = [
-  '0x000000000000000000000000000000000000dead',
-  '0x0000000000000000000000000000000000000000',
-]
-const SEL_DECIMALS = '0x313ce567'
-const SEL_TOTAL_SUPPLY = '0x18160ddd'
-const BURN_REFRESH_MS = 60_000
-
-const balanceOfData = addr => '0x70a08231' + addr.replace(/^0x/, '').toLowerCase().padStart(64, '0')
-const toBig = hex => (hex && hex !== '0x' ? BigInt(hex) : 0n)
-
-async function rpcCallBatch(url, dataList) {
-  const body = dataList.map((data, id) => ({
-    jsonrpc: '2.0', id, method: 'eth_call',
-    params: [{ to: TOKEN_ADDRESS, data }, 'latest'],
-  }))
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(body),
-  })
-  if (!res.ok) throw new Error(`RPC ${res.status}`)
-  const json = await res.json()
-  if (!Array.isArray(json)) throw new Error('RPC batch unsupported')
-  const byId = {}
-  json.forEach(entry => { byId[entry.id] = entry.result })
-  return byId
-}
-
-async function fetchBurnState() {
-  const calls = [SEL_DECIMALS, SEL_TOTAL_SUPPLY, ...BURN_ADDRESSES.map(balanceOfData)]
-  for (const url of RPC_ENDPOINTS) {
-    try {
-      const r = await rpcCallBatch(url, calls)
-      const total = toBig(r[1])
-      if (!total) continue
-      const decimals = Number(toBig(r[0])) || 18
-      const burned = BURN_ADDRESSES.reduce((sum, _, i) => sum + toBig(r[2 + i]), 0n)
-      return { decimals, total, burned }
-    } catch {
-      /* try the next endpoint */
-    }
-  }
-  throw new Error('all RPC endpoints failed')
-}
-
-function initBurnTracker() {
-  const pctEl = document.querySelector('[data-burn-pct]')
-  const availEl = document.querySelector('[data-burn-available]')
-  if (!pctEl) return
-
-  const render = ({ decimals, total, burned }) => {
-    const unit = 10n ** BigInt(decimals)
-    const pct = Number((burned * 10000n) / total) / 100        // 2-decimal %
-    const available = Number((total - burned) / unit)
-    pctEl.textContent = `${pct.toFixed(2)}%`
-    if (availEl) availEl.textContent = `${available.toLocaleString('en-US')} LEFT`
-  }
-
-  const tick = () => fetchBurnState()
-    .then(render)
-    .catch(err => console.warn('[SAIYAN] Burn tracker unavailable:', err))
-
-  tick()
-  setInterval(tick, BURN_REFRESH_MS)
-}
 
 function initOrbPress() {
   document.querySelectorAll('.token-card').forEach(card => {
@@ -150,7 +71,7 @@ function initMarketPulse() {
     status.classList.toggle('is-error', isError)
   }
 
-  fetch(DEXSCREENER_TOKEN_URL, { headers: { Accept: 'application/json' } })
+  fetch(DEXSCREENER_PAIR_URL, { headers: { Accept: 'application/json' } })
     .then(response => {
       if (!response.ok) throw new Error(`DexScreener ${response.status}`)
       return response.json()
@@ -173,7 +94,7 @@ function initMarketPulse() {
 
 function pickBestPair(pairs = []) {
   return pairs
-    .filter(pair => pair?.chainId === 'ethereum')
+    .filter(pair => pair?.chainId === 'robinhood' && pair?.baseToken?.address?.toLowerCase() === TOKEN_ADDRESS.toLowerCase())
     .sort((a, b) => (b?.liquidity?.usd || 0) - (a?.liquidity?.usd || 0))[0]
 }
 
