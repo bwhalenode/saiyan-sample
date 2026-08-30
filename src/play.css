@@ -23,10 +23,12 @@
 }
 
 :root {
-  --bg: #050306;
-  --gold: #ffd230;
-  --gold-hot: #ffa800;
-  --ink: #fff7e0;
+  /* Host-shell theme. The Heidrun iframe is cross-origin and owns its internal palette. */
+  --bg: #050a06;
+  --accent: #9dff00;
+  --accent-hot: #65c900;
+  --accent-rgb: 157, 255, 0;
+  --ink: #f3ffe6;
   --mono: 'JetBrains Mono', 'Courier New', monospace;
   --display: 'Bebas Neue', 'Arial Black', sans-serif;
   --brand: 'Zen Dots', sans-serif;
@@ -62,8 +64,8 @@ a {
   min-height: 100svh;
   overflow: hidden;
   background:
-    radial-gradient(ellipse 72% 58% at 50% 28%, rgba(255, 210, 48, 0.11) 0%, transparent 70%),
-    radial-gradient(ellipse 38% 42% at 88% 68%, rgba(74, 216, 255, 0.07) 0%, transparent 72%),
+    radial-gradient(ellipse 72% 58% at 50% 28%, rgba(var(--accent-rgb), 0.11) 0%, transparent 70%),
+    radial-gradient(ellipse 38% 42% at 88% 68%, rgba(39, 167, 74, 0.08) 0%, transparent 72%),
     var(--bg);
 }
 
@@ -72,8 +74,8 @@ a {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(255, 210, 48, 0.08) 1px, transparent 1px) 0 0 / 92px 92px,
-    linear-gradient(rgba(255, 210, 48, 0.05) 1px, transparent 1px) 0 0 / 92px 92px;
+    linear-gradient(90deg, rgba(var(--accent-rgb), 0.08) 1px, transparent 1px) 0 0 / 92px 92px,
+    linear-gradient(rgba(var(--accent-rgb), 0.05) 1px, transparent 1px) 0 0 / 92px 92px;
   mask-image: radial-gradient(ellipse at 50% 38%, black 0%, transparent 76%);
   opacity: 0.4;
 }
@@ -86,8 +88,8 @@ a {
   align-items: center;
   min-height: 72px;
   padding: 12px clamp(18px, 4vw, 56px);
-  border-bottom: 1px solid rgba(255, 210, 48, 0.22);
-  background: rgba(5, 3, 6, 0.86);
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.22);
+  background: rgba(5, 10, 6, 0.9);
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
   backdrop-filter: blur(16px);
 }
@@ -97,17 +99,17 @@ a {
   align-items: center;
   gap: 12px;
   width: fit-content;
-  color: var(--gold);
+  color: var(--accent);
   font-family: var(--brand);
   font-size: clamp(16px, 2vw, 22px);
-  text-shadow: 0 0 18px rgba(255, 210, 48, 0.55);
+  text-shadow: 0 0 18px rgba(var(--accent-rgb), 0.55);
 }
 
 .play-brand img {
   width: 38px;
   height: 38px;
   object-fit: contain;
-  filter: drop-shadow(0 0 12px rgba(255, 210, 48, 0.45));
+  filter: drop-shadow(0 0 12px rgba(var(--accent-rgb), 0.45));
 }
 
 .play-socials,
@@ -129,7 +131,7 @@ a {
   justify-content: center;
   border: 0;
   background: none;
-  color: rgba(255, 247, 224, 0.74);
+  color: rgba(243, 255, 230, 0.74);
   cursor: pointer;
   font-family: var(--mono);
   font-size: 10px;
@@ -146,8 +148,8 @@ a {
 .play-socials a:hover,
 .play-exit:hover,
 .play-sound-toggle:hover {
-  color: var(--gold);
-  text-shadow: 0 0 18px rgba(255, 210, 48, 0.42);
+  color: var(--accent);
+  text-shadow: 0 0 18px rgba(var(--accent-rgb), 0.42);
 }
 
 .play-exit,
@@ -155,10 +157,10 @@ a {
   min-width: 42px;
   height: 34px;
   padding: 0 11px;
-  border: 1px solid rgba(255, 210, 48, 0.36);
+  border: 1px solid rgba(var(--accent-rgb), 0.36);
   border-radius: 999px;
-  background: rgba(255, 210, 48, 0.06);
-  color: var(--gold);
+  background: rgba(var(--accent-rgb), 0.06);
+  color: var(--accent);
 }
 
 .play-sound-toggle {
@@ -176,7 +178,7 @@ a {
 }
 
 .play-exit {
-  border-color: rgba(255, 210, 48, 0.62);
+  border-color: rgba(var(--accent-rgb), 0.62);
 }
 
 /* Slim "more games → community" bar (drives players to Telegram) */
@@ -189,8 +191,8 @@ a {
   gap: 8px;
   height: 38px;
   padding: 0 16px;
-  border-bottom: 1px solid rgba(255, 210, 48, 0.18);
-  background: rgba(8, 5, 9, 0.82);
+  border-bottom: 1px solid rgba(var(--accent-rgb), 0.18);
+  background: rgba(5, 12, 7, 0.88);
   font-family: var(--mono);
   font-size: clamp(10px, 1.4vw, 12px);
   letter-spacing: 0.12em;
@@ -201,8 +203,8 @@ a {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 0 10px 2px rgba(255, 210, 48, 0.6);
+  background: var(--accent);
+  box-shadow: 0 0 10px 2px rgba(var(--accent-rgb), 0.6);
   animation: play-more-pulse 1.8s ease-in-out infinite;
 }
 
@@ -211,16 +213,16 @@ a {
   50%      { opacity: 1;   transform: scale(1.1); }
 }
 
-.play-more__text { color: rgba(255, 247, 224, 0.66); }
+.play-more__text { color: rgba(243, 255, 230, 0.66); }
 
 .play-more__cta {
-  color: var(--gold);
+  color: var(--accent);
   font-weight: 700;
-  text-shadow: 0 0 14px rgba(255, 210, 48, 0.4);
+  text-shadow: 0 0 14px rgba(var(--accent-rgb), 0.4);
   transition: text-shadow 0.25s, opacity 0.2s;
 }
 
-.play-more__cta:hover { opacity: 0.85; text-shadow: 0 0 20px rgba(255, 210, 48, 0.7); }
+.play-more__cta:hover { opacity: 0.85; text-shadow: 0 0 20px rgba(var(--accent-rgb), 0.7); }
 
 .play-main {
   position: relative;
@@ -239,7 +241,7 @@ a {
   inset: -1px;
   pointer-events: none;
   border: 1px solid transparent;
-  border-image: linear-gradient(135deg, var(--gold), transparent 38%, var(--gold-hot)) 1;
+  border-image: linear-gradient(135deg, var(--accent), transparent 38%, var(--accent-hot)) 1;
 }
 
 .play-frame {
