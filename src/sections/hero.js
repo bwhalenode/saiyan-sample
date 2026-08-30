@@ -1,6 +1,6 @@
 import gsap from 'gsap'
 
-const CA = '0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56'
+const CA = '0xd242d6CC65eA378D3eD99FBf82Ef8784D9cF9ff6'
 const isMob = () => window.innerWidth < 900
 
 export function initHero() {

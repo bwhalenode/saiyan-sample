@@ -1,8 +1,8 @@
 /* Buy modal: one BUY action opens a centred popup with Uniswap + Phantom routes.
    Uniswap has a real web swap (any wallet). Phantom opens in the Phantom app /
    extension; if Phantom isn't installed we point the user at the official site. */
-const CA = '0x1f7566299f6111a0d492f473bdbe4a1ebd9cef56'
-const UNISWAP_URL = `https://app.uniswap.org/swap?outputCurrency=${CA}&chain=ethereum`
+const CA = '0xd242d6CC65eA378D3eD99FBf82Ef8784D9cF9ff6'
+const UNISWAP_URL = `https://app.uniswap.org/swap?chain=robinhood&inputCurrency=NATIVE&outputCurrency=${CA}`
 const PHANTOM_INSTALL = 'https://phantom.app/download'
 
 const hasPhantom = () =>
