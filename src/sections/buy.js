@@ -13,10 +13,14 @@ export function initBuy() {
   if (!modal) return
 
   const closeBtn = modal.querySelector('[data-buy-close]')
+  const uniswapLink = modal.querySelector('[data-buy-uniswap]')
   const phantomBtn = modal.querySelector('[data-buy-phantom]')
   const notice = modal.querySelector('[data-buy-notice]')
   const coarsePointer = window.matchMedia('(hover: none), (pointer: coarse)').matches
   let lastFocused = null
+
+  // Keep the rendered fallback and the interactive modal on the same token-specific route.
+  if (uniswapLink) uniswapLink.href = UNISWAP_URL
 
   const open = () => {
     lastFocused = document.activeElement
