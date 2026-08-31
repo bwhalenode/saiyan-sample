@@ -70,7 +70,7 @@ if (forge) {
     'The fire you feel is your power waking up.',
   ]
 
-  const state = { mode: DEFAULT_MODE, aura: 'golden', character: 'meketa', captions: true, transform: 'golden', uploadData: null, uploadPromise: null }
+  const state = { mode: DEFAULT_MODE, aura: 'rh', character: 'meketa', captions: true, transform: 'rh', uploadData: null, uploadPromise: null }
   let loadingTimer = null
 
   const pick = arr => arr[Math.floor(Math.random() * arr.length)]

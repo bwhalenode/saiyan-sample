@@ -1,20 +1,26 @@
 /* SAIYAN AI — prompt builders. Pure functions: mode + user input -> a structured
    prompt object ready for a future generation API. Kept free of any DOM/UI so the
-   service layer (or a server) can call them directly. */
+   service layer (or a server) can call them directly.
+
+   NOTE: AURAS mirrors the backend table in saiyan-ai-infra
+   shared/services/prompts.js. The backend builds the real provider prompt and
+   ignores anything sent from here, so keep the ids in sync when adding options.
+   'rh' is the house green (--gold: #9EE84B) and the default. */
 
 export const AURAS = {
+  rh:       { id: 'rh',       label: 'Saiyan green aura',  light: 'radiant lime green' },
   golden:   { id: 'golden',   label: 'Golden aura',        light: 'radiant gold' },
   emerald:  { id: 'emerald',  label: 'Emerald-blue aura',  light: 'emerald and deep blue' },
   electric: { id: 'electric', label: 'Electric-blue aura', light: 'electric cyan-blue' },
   dark:     { id: 'dark',     label: 'Dark warrior',       light: 'shadowed gold rim light' },
 }
 
-const auraLight = id => (AURAS[id] || AURAS.golden).light
+const auraLight = id => (AURAS[id] || AURAS.rh).light
 
 /* MULTI-MOTIVATION (primary): a short emotional mood -> a cinematic Super Saiyan
    comeback video concept. Intense and motivational, never cringe. */
 export function buildMotivationPrompt(mood, opts = {}) {
-  const aura = opts.aura || 'golden'
+  const aura = opts.aura || 'rh'
   const text = (mood || '').trim()
   return {
     mode: 'motivation',
@@ -38,7 +44,7 @@ export function buildMotivationPrompt(mood, opts = {}) {
 
 /* PFP: an uploaded person -> a Super Saiyan-inspired crypto warrior profile picture. */
 export function buildPfpPrompt(opts = {}) {
-  const aura = opts.aura || 'golden'
+  const aura = opts.aura || 'rh'
   return {
     mode: 'pfp',
     output: 'image',
@@ -49,7 +55,7 @@ export function buildPfpPrompt(opts = {}) {
     prompt:
       `Transform the uploaded person into a Super Saiyan-inspired crypto warrior PFP. ` +
       `Preserve their identity and facial likeness. Add a ${auraLight(aura)} energy aura, ` +
-      `glowing eyes, dramatic rim light, high contrast dark/gold/blue palette, subtle lightning. ` +
+      `glowing eyes, dramatic rim light, high contrast dark/green/blue palette, subtle lightning. ` +
       `Square 1:1, clean centered profile-picture composition, premium and battle-ready — not a full scene.`,
     negative: 'lose likeness, extra limbs, text, logos, messy background',
   }
