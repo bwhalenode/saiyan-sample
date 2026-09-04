@@ -299,6 +299,12 @@
 
 /* ── Views (input / loading / reveal) ── */
 .creator__view { display: none; flex-direction: column; gap: 14px; }
+
+/* Input view breathes more than the others: four distinct groups (prompt,
+   characters, style, action) rather than one even run of controls. */
+.creator__view--input { gap: 22px; }
+.creator__view--input .creator__label { margin-bottom: -14px; }
+.creator__view--input .creator__forge-foot { margin-top: 6px; }
 .creator__forge[data-state='input']   .creator__view--input   { display: flex; }
 .creator__forge[data-state='loading'] .creator__view--loading { display: flex; }
 .creator__forge[data-state='reveal']  .creator__view--reveal  { display: flex; }
@@ -770,3 +776,69 @@
     animation: none !important;
   }
 }
+
+
+/* ── STYLE: collapsed secondary configuration ──────────────────────────────
+   Super form, scene and voice all have defaults a normal user never needs to
+   touch, so they are folded behind one line that states the current picks.
+   Nothing is removed - "Customize" reveals the same chips as before. */
+.creator__style {
+  border: 1px solid rgba(158, 232, 75, 0.16);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+}
+
+.creator__style-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.creator__style-head-main { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+
+.creator__style-summary {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--gold);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.creator__style-more {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 247, 224, 0.55);
+  transition: color 0.2s;
+}
+.creator__style-head:hover .creator__style-more { color: var(--ink); }
+.creator__style-more i { font-style: normal; display: inline-block; transition: transform 0.25s var(--ease-out-expo); }
+.creator__style.is-open .creator__style-more i { transform: rotate(90deg); }
+
+.creator__style-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px 14px 16px;
+  border-top: 1px solid rgba(158, 232, 75, 0.12);
+}
+
+/* ── One unmistakable endpoint ───────────────────────────────────────────── */
+.creator__forge-foot {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+.creator__forge-hint { text-align: center; }
+.creator__generate { width: 100%; padding: 15px 26px; }

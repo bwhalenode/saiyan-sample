@@ -75,6 +75,48 @@ if (forge) {
 
   const pick = arr => arr[Math.floor(Math.random() * arr.length)]
 
+  /* ── STYLE panel: the secondary options every user can safely ignore.
+     Collapsed by default with a summary of the current picks, so the default
+     screen carries one line instead of three headings and eight pills. ── */
+  const STYLE_LABELS = {
+    transform: { rh: 'Saiyan green', golden: 'Golden', electric: 'Electric-blue' },
+    scene:     { motivation: 'Motivation', fight: 'Fight', transform: 'Transformation' },
+    voice:     { spoken: 'Spoken', silent: 'Silent' },
+    aura:      { rh: 'Saiyan green', golden: 'Golden', emerald: 'Emerald-blue',
+                 electric: 'Electric-blue', dark: 'Dark warrior' },
+  }
+
+  const styleEl = $('[data-style]')
+  const styleBodyEl = $('[data-style-body]')
+  const styleToggleEl = $('[data-style-toggle]')
+  const styleSummaryEl = $('[data-style-summary]')
+
+  // Only summarise what the current mode actually exposes.
+  function refreshStyleSummary() {
+    const parts = state.mode === 'motivation'
+      ? [STYLE_LABELS.transform[state.transform], STYLE_LABELS.scene[state.scene], STYLE_LABELS.voice[state.voice]]
+      : state.mode === 'pfp'
+        ? [STYLE_LABELS.aura[state.aura]]
+        : [state.captions ? 'With caption' : 'Image only']
+    styleSummaryEl.textContent = parts.filter(Boolean).join(' · ')
+  }
+
+  // The action names the chosen warrior, so the endpoint is unambiguous.
+  function refreshGenerateLabel() {
+    const btn = $('[data-generate-label]')
+    if (!btn) return
+    const active = forge.querySelector('[data-char-btn].is-active')
+    const name = active?.querySelector('span')?.textContent?.trim()
+    const named = state.mode !== 'meme' && name && state.character !== 'custom'
+    btn.textContent = named ? `GENERATE WITH ${name.toUpperCase()}` : 'GENERATE'
+  }
+
+  styleToggleEl?.addEventListener('click', () => {
+    const open = styleEl.classList.toggle('is-open')
+    styleBodyEl.hidden = !open
+    styleToggleEl.setAttribute('aria-expanded', String(open))
+  })
+
   /* ── Mode switching ── */
   function setMode(mode) {
     if (!MODE_UI[mode]) return
@@ -96,12 +138,16 @@ if (forge) {
     // PFP defaults to Custom (own subject/photo); video needs a real character.
     if (mode === 'pfp' && state.character !== 'custom') selectCharacter('custom')
     if (mode === 'motivation' && state.character === 'custom') selectCharacter('meketa')
+
+    refreshStyleSummary()
+    refreshGenerateLabel()
   }
 
   function selectCharacter(id) {
     state.character = id
     forge.querySelectorAll('[data-char-btn]').forEach(b =>
       b.classList.toggle('is-active', b.dataset.charBtn === id))
+    refreshGenerateLabel()
   }
 
   forge.querySelectorAll('[data-mode-btn]').forEach(btn => {
@@ -112,6 +158,7 @@ if (forge) {
   forge.querySelectorAll('[data-aura-btn]').forEach(btn => {
     btn.addEventListener('click', () => {
       state.aura = btn.dataset.auraBtn
+      refreshStyleSummary()
       forge.querySelectorAll('[data-aura-btn]').forEach(b =>
         b.classList.toggle('is-active', b === btn))
     })
@@ -121,6 +168,7 @@ if (forge) {
   forge.querySelectorAll('[data-transform-btn]').forEach(btn => {
     btn.addEventListener('click', () => {
       state.transform = btn.dataset.transformBtn
+      refreshStyleSummary()
       forge.querySelectorAll('[data-transform-btn]').forEach(b =>
         b.classList.toggle('is-active', b === btn))
     })
@@ -143,6 +191,7 @@ if (forge) {
         forge.querySelectorAll('[data-voice-btn]').forEach(b =>
           b.classList.toggle('is-active', b.dataset.voiceBtn === state.voice))
       }
+      refreshStyleSummary()
     })
   })
 
@@ -152,6 +201,7 @@ if (forge) {
       state.voiceTouched = true
       forge.querySelectorAll('[data-voice-btn]').forEach(b =>
         b.classList.toggle('is-active', b === btn))
+      refreshStyleSummary()
     })
   })
 
@@ -160,6 +210,7 @@ if (forge) {
   forge.querySelectorAll('[data-captions-btn]').forEach(btn => {
     btn.addEventListener('click', () => {
       state.captions = btn.dataset.captionsBtn === 'on'
+      refreshStyleSummary()
       forge.querySelectorAll('[data-captions-btn]').forEach(b =>
         b.classList.toggle('is-active', b === btn))
     })

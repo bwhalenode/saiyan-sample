@@ -521,51 +521,6 @@
           <label class="creator__label" for="ai-input" data-prompt-label>HOW ARE YOU FEELING?</label>
           <textarea id="ai-input" class="creator__input" data-input rows="3" maxlength="200" placeholder="Describe your mood today…"></textarea>
 
-          <div class="creator__guided" data-guided="aura">
-            <span class="creator__guided-label">AURA ACCENT</span>
-            <div class="creator__chips">
-              <button class="creator__chip is-active" type="button" data-aura-btn="rh">Saiyan&nbsp;green</button>
-              <button class="creator__chip" type="button" data-aura-btn="golden">Golden</button>
-              <button class="creator__chip" type="button" data-aura-btn="emerald">Emerald&#8209;blue</button>
-              <button class="creator__chip" type="button" data-aura-btn="electric">Electric&#8209;blue</button>
-              <button class="creator__chip" type="button" data-aura-btn="dark">Dark warrior</button>
-            </div>
-          </div>
-
-          <div class="creator__guided" data-guided="transform">
-            <span class="creator__guided-label">SUPER FORM</span>
-            <div class="creator__chips">
-              <button class="creator__chip is-active" type="button" data-transform-btn="rh">Saiyan&nbsp;green</button>
-              <button class="creator__chip" type="button" data-transform-btn="golden">Golden</button>
-              <button class="creator__chip" type="button" data-transform-btn="electric">Electric&#8209;blue</button>
-            </div>
-          </div>
-
-          <div class="creator__guided" data-guided="scene">
-            <span class="creator__guided-label">SCENE</span>
-            <div class="creator__chips">
-              <button class="creator__chip is-active" type="button" data-scene-btn="motivation">Motivation</button>
-              <button class="creator__chip" type="button" data-scene-btn="fight">Fight</button>
-              <button class="creator__chip" type="button" data-scene-btn="transform">Transformation</button>
-            </div>
-          </div>
-
-          <div class="creator__guided" data-guided="voice">
-            <span class="creator__guided-label">VOICE</span>
-            <div class="creator__chips">
-              <button class="creator__chip is-active" type="button" data-voice-btn="spoken">Spoken&nbsp;line</button>
-              <button class="creator__chip" type="button" data-voice-btn="silent">Silent</button>
-            </div>
-          </div>
-
-          <div class="creator__guided" data-guided="captions">
-            <span class="creator__guided-label">MEME TEXT</span>
-            <div class="creator__chips">
-              <button class="creator__chip is-active" type="button" data-captions-btn="on">With caption</button>
-              <button class="creator__chip" type="button" data-captions-btn="off">Image only</button>
-            </div>
-          </div>
-
           <div class="creator__guided" data-guided="character">
             <span class="creator__guided-label">CHOOSE YOUR SAIYAN</span>
             <div class="creator__chars">
@@ -591,9 +546,68 @@
             </label>
           </div>
 
+          <!-- Secondary configuration. Every option here has a sensible default,
+               so it stays collapsed and the summary line shows the current picks. -->
+          <div class="creator__style" data-style>
+            <button class="creator__style-head" type="button" data-style-toggle aria-expanded="false" aria-controls="creator-style-body">
+              <span class="creator__style-head-main">
+                <span class="creator__guided-label">STYLE</span>
+                <span class="creator__style-summary" data-style-summary>Saiyan green &middot; Motivation &middot; Spoken</span>
+              </span>
+              <span class="creator__style-more">Customize <i aria-hidden="true">&rsaquo;</i></span>
+            </button>
+
+            <div class="creator__style-body" id="creator-style-body" data-style-body hidden>
+              <div class="creator__guided" data-guided="aura">
+              <span class="creator__guided-label">AURA ACCENT</span>
+              <div class="creator__chips">
+              <button class="creator__chip is-active" type="button" data-aura-btn="rh">Saiyan&nbsp;green</button>
+              <button class="creator__chip" type="button" data-aura-btn="golden">Golden</button>
+              <button class="creator__chip" type="button" data-aura-btn="emerald">Emerald&#8209;blue</button>
+              <button class="creator__chip" type="button" data-aura-btn="electric">Electric&#8209;blue</button>
+              <button class="creator__chip" type="button" data-aura-btn="dark">Dark warrior</button>
+              </div>
+              </div>
+
+              <div class="creator__guided" data-guided="transform">
+              <span class="creator__guided-label">SUPER FORM</span>
+              <div class="creator__chips">
+              <button class="creator__chip is-active" type="button" data-transform-btn="rh">Saiyan&nbsp;green</button>
+              <button class="creator__chip" type="button" data-transform-btn="golden">Golden</button>
+              <button class="creator__chip" type="button" data-transform-btn="electric">Electric&#8209;blue</button>
+              </div>
+              </div>
+
+              <div class="creator__guided" data-guided="scene">
+              <span class="creator__guided-label">SCENE</span>
+              <div class="creator__chips">
+              <button class="creator__chip is-active" type="button" data-scene-btn="motivation">Motivation</button>
+              <button class="creator__chip" type="button" data-scene-btn="fight">Fight</button>
+              <button class="creator__chip" type="button" data-scene-btn="transform">Transformation</button>
+              </div>
+              </div>
+
+              <div class="creator__guided" data-guided="voice">
+              <span class="creator__guided-label">VOICE</span>
+              <div class="creator__chips">
+              <button class="creator__chip is-active" type="button" data-voice-btn="spoken">Spoken&nbsp;line</button>
+              <button class="creator__chip" type="button" data-voice-btn="silent">Silent</button>
+              </div>
+              </div>
+
+              <div class="creator__guided" data-guided="captions">
+              <span class="creator__guided-label">MEME TEXT</span>
+              <div class="creator__chips">
+              <button class="creator__chip is-active" type="button" data-captions-btn="on">With caption</button>
+              <button class="creator__chip" type="button" data-captions-btn="off">Image only</button>
+              </div>
+              </div>
+            </div>
+          </div>
+
           <div class="creator__forge-foot">
             <span class="creator__forge-hint" data-hint>Describe your mood</span>
-            <button class="creator__generate" type="button" data-generate>GENERATE</button>
+            <button class="creator__generate" type="button" data-generate data-generate-label>GENERATE</button>
           </div>
         </div>
 
