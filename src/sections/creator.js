@@ -70,7 +70,7 @@ if (forge) {
     'The fire you feel is your power waking up.',
   ]
 
-  const state = { mode: DEFAULT_MODE, aura: 'rh', character: 'meketa', captions: true, transform: 'rh', uploadData: null, uploadPromise: null }
+  const state = { mode: DEFAULT_MODE, aura: 'rh', character: 'meketa', captions: true, transform: 'rh', scene: 'motivation', uploadData: null, uploadPromise: null }
   let loadingTimer = null
 
   const pick = arr => arr[Math.floor(Math.random() * arr.length)]
@@ -124,6 +124,34 @@ if (forge) {
       forge.querySelectorAll('[data-transform-btn]').forEach(b =>
         b.classList.toggle('is-active', b === btn))
     })
+  })
+
+  /* ── Guided: scene type. "Fight" is a wordless duel, which the backend opts
+     into via a FIGHT: prefix on the brief. The prefix is written into the box
+     rather than added silently at submit time, so the user can see exactly
+     what is being sent and can still edit or delete it by hand. ── */
+  const FIGHT_PREFIX = 'FIGHT: '
+  const stripFightPrefix = v => String(v).replace(/^\s*(?:fight|duel|battle)\s*[:-]\s*/i, '')
+
+  forge.querySelectorAll('[data-scene-btn]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.scene = btn.dataset.sceneBtn
+      forge.querySelectorAll('[data-scene-btn]').forEach(b =>
+        b.classList.toggle('is-active', b === btn))
+      const body = stripFightPrefix(inputEl.value)
+      inputEl.value = state.scene === 'fight' ? FIGHT_PREFIX + body : body
+      inputEl.focus()
+      inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length)
+    })
+  })
+
+  /* Typing the prefix by hand keeps the chip honest. */
+  inputEl.addEventListener('input', () => {
+    const typed = /^\s*(?:fight|duel|battle)\s*[:-]/i.test(inputEl.value) ? 'fight' : 'motivation'
+    if (typed === state.scene) return
+    state.scene = typed
+    forge.querySelectorAll('[data-scene-btn]').forEach(b =>
+      b.classList.toggle('is-active', b.dataset.sceneBtn === typed))
   })
 
   /* ── Guided: meme caption on/off. Burned-in text can bury a strong image,
