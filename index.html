@@ -519,7 +519,7 @@
         <!-- INPUT -->
         <div class="creator__view creator__view--input">
           <label class="creator__label" for="ai-input" data-prompt-label>HOW ARE YOU FEELING?</label>
-          <textarea id="ai-input" class="creator__input" data-input rows="3" maxlength="210" placeholder="Describe your mood today…"></textarea>
+          <textarea id="ai-input" class="creator__input" data-input rows="3" maxlength="200" placeholder="Describe your mood today…"></textarea>
 
           <div class="creator__guided" data-guided="aura">
             <span class="creator__guided-label">AURA ACCENT</span>
@@ -545,7 +545,16 @@
             <span class="creator__guided-label">SCENE</span>
             <div class="creator__chips">
               <button class="creator__chip is-active" type="button" data-scene-btn="motivation">Motivation</button>
-              <button class="creator__chip" type="button" data-scene-btn="fight">Fight&nbsp;&middot;&nbsp;no&nbsp;words</button>
+              <button class="creator__chip" type="button" data-scene-btn="fight">Fight</button>
+              <button class="creator__chip" type="button" data-scene-btn="transform">Transformation</button>
+            </div>
+          </div>
+
+          <div class="creator__guided" data-guided="voice">
+            <span class="creator__guided-label">VOICE</span>
+            <div class="creator__chips">
+              <button class="creator__chip is-active" type="button" data-voice-btn="spoken">Spoken&nbsp;line</button>
+              <button class="creator__chip" type="button" data-voice-btn="silent">Silent</button>
             </div>
           </div>
 
