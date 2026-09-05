@@ -456,7 +456,10 @@ if (forge) {
       '<button class="saiyan-gate__close" type="button" aria-label="Close">×</button>' +
       '<p class="saiyan-gate__kicker">SAIYAN CREATOR</p>' +
       '<h3 class="saiyan-gate__title">My creations</h3>' +
-      '<div class="creator__gallery-grid"><p class="saiyan-gate__text">Loading…</p></div>'
+      // data-lenis-prevent: Lenis hijacks wheel and touch globally for smooth
+      // scrolling, so an overlay that scrolls internally never receives them.
+      // Without this the gallery only scrolls by dragging its scrollbar.
+      '<div class="creator__gallery-grid" data-lenis-prevent><p class="saiyan-gate__text">Loading…</p></div>'
     card.querySelector('.saiyan-gate__close').addEventListener('click', () => overlay.remove())
     overlay.appendChild(card)
     document.body.appendChild(overlay)
