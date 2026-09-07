@@ -23,6 +23,7 @@ if (forge) {
   const resultHintEl = $('[data-result-hint]')
   const conceptPromptEl = $('[data-concept-prompt]')
   const conceptTagEl = $('[data-concept-tag]')
+  const buyLinkEl = $('[data-buy-credits]')
   const video = $('[data-video]')
   const imageEl = $('[data-image]')
   const soundBtn = $('[data-sound]')
@@ -311,7 +312,7 @@ if (forge) {
 
   // Friendly copy for live-generation errors. Nothing is spent on a failure.
   const ERROR_COPY = {
-    insufficient_credits: 'You are out of credits. More power is coming soon, warrior.',
+    insufficient_credits: 'You are out of credits, warrior. Top up on Telegram and come back stronger.',
     daily_limit: 'You hit the daily limit. Rest up and return stronger tomorrow.',
     job_in_progress: 'One creation at a time. Your last one is still charging.',
     blocked_by_safety: 'That wording did not pass the content check. Nothing was spent. Try saying it a different way.',
@@ -324,6 +325,7 @@ if (forge) {
 
   function reveal(result) {
     clearInterval(loadingTimer)
+    if (buyLinkEl) buyLinkEl.hidden = true
 
     if (result.error) {
       forge.dataset.output = 'concept'
@@ -331,6 +333,15 @@ if (forge) {
       conceptPromptEl.textContent = ERROR_COPY[result.error] || 'The forge misfired. Nothing was spent. Try again in a moment.'
       captionEl.textContent = 'Not this time'
       resultHintEl.textContent = 'Nothing was spent'
+      /* Only an empty balance is worth a purchase prompt. ?start=buy is a
+         reserved payload the bot turns straight into package selection, so the
+         user never has to discover /buy on their own. */
+      if (buyLinkEl) {
+        const bot = AI_CONFIG.auth?.botUsername
+        const canBuy = result.error === 'insufficient_credits' && Boolean(bot)
+        buyLinkEl.hidden = !canBuy
+        if (canBuy) buyLinkEl.href = `https://t.me/${bot}?start=buy`
+      }
     } else if (result.output === 'video' && result.asset) {
       forge.dataset.output = 'video'
       // The character's actual spoken line is the caption when we have it.
