@@ -228,6 +228,33 @@
   display: block;
 }
 
+/* Wrapper so the publish button can sit over the tile without nesting a
+   button inside the tile's link. */
+.creator__gallery-cell { position: relative; }
+
+.creator__gallery-pub {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 3px 7px;
+  border: 1px solid rgba(158, 232, 75, 0.35);
+  border-radius: 999px;
+  background: rgba(5, 3, 6, 0.82);
+  color: rgba(255, 247, 224, 0.7);
+  font-family: var(--font-mono);
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.creator__gallery-pub:hover { border-color: var(--gold); color: var(--gold-white); }
+.creator__gallery-pub.is-on {
+  background: rgba(158, 232, 75, 0.18);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.creator__gallery-pub:disabled { opacity: 0.5; cursor: default; }
+
 .creator__gallery-item span {
   position: absolute;
   left: 6px;

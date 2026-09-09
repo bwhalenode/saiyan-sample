@@ -452,6 +452,55 @@ if (forge) {
     inputEl.focus()
   }
 
+  /* Publish / unpublish one creation to the public gallery page. PFPs are
+     built from an uploaded photo of a real face, so the backend keeps them
+     private until their owner opts in here; videos and memes are prompt-driven
+     and public by default, but their owner can still pull one back. */
+  function publishToggle(item) {
+    const btn = document.createElement('button')
+    btn.type = 'button'
+    btn.className = 'creator__gallery-pub'
+    let on = item.published === true
+
+    const paint = () => {
+      btn.classList.toggle('is-on', on)
+      btn.textContent = on ? 'IN GALLERY' : 'PUBLISH'
+      btn.setAttribute('aria-pressed', String(on))
+      btn.title = on
+        ? 'Visible in the public gallery. Click to remove it.'
+        : 'Show this in the public gallery.'
+    }
+    paint()
+
+    btn.addEventListener('click', async () => {
+      const next = !on
+      btn.disabled = true
+      // Optimistic, then reverted if the call fails — a dropped request must
+      // never leave the tile claiming a state the server does not hold.
+      on = next
+      paint()
+      try {
+        const api = AI_CONFIG.apiBase.replace(/\/$/, '')
+        const res = await fetch(`${api}/api/ai/publish`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'content-type': 'application/json', ...authHeaders() },
+          body: JSON.stringify({ jobId: item.id, published: next }),
+        })
+        const data = await res.json().catch(() => ({}))
+        if (!res.ok || !data.ok) throw new Error(data.error || 'failed')
+        item.published = next
+      } catch {
+        on = !next
+        paint()
+        btn.textContent = 'TRY AGAIN'
+      } finally {
+        btn.disabled = false
+      }
+    })
+    return btn
+  }
+
   /* ── Gallery: the logged-in user's past creations ── */
   async function openGallery() {
     const base = AI_CONFIG.apiBase.replace(/\/$/, '')
@@ -511,7 +560,14 @@ if (forge) {
         const d = new Date(item.createdAt)
         label.textContent = `${item.mode === 'motivation' ? 'VIDEO' : item.mode.toUpperCase()} · ${d.getDate()}/${d.getMonth() + 1}`
         tile.appendChild(label)
-        grid.appendChild(tile)
+
+        // The cell wraps the tile because a button may not be nested inside
+        // the tile's own link.
+        const cell = document.createElement('div')
+        cell.className = 'creator__gallery-cell'
+        cell.appendChild(tile)
+        if (item.id) cell.appendChild(publishToggle(item))
+        grid.appendChild(cell)
       }
     } catch {
       grid.innerHTML = '<p class="saiyan-gate__text">Could not load your creations. Connect Telegram and try again.</p>'

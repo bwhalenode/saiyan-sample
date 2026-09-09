@@ -8,6 +8,7 @@ export default defineConfig({
       input: {
         main: resolve(import.meta.dirname, 'index.html'),
         play: resolve(import.meta.dirname, 'play.html'),
+        gallery: resolve(import.meta.dirname, 'gallery.html'),
       },
       output: {
         manualChunks: {

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Videos and memes forged by the $SAIYAN community with the Saiyan Creator." />
+  <meta name="theme-color" content="#050306" />
+  <title>$SAIYAN - Community Gallery</title>
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="stylesheet" href="/src/gallery.css" />
+</head>
+<body>
+  <div class="gal-shell">
+    <div class="gal-shell__glow" aria-hidden="true"></div>
+
+    <header class="gal-header">
+      <a class="gal-brand" href="/" aria-label="Return to $SAIYAN home">
+        <img src="/images/logo.png" alt="" aria-hidden="true" />
+        <span class="gal-brand__text">$SAIYAN</span>
+      </a>
+      <a class="gal-exit" href="/#creator">FORGE YOUR OWN →</a>
+    </header>
+
+    <main class="gal-main">
+      <h1 class="gal-title">COMMUNITY GALLERY</h1>
+      <p class="gal-sub">Everything below was forged with the Saiyan Creator.</p>
+
+      <nav class="gal-tabs" role="tablist" aria-label="Gallery categories">
+        <button class="gal-tab" role="tab" type="button" data-tab="video" aria-selected="true">VIDEOS</button>
+        <button class="gal-tab" role="tab" type="button" data-tab="meme" aria-selected="false">MEMES</button>
+        <button class="gal-tab" role="tab" type="button" data-tab="pfp" aria-selected="false">PFPS</button>
+      </nav>
+
+      <!-- Only shown on the PFP tab: says plainly why it can look sparse. -->
+      <p class="gal-note" data-note hidden>
+        PFPs are made from a photo you upload, so they stay private by default.
+        These were shared to the gallery by the people who made them.
+      </p>
+
+      <div class="gal-grid" data-grid role="tabpanel" aria-live="polite"></div>
+
+      <div class="gal-foot">
+        <div class="gal-sentinel" data-sentinel aria-hidden="true"></div>
+        <button class="gal-more" type="button" data-more hidden>LOAD MORE</button>
+        <p class="gal-end" data-end hidden>You have reached the end.</p>
+      </div>
+    </main>
+  </div>
+
+  <div class="gal-light" data-lightbox hidden>
+    <button class="gal-light__close" type="button" data-close aria-label="Close">×</button>
+    <button class="gal-light__nav gal-light__nav--prev" type="button" data-prev aria-label="Previous">‹</button>
+    <figure class="gal-light__stage" data-stage></figure>
+    <button class="gal-light__nav gal-light__nav--next" type="button" data-next aria-label="Next">›</button>
+  </div>
+
+  <script type="module" src="/src/gallery.js"></script>
+</body>
+</html>
