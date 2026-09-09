@@ -65,11 +65,36 @@ img, video { display: block; max-width: 100%; }
   gap: 16px;
   padding: 18px clamp(16px, 4vw, 48px);
 }
+/* Brand lockup copied from the landing nav so the two pages read as one site:
+   Zen Dots in lime with the same glow, not the cream used elsewhere here. */
 .gal-brand { display: inline-flex; align-items: center; gap: 10px; }
-.gal-brand img { width: 34px; height: 34px; object-fit: contain; }
-.gal-brand__text { font-family: var(--brand); font-size: 15px; letter-spacing: 0.06em; color: var(--gold-white); }
-.gal-exit {
-  padding: 8px 14px;
+.gal-brand img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  filter:
+    drop-shadow(0 0 14px rgba(158, 232, 75, 0.4))
+    drop-shadow(0 0 18px rgba(60, 220, 130, 0.16));
+}
+.gal-brand__text {
+  font-family: var(--brand);
+  font-size: 20px;
+  letter-spacing: 0.05em;
+  color: var(--gold);
+  text-shadow:
+    0 0 20px rgba(158, 232, 75, 0.6),
+    0 0 28px rgba(60, 220, 130, 0.12);
+  transition: text-shadow 0.3s;
+}
+.gal-brand:hover .gal-brand__text {
+  text-shadow:
+    0 0 30px rgba(158, 232, 75, 0.9),
+    0 0 38px rgba(60, 220, 130, 0.2);
+}
+
+.gal-actions { display: flex; align-items: center; gap: 10px; }
+.gal-cta {
+  padding: 8px 16px;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: rgba(158, 232, 75, 0.05);
@@ -79,7 +104,23 @@ img, video { display: block; max-width: 100%; }
   white-space: nowrap;
   transition: background 0.2s, border-color 0.2s;
 }
-.gal-exit:hover { background: rgba(158, 232, 75, 0.13); border-color: var(--gold); }
+.gal-cta:hover { background: rgba(158, 232, 75, 0.13); border-color: var(--gold); }
+
+/* Way back to the main page. */
+.gal-back {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(158, 232, 75, 0.05);
+  color: var(--gold);
+  font-size: 19px;
+  line-height: 1;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.gal-back:hover { background: rgba(158, 232, 75, 0.14); border-color: var(--gold); transform: rotate(90deg); }
 
 /* ── Head matter ────────────────────────────────────────────────────────── */
 .gal-main {
@@ -88,17 +129,49 @@ img, video { display: block; max-width: 100%; }
   margin: 0 auto;
   padding: clamp(16px, 4vw, 40px) clamp(16px, 4vw, 48px) 80px;
 }
-.gal-title {
-  font-family: var(--display);
-  font-size: clamp(38px, 8vw, 76px);
-  line-height: 0.95;
-  letter-spacing: 0.02em;
-  color: var(--gold-white);
+/* Eyebrow + headline use the hero's treatments so this page sits in the same
+   world as the landing page: lime gradient over mono, metallic gold over Bebas. */
+.gal-eyebrow {
+  font-family: var(--mono);
+  font-size: clamp(10px, 1.1vw, 14px);
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  line-height: 1;
   text-align: center;
+  background: linear-gradient(90deg, var(--gold-hot) 0%, var(--gold) 52%, var(--gold-white) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 12px rgba(158, 232, 75, 0.36));
+  animation: gal-pulse 3.8s ease-in-out infinite;
+}
+@keyframes gal-pulse {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(158, 232, 75, 0.28)); }
+  50% { filter: drop-shadow(0 0 20px rgba(158, 232, 75, 0.64)); }
+}
+
+.gal-title {
+  margin-top: 8px;
+  font-family: var(--display);
+  font-size: clamp(46px, 9vw, 104px);
+  line-height: 0.9;
+  letter-spacing: 0.035em;
+  text-align: center;
+  color: var(--ink);
+  background: linear-gradient(180deg, #fffaf0 0%, #fff5c2 28%, #e4bd58 62%, #a8771d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-text-stroke: 0.7px rgba(185, 151, 68, 0.78);
+  text-shadow:
+    0 1px 0 rgba(255, 250, 240, 0.24),
+    0 3px 0 rgba(5, 3, 6, 0.52),
+    0 5px 12px rgba(5, 3, 6, 0.56),
+    0 0 18px rgba(255, 210, 48, 0.12);
 }
 .gal-sub {
-  margin: 10px auto 0;
-  max-width: 46ch;
+  margin: 14px auto 0;
+  max-width: 52ch;
   text-align: center;
   font-size: 11px;
   letter-spacing: 0.1em;
@@ -292,5 +365,6 @@ img, video { display: block; max-width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gal-item, .gal-skel { transition: none; animation: none; }
+  .gal-item, .gal-skel, .gal-eyebrow { transition: none; animation: none; }
+  .gal-back:hover { transform: none; }
 }

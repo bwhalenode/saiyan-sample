@@ -187,6 +187,16 @@
 }
 .creator__gallery-btn:hover { background: rgba(158, 232, 75, 0.12); border-color: var(--gold); }
 
+/* Public hall link: same pill as MY CREATIONS, warmer so the two read as
+   private vs public rather than as duplicates. */
+.creator__hall-btn {
+  text-decoration: none;
+  border-color: rgba(255, 176, 60, 0.32);
+  background: rgba(255, 176, 60, 0.06);
+  color: #ffc46a;
+}
+.creator__hall-btn:hover { background: rgba(255, 176, 60, 0.14); border-color: #ffc46a; }
+
 /* Gallery modal grid (inside the shared gate modal) */
 .saiyan-gate__card--gallery { width: min(560px, 100%); text-align: left; }
 .saiyan-gate__card--gallery .saiyan-gate__kicker,

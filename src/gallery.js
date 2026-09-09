@@ -12,9 +12,9 @@ import { AI_CONFIG } from './sections/ai/config.js'
 const base = () => AI_CONFIG.apiBase.replace(/\/$/, '')
 
 const TABS = {
-  video: { label: 'VIDEOS', tag: 'VIDEO', empty: 'No videos yet. Be the first to forge one.' },
-  meme: { label: 'MEMES', tag: 'MEME', empty: 'No memes yet. Be the first to forge one.' },
-  pfp: { label: 'PFPS', tag: 'PFP', empty: 'Nobody has shared a PFP yet.' },
+  video: { label: 'VIDEOS', tag: 'VIDEO', empty: 'No power unleashed yet. Be the first.' },
+  meme: { label: 'MEMES', tag: 'MEME', empty: 'No memes yet. Be the first.' },
+  pfp: { label: 'PFPS', tag: 'PFP', empty: 'No warrior has shown their face yet.' },
 }
 const PAGE = 24
 
@@ -116,7 +116,7 @@ function tile(item, index) {
     img.src = src
     img.loading = 'lazy'
     img.decoding = 'async'
-    img.alt = `${TABS[active].tag} created with the Saiyan Creator`
+    img.alt = `A $SAIYAN ${TABS[active].tag.toLowerCase()}`
     el.appendChild(img)
   }
 
@@ -140,15 +140,15 @@ function render() {
     if (bucket.failed) {
       grid.appendChild(message(
         !base()
-          ? 'The gallery is offline right now. Try again shortly.'
-          : 'Could not load the gallery. <a href="#" data-retry>Try again</a>.',
+          ? 'The hall is sealed right now. Try again shortly.'
+          : 'The hall would not open. <a href="#" data-retry>Try again</a>.',
       ))
       grid.querySelector('[data-retry]')?.addEventListener('click', (e) => {
         e.preventDefault()
         loadPage(active)
       })
     } else {
-      grid.appendChild(message(`${TABS[active].empty}<br /><a href="/#creator">Open the Saiyan Creator →</a>`))
+      grid.appendChild(message(`${TABS[active].empty}<br /><a href="/#creator">Awaken yours →</a>`))
     }
     setFooter()
     return
@@ -164,7 +164,7 @@ function setFooter() {
   const bucket = buckets[active]
   const hasItems = bucket.items.length > 0
   moreBtn.hidden = !hasItems || bucket.done || bucket.loading
-  moreBtn.textContent = 'LOAD MORE'
+  moreBtn.textContent = 'UNLEASH MORE'
   endMsg.hidden = !hasItems || !bucket.done
 }
 
@@ -190,7 +190,7 @@ function openLightbox(index) {
   } else {
     const img = document.createElement('img')
     img.src = src
-    img.alt = `${TABS[active].tag} created with the Saiyan Creator`
+    img.alt = `A $SAIYAN ${TABS[active].tag.toLowerCase()}`
     stage.appendChild(img)
   }
 
@@ -258,7 +258,7 @@ document.addEventListener('keydown', (e) => {
 
 window.addEventListener('hashchange', () => selectTab(location.hash.slice(1), { push: false }))
 
-// Infinite scroll, with LOAD MORE kept as the accessible fallback.
+// Infinite scroll, with the button kept as the accessible fallback.
 if ('IntersectionObserver' in window) {
   new IntersectionObserver((entries) => {
     if (entries.some((en) => en.isIntersecting)) loadPage(active)

@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Videos and memes forged by the $SAIYAN community with the Saiyan Creator." />
+  <meta name="description" content="The Hall of Power — every awakening the $SAIYAN community has unleashed." />
   <meta name="theme-color" content="#050306" />
-  <title>$SAIYAN - Community Gallery</title>
+  <title>$SAIYAN - Hall of Power</title>
 
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
@@ -21,12 +21,16 @@
         <img src="/images/logo.png" alt="" aria-hidden="true" />
         <span class="gal-brand__text">$SAIYAN</span>
       </a>
-      <a class="gal-exit" href="/#creator">FORGE YOUR OWN →</a>
+      <div class="gal-actions">
+        <a class="gal-cta" href="/#creator">AWAKEN YOURS</a>
+        <a class="gal-back" href="/" aria-label="Back to the main page" title="Back">×</a>
+      </div>
     </header>
 
     <main class="gal-main">
-      <h1 class="gal-title">COMMUNITY GALLERY</h1>
-      <p class="gal-sub">Everything below was forged with the Saiyan Creator.</p>
+      <p class="gal-eyebrow">POWER UNLEASHED</p>
+      <h1 class="gal-title">HALL OF POWER</h1>
+      <p class="gal-sub">Every awakening the community has unleashed.</p>
 
       <nav class="gal-tabs" role="tablist" aria-label="Gallery categories">
         <button class="gal-tab" role="tab" type="button" data-tab="video" aria-selected="true">VIDEOS</button>
@@ -34,18 +38,19 @@
         <button class="gal-tab" role="tab" type="button" data-tab="pfp" aria-selected="false">PFPS</button>
       </nav>
 
-      <!-- Only shown on the PFP tab: says plainly why it can look sparse. -->
+      <!-- Only shown on the PFP tab: says plainly why it can look sparse.
+           Stays plain-spoken on purpose — this is a privacy promise, not copy. -->
       <p class="gal-note" data-note hidden>
-        PFPs are made from a photo you upload, so they stay private by default.
-        These were shared to the gallery by the people who made them.
+        A PFP is made from a photo you upload, so it stays private unless you
+        choose to show it. These warriors chose to.
       </p>
 
       <div class="gal-grid" data-grid role="tabpanel" aria-live="polite"></div>
 
       <div class="gal-foot">
         <div class="gal-sentinel" data-sentinel aria-hidden="true"></div>
-        <button class="gal-more" type="button" data-more hidden>LOAD MORE</button>
-        <p class="gal-end" data-end hidden>You have reached the end.</p>
+        <button class="gal-more" type="button" data-more hidden>UNLEASH MORE</button>
+        <p class="gal-end" data-end hidden>You have reached the end of the hall.</p>
       </div>
     </main>
   </div>
