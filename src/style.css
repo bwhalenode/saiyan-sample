@@ -568,10 +568,18 @@ ul { list-style: none; }
   justify-content: center;
   line-height: 0;
 }
-.nav__links .nav__hall-cta { padding: 6px 11px; }
-.nav__socials .nav__hall-link { padding: 5px 9px; color: var(--gold); }
-.nav__links .nav__hall-cta svg,
-.nav__socials .nav__hall-link svg { display: block; }
+/* Padding + icon are picked so each pill lands on the exact height of its text
+   sibling: 14 + 7 + 7 + 2 = 30 next to PLAY/CREATE, and 10 + 5 + 5 + 2 = 22 in
+   the compact bar. The two-class selectors also outrank `.nav__socials a svg`
+   further down, which scales the X/Telegram glyphs to 19-20px on small screens
+   and was making this pill tower over the others. */
+.nav__links .nav__hall-cta { padding: 7px 11px; }
+/* `a.` on purpose: the small-screen media query re-asserts padding on
+   `.nav__socials .nav__game-link` at equal specificity and would otherwise win
+   on order, putting the pill 2px over its neighbours. */
+.nav__socials a.nav__hall-link { padding: 5px 9px; min-width: 0; color: var(--gold); }
+.nav__links .nav__hall-cta svg { display: block; width: 14px; height: 14px; }
+.nav__socials .nav__hall-link svg { display: block; width: 10px; height: 10px; }
 .nav__socials .nav__hall-link:hover {
   background: rgba(158, 232, 75, 0.1);
   transform: translateY(-1px);
