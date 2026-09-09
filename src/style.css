@@ -559,6 +559,24 @@ ul { list-style: none; }
   display: none;
 }
 
+/* Hall of Power: the same lime pill as GAME/CREATE, but carrying the grid icon
+   instead of a word, so it reads as one of the CTAs rather than a social icon. */
+.nav__links .nav__hall-cta,
+.nav__socials .nav__hall-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+.nav__links .nav__hall-cta { padding: 6px 11px; }
+.nav__socials .nav__hall-link { padding: 5px 9px; color: var(--gold); }
+.nav__links .nav__hall-cta svg,
+.nav__socials .nav__hall-link svg { display: block; }
+.nav__socials .nav__hall-link:hover {
+  background: rgba(158, 232, 75, 0.1);
+  transform: translateY(-1px);
+}
+
 .nav__socials {
   display: none;
   align-items: center;

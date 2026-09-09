@@ -187,15 +187,67 @@
 }
 .creator__gallery-btn:hover { background: rgba(158, 232, 75, 0.12); border-color: var(--gold); }
 
-/* Public hall link: same pill as MY CREATIONS, warmer so the two read as
-   private vs public rather than as duplicates. */
-.creator__hall-btn {
+/* Public hall entry. It lives in the intro column, not the panel bar: browsing
+   what others made is a different job from the panel's own controls, and the
+   bar had no room for a third pill on a phone. */
+.creator__hall {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 26px;
+  padding: 13px 18px;
+  border: 1px solid rgba(158, 232, 75, 0.26);
+  border-radius: 14px;
+  background: linear-gradient(100deg, rgba(158, 232, 75, 0.09), rgba(158, 232, 75, 0.02));
   text-decoration: none;
-  border-color: rgba(255, 176, 60, 0.32);
-  background: rgba(255, 176, 60, 0.06);
-  color: #ffc46a;
+  transition: border-color 0.25s, background 0.25s, transform 0.25s;
 }
-.creator__hall-btn:hover { background: rgba(255, 176, 60, 0.14); border-color: #ffc46a; }
+.creator__hall:hover {
+  border-color: var(--gold);
+  background: linear-gradient(100deg, rgba(158, 232, 75, 0.16), rgba(158, 232, 75, 0.05));
+  transform: translateY(-2px);
+}
+
+.creator__hall-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: rgba(158, 232, 75, 0.12);
+  color: var(--gold);
+}
+.creator__hall:hover .creator__hall-icon { background: rgba(158, 232, 75, 0.22); }
+
+.creator__hall-copy { display: flex; flex-direction: column; gap: 3px; }
+.creator__hall-copy strong {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--gold);
+}
+.creator__hall-copy em {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-style: normal;
+  letter-spacing: 0.06em;
+  color: rgba(255, 247, 224, 0.5);
+}
+
+.creator__hall-arrow {
+  margin-left: 6px;
+  color: var(--gold);
+  font-size: 15px;
+  transition: transform 0.25s;
+}
+.creator__hall:hover .creator__hall-arrow { transform: translateX(4px); }
+
+@media (max-width: 640px) {
+  .creator__hall { display: flex; width: 100%; margin-top: 20px; padding: 12px 14px; gap: 11px; }
+  .creator__hall-arrow { margin-left: auto; }
+}
 
 /* Gallery modal grid (inside the shared gate modal) */
 .saiyan-gate__card--gallery { width: min(560px, 100%); text-align: left; }

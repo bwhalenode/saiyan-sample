@@ -32,33 +32,16 @@
       <h1 class="gal-title">HALL OF POWER</h1>
       <p class="gal-sub">Every awakening the community has unleashed.</p>
 
-      <nav class="gal-tabs" role="tablist" aria-label="Gallery categories">
-        <button class="gal-tab" role="tab" type="button" data-tab="video" aria-selected="true">VIDEOS</button>
-        <button class="gal-tab" role="tab" type="button" data-tab="meme" aria-selected="false">MEMES</button>
-        <button class="gal-tab" role="tab" type="button" data-tab="pfp" aria-selected="false">PFPS</button>
-      </nav>
-
-      <!-- Only shown on the PFP tab: says plainly why it can look sparse.
-           Stays plain-spoken on purpose — this is a privacy promise, not copy. -->
-      <p class="gal-note" data-note hidden>
-        A PFP is made from a photo you upload, so it stays private unless you
-        choose to show it. These warriors chose to.
-      </p>
-
-      <div class="gal-grid" data-grid role="tabpanel" aria-live="polite"></div>
-
-      <div class="gal-foot">
-        <div class="gal-sentinel" data-sentinel aria-hidden="true"></div>
-        <button class="gal-more" type="button" data-more hidden>UNLEASH MORE</button>
-        <p class="gal-end" data-end hidden>You have reached the end of the hall.</p>
-      </div>
+      <!-- One rail per category, built in gallery.js from the same TABS map the
+           feed uses, so the markup cannot drift from the categories. -->
+      <div class="gal-rails" data-rails></div>
     </main>
   </div>
 
   <div class="gal-light" data-lightbox hidden>
     <button class="gal-light__close" type="button" data-close aria-label="Close">×</button>
-    <button class="gal-light__nav gal-light__nav--prev" type="button" data-prev aria-label="Previous">‹</button>
     <figure class="gal-light__stage" data-stage></figure>
+    <button class="gal-light__nav gal-light__nav--prev" type="button" data-prev aria-label="Previous">‹</button>
     <button class="gal-light__nav gal-light__nav--next" type="button" data-next aria-label="Next">›</button>
   </div>
 
