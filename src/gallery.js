@@ -4,7 +4,7 @@
    playing. This file handles the other case: the page was genuinely loaded. */
 
 import './style.css'
-import { AsciiPreloader } from './preloader/AsciiPreloader.js'
+import { HallPreloader } from './gallery/HallPreloader.js'
 import { mountHall } from './gallery/hall.js'
 import { initCaBar } from './sections/ca-bar.js'
 import { initHeroAnthem } from './sections/hero-anthem.js'
@@ -16,18 +16,10 @@ mountHall(document.getElementById('hall'), { mode: 'page' })
 initCaBar()
 initHeroAnthem()
 
-/* The same preloader the landing page uses — same crystal, same reveal, same
-   HUD — because a freshly loaded document may not play sound until the visitor
-   acts, and this is what carries that tap. Two differences: the prompt reads
-   ENTER THE HALL, and it leaves by rushing towards the viewer instead of the
-   hero's transformation blast.
-
-   It waits on no hero art: those images belong to the landing page and would
-   be pure download here. */
-new AsciiPreloader({
-  promptText: 'ENTER THE HALL',
-  exit: 'zoom',
-  assets: [],
+/* The landing page's preloader, subclassed for its wording and its exit. It
+   also carries the tap that lets the soundtrack play, which a freshly loaded
+   document cannot do on its own. */
+new HallPreloader({
   onAwaken: () => audioPlayer.resumeWhereItLeftOff(ANTHEM_SRC),
   onComplete: () => {},
 }).start()
