@@ -22,6 +22,23 @@ function nextTrackSrc() {
   return playlist[(i + 1) % playlist.length]
 }
 
+/* Where the soundtrack had got to, per tab.
+
+   ONLY the Hall page reads this, and only when it was reached by a real page
+   load, so that walking in does not restart the track. The landing page never
+   reads it: TAP TO AWAKEN calls play() and always begins at 0:00.
+
+   Position only — never the mute state. The anthem button mutes rather than
+   pauses, so carrying a mute across would silence the next entry. */
+const MEMORY_KEY = 'saiyan:audio-position'
+
+function remember() {
+  if (!audio?.src) return
+  try {
+    sessionStorage.setItem(MEMORY_KEY, JSON.stringify({ src: audio.src, time: audio.currentTime }))
+  } catch { /* private mode or storage full — playback is unaffected */ }
+}
+
 function ensure() {
   if (audio) return audio
   audio = new Audio()
@@ -30,12 +47,13 @@ function ensure() {
   audio.addEventListener('play', emit)
   audio.addEventListener('pause', emit)
   audio.addEventListener('timeupdate', emit)
+  audio.addEventListener('timeupdate', remember)
   audio.addEventListener('ended', () => {
     const next = nextTrackSrc()
     if (next) playSrc(next).catch(() => emit())
     emit()
   })
-  window.addEventListener('pagehide', () => audio.pause(), { once: true })
+  window.addEventListener('pagehide', () => { remember(); audio.pause() }, { once: true })
   return audio
 }
 
@@ -60,6 +78,34 @@ export const audioPlayer = {
 
   play(src) {
     playSrc(src).catch(() => emit())
+  },
+
+  /* Carry on from where this tab's soundtrack stopped, so arriving at the Hall
+     through a page load does not restart the track. Falls back to playing
+     `src` from the top when there is nothing to carry on from.
+
+     Used by the Hall page alone. MUST be called inside a user gesture. */
+  continueFrom(src) {
+    let saved = null
+    try {
+      const raw = sessionStorage.getItem(MEMORY_KEY)
+      saved = raw ? JSON.parse(raw) : null
+    } catch { /* unreadable storage — start from the top */ }
+
+    if (!saved?.src) return this.play(src)
+
+    const a = ensure()
+    a.muted = false            // entering is a request for sound
+    if (a.src !== saved.src) a.src = saved.src
+    const seek = () => {
+      // Landing on the last moment of a track would look like nothing playing.
+      const t = saved.time || 0
+      try { a.currentTime = a.duration && t >= a.duration - 1.5 ? 0 : t } catch { /* not seekable yet */ }
+    }
+    if (a.readyState > 0) seek()
+    else a.addEventListener('loadedmetadata', seek, { once: true })
+    a.play().catch(() => emit())
+    emit()
   },
 
   playMuted(src) {
