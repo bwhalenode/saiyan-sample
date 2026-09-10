@@ -19,9 +19,19 @@ function _canUseWebP() {
 const wait = ms => new Promise(r => setTimeout(r, ms))
 
 export class AsciiPreloader {
-  constructor({ onComplete, onAwaken }) {
+  /**
+   * @param {object}   o
+   * @param {string}   [o.promptText] wording of the tap gate ('TAP TO AWAKEN')
+   * @param {'burst'|'zoom'} [o.exit]  how it leaves: the hero's transformation
+   *                                   blast, or a zoom towards the viewer
+   * @param {string[]} [o.assets]      what to wait for before arming the tap
+   */
+  constructor({ onComplete, onAwaken, promptText = 'TAP TO AWAKEN', exit = 'burst', assets = READY_ASSETS }) {
     this._onComplete  = onComplete
     this._onAwaken    = onAwaken
+    this._promptText  = promptText
+    this._exit        = exit
+    this._assets      = assets
     this._startTime   = 0
     this._rafId       = null
     this._p           = 0
@@ -88,7 +98,7 @@ export class AsciiPreloader {
 
   // Readiness: wait for hero assets + fonts (capped), then maybe show tap
   _trackReady() {
-    const assetLoads = READY_ASSETS.map(src => new Promise(res => {
+    const assetLoads = this._assets.map(src => new Promise(res => {
       const img = new Image()
       img.onload = img.onerror = () => res()
       img.src = src
@@ -190,7 +200,7 @@ export class AsciiPreloader {
     if (this._loaded) {
       // Page behind is ready → invite the tap.
       this._armed = true
-      this._prompt.textContent = 'TAP TO AWAKEN'
+      this._prompt.textContent = this._promptText
       this._prompt.classList.remove('is-loading')
       this._prompt.classList.add('is-ready')
       this._hudBot.style.transition = 'opacity 0.4s ease'
@@ -218,7 +228,41 @@ export class AsciiPreloader {
     this._el.removeEventListener('click', this._tapHandler)
     window.removeEventListener('keydown', this._keyHandler)
     this._el.classList.remove('is-ready')
-    this._burst()
+    this._exit === 'zoom' ? this._zoom() : this._burst()
+  }
+
+  /* Alternative exit: no blast. The crystal rushes towards the viewer and the
+     whole overlay fades, so what is behind it opens up out of the image. */
+  async _zoom() {
+    this._prompt.classList.remove('is-ready')
+    this._prompt.style.transition = 'opacity 0.2s ease'
+    this._prompt.style.opacity = '0'
+    this._hudTop.style.transition = 'opacity 0.2s ease'
+    this._hudTop.style.opacity = '0'
+    this._hudBot.style.transition = 'opacity 0.2s ease'
+    this._hudBot.style.opacity = '0'
+
+    if (REDUCED()) {
+      this._el.style.transition = 'opacity 0.3s ease'
+      this._el.style.opacity = '0'
+      await wait(320)
+      this._finish()
+      return
+    }
+
+    // A brief flare first, the same surge the hero uses, then the rush in.
+    this._stage.classList.add('preloader-stage--flare')
+    await wait(120)
+
+    this._stage.style.transition = 'transform 760ms cubic-bezier(0.45, 0, 0.2, 1)'
+    this._stage.style.transform = 'scale(4.2)'
+    // Fade a touch later than the zoom starts, so it reads as coming at you
+    // rather than simply dissolving.
+    this._el.style.transition = 'opacity 620ms ease 180ms'
+    this._el.style.opacity = '0'
+
+    await wait(800)
+    this._finish()
   }
 
   // Transformation burst
