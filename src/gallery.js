@@ -5,6 +5,7 @@
 
 import './style.css'
 import { mountHall } from './gallery/hall.js'
+import { initHallGate } from './gallery/gate.js'
 import { initCaBar } from './sections/ca-bar.js'
 import { initHeroAnthem } from './sections/hero-anthem.js'
 import { audioPlayer } from './sections/audio-controller.js'
@@ -15,29 +16,9 @@ mountHall(document.getElementById('hall'), { mode: 'page' })
 initCaBar()
 initHeroAnthem()
 
-/* Pick the soundtrack back up where it stopped.
-
-   The landing page does not autoplay either — TAP TO AWAKEN is its gesture
-   gate, and the anthem starts inside that tap. This is the same trick without
-   a gate in the way: the first tap anywhere resumes the track at the position
-   this tab left it, so walking into the Hall from the site feels continuous.
-
-   Only when there is something to continue. A cold visitor arriving on a
-   shared link gets silence until they choose the anthem circle — starting
-   music at someone who never asked for it is not a good welcome. */
-function resumeOnFirstGesture() {
-  const off = () => {
-    document.removeEventListener('pointerdown', start)
-    document.removeEventListener('keydown', start)
-  }
-  function start() {
-    off()
-    audioPlayer.resumeWhereItLeftOff(ANTHEM_SRC)
-  }
-  document.addEventListener('pointerdown', start, { once: true })
-  document.addEventListener('keydown', start, { once: true })
-}
-
-try {
-  if (sessionStorage.getItem('saiyan:audio')) resumeOnFirstGesture()
-} catch { /* storage unavailable: the anthem circle still works */ }
+/* The gate exists to carry the tap that lets audio play — the same reason the
+   landing page has TAP TO AWAKEN. It continues this tab's track from where it
+   stopped, or starts the anthem if there is nothing to continue. */
+initHallGate({
+  onEnter: () => audioPlayer.resumeWhereItLeftOff(ANTHEM_SRC),
+})
