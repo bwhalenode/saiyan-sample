@@ -15,10 +15,13 @@
   --brand: 'Zen Dots', sans-serif;
 }
 
-.gal-root *, .gal-root *::before, .gal-root *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* :where() keeps these at zero specificity. Scoping a plain `a { }` reset under
+   .gal-root would otherwise outrank component classes like .gal-cta and repaint
+   them — which is exactly what happened to the AWAKEN YOURS button once. */
+:where(.gal-root *, .gal-root *::before, .gal-root *::after) { box-sizing: border-box; margin: 0; padding: 0; }
 .gal-root { color: var(--ink); font-family: var(--mono); -webkit-font-smoothing: antialiased; }
-.gal-root a { color: inherit; text-decoration: none; }
-.gal-root img, .gal-root video { display: block; max-width: 100%; }
+:where(.gal-root a) { color: inherit; text-decoration: none; }
+:where(.gal-root img, .gal-root video) { display: block; max-width: 100%; }
 
 .gal-shell { position: relative; min-height: 100vh; overflow: hidden; }
 .gal-shell__glow {
