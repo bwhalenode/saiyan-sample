@@ -25,36 +25,31 @@ export class HallPreloader extends AsciiPreloader {
   }
 
   /* _onTap() calls this._burst(), so overriding it is enough to change how the
-     preloader leaves — no need to touch the tap handling itself. */
+     preloader leaves — no need to touch the tap handling itself.
+
+     Nothing from the landing page's exit is reused: no flare, no shockwave, no
+     flash, no shake, and no delay before anything happens. On the tap the image
+     starts zooming and fading in the same frame, and the Hall is there when it
+     has gone. */
   async _burst() {
     this._prompt.classList.remove('is-ready')
-    this._prompt.style.transition = 'opacity 0.2s ease'
-    this._prompt.style.opacity = '0'
-    this._hudTop.style.transition = 'opacity 0.2s ease'
-    this._hudTop.style.opacity = '0'
-    this._hudBot.style.transition = 'opacity 0.2s ease'
-    this._hudBot.style.opacity = '0'
 
     if (REDUCED()) {
-      this._el.style.transition = 'opacity 0.3s ease'
+      this._el.style.transition = 'opacity 0.28s ease'
       this._el.style.opacity = '0'
-      await wait(320)
+      await wait(300)
       this._finish()
       return
     }
 
-    // A brief flare, then the rush towards the viewer.
-    this._stage.classList.add('preloader-stage--flare')
-    await wait(120)
-
-    this._stage.style.transition = 'transform 760ms cubic-bezier(0.45, 0, 0.2, 1)'
-    this._stage.style.transform = 'scale(4.2)'
-    // Fade a little after the zoom starts, so it reads as coming at you rather
-    // than simply dissolving.
-    this._el.style.transition = 'opacity 620ms ease 180ms'
+    this._stage.style.transition = 'transform 620ms cubic-bezier(0.33, 0, 0.2, 1)'
+    this._stage.style.transform = 'scale(3.4)'
+    // The whole overlay fades, taking the HUD and the prompt with it, starting
+    // at the same instant as the zoom.
+    this._el.style.transition = 'opacity 620ms cubic-bezier(0.4, 0, 1, 1)'
     this._el.style.opacity = '0'
 
-    await wait(800)
+    await wait(650)
     this._finish()
   }
 }

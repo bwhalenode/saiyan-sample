@@ -31,10 +31,12 @@ const MEMORY_KEY = 'saiyan:audio'
 function remember() {
   if (!audio?.src) return
   try {
+    // Position only. The mute state is deliberately NOT remembered: the button
+    // mutes rather than pauses, so carrying it across would silence the next
+    // tap-to-enter even though the visitor just asked for sound.
     sessionStorage.setItem(MEMORY_KEY, JSON.stringify({
       src: audio.src,
       time: audio.currentTime,
-      muted: audio.muted,
     }))
   } catch { /* private mode, or storage full — playback still works */ }
 }
@@ -95,12 +97,16 @@ export const audioPlayer = {
   resumeWhereItLeftOff(fallbackSrc) {
     const saved = recall()
     const a = ensure()
+    // Tapping through is an explicit request for sound, so always audible.
+    a.muted = false
     if (!saved?.src) return this.play(fallbackSrc)
 
     if (a.src !== saved.src) a.src = saved.src
-    a.muted = !!saved.muted
     const seek = () => {
-      try { a.currentTime = saved.time || 0 } catch { /* not seekable yet */ }
+      // Landing on the last moment of a track would look like nothing playing.
+      const t = saved.time || 0
+      const safe = a.duration && t >= a.duration - 1.5 ? 0 : t
+      try { a.currentTime = safe } catch { /* not seekable yet */ }
     }
     if (a.readyState > 0) seek()
     else a.addEventListener('loadedmetadata', seek, { once: true })
