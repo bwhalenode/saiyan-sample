@@ -13,6 +13,7 @@ import { initTeam }        from './sections/team.js'
 import { initMusic }       from './sections/music.js'
 import { initHeroAnthem, startHeroAnthem }  from './sections/hero-anthem.js'
 import { initBuy }          from './sections/buy.js'
+import { initHallRoute }    from './sections/hall-route.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -58,6 +59,8 @@ async function finishInit(lenis, scene) {
   initTeam()
   initMusic()
   initBuy()
+  // Opens the Hall in place, so the soundtrack is never cut by a page load.
+  initHallRoute(lenis)
 
   initTimeline(lenis)
 }

@@ -10,39 +10,57 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="stylesheet" href="/src/gallery.css" />
 </head>
-<body>
-  <div class="gal-shell">
-    <div class="gal-shell__glow" aria-hidden="true"></div>
+<body class="hall-page">
+  <!-- gallery.js builds the Hall in here, the same code the landing page
+       mounts in place when you arrive from the site itself. -->
+  <div id="hall"></div>
 
-    <header class="gal-header">
-      <a class="gal-brand" href="/" aria-label="Return to $SAIYAN home">
-        <img src="/images/logo.png" alt="" aria-hidden="true" />
-        <span class="gal-brand__text">$SAIYAN</span>
-      </a>
-      <div class="gal-actions">
-        <a class="gal-cta" href="/#creator">AWAKEN YOURS</a>
-        <a class="gal-back" href="/" aria-label="Back to the main page" title="Back">×</a>
-      </div>
-    </header>
-
-    <main class="gal-main">
-      <p class="gal-eyebrow">POWER UNLEASHED</p>
-      <h1 class="gal-title">HALL OF POWER</h1>
-      <p class="gal-sub">Every awakening the community has unleashed.</p>
-
-      <!-- One rail per category, built in gallery.js from the same TABS map the
-           feed uses, so the markup cannot drift from the categories. -->
-      <div class="gal-rails" data-rails></div>
-    </main>
+  <!-- The CA and anthem circles, shared with the landing page. On a direct
+       visit the anthem starts paused: a freshly loaded document is not allowed
+       to play sound until the visitor taps. Coming from the site instead, the
+       Hall opens in place and the music simply never stops. -->
+  <div class="hero__ca" id="hero-ca-bar">
+    <button
+      class="hero__ca-trigger"
+      id="ca-trigger"
+      aria-label="Show contract address"
+      aria-expanded="false"
+      aria-controls="ca-panel"
+    >CA</button>
+    <div class="hero__ca-panel" id="ca-panel" aria-hidden="true">
+      <span class="hero__ca-label">CA</span>
+      <span class="hero__ca-address" id="ca-address">0xd242d6CC65eA378D3eD99FBf82Ef8784D9cF9ff6</span>
+      <button class="hero__ca-copy" id="ca-copy" aria-label="Copy contract address">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M2 10V2a1 1 0 011-1h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="hero__ca-copy-label">COPY</span>
+      </button>
+      <a
+        class="hero__ca-buy"
+        href="https://app.uniswap.org/swap?chain=robinhood&amp;inputCurrency=NATIVE&amp;outputCurrency=0xd242d6CC65eA378D3eD99FBf82Ef8784D9cF9ff6"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-buy
+      >BUY</a>
+    </div>
   </div>
 
-  <div class="gal-light" data-lightbox hidden>
-    <button class="gal-light__close" type="button" data-close aria-label="Close">×</button>
-    <figure class="gal-light__stage" data-stage></figure>
-    <button class="gal-light__nav gal-light__nav--prev" type="button" data-prev aria-label="Previous">‹</button>
-    <button class="gal-light__nav gal-light__nav--next" type="button" data-next aria-label="Next">›</button>
+  <!-- Hero anthem toggle (corner remote for "Awaken The Saiyan") -->
+  <div class="hero__anthem" id="hero-anthem-wrap">
+    <span class="hero__anthem-name" aria-hidden="true">AWAKEN THE SAIYAN</span>
+    <button
+      class="hero__anthem-btn"
+      id="hero-anthem"
+      type="button"
+      aria-pressed="false"
+      aria-label="Play the $SAIYAN anthem"
+    >
+      <span class="hero__anthem-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span class="hero__anthem-muted-mark" aria-hidden="true"></span>
+    </button>
   </div>
 
   <script type="module" src="/src/gallery.js"></script>

@@ -1,30 +1,9 @@
-/* $SAIYAN community gallery — standalone page shell.
-   Deliberately independent of style.css: this page runs without Lenis, three.js
-   or the scroll scene, so it only loads the tokens and fonts it actually uses. */
+/* Hall of Power — shared by the standalone /gallery.html page and the in-page
+   overlay on the landing page. Everything is scoped under .gal-root: no global
+   reset and no :root tokens, so mounting this inside index.html cannot disturb
+   the landing page styles. */
 
-@font-face {
-  font-family: 'Bebas Neue';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/bebas-neue-400.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Zen Dots';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/zen-dots-400.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'JetBrains Mono';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/jetbrains-mono-400.woff2') format('woff2');
-}
-
-:root {
+.gal-root {
   --bg: #050306;
   --gold: #9ee84b;
   --gold-hot: #5fb800;
@@ -36,16 +15,10 @@
   --brand: 'Zen Dots', sans-serif;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html, body { min-height: 100%; background: var(--bg); }
-body {
-  color: var(--ink);
-  font-family: var(--mono);
-  -webkit-font-smoothing: antialiased;
-}
-a { color: inherit; text-decoration: none; }
-img, video { display: block; max-width: 100%; }
+.gal-root *, .gal-root *::before, .gal-root *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.gal-root { color: var(--ink); font-family: var(--mono); -webkit-font-smoothing: antialiased; }
+.gal-root a { color: inherit; text-decoration: none; }
+.gal-root img, .gal-root video { display: block; max-width: 100%; }
 
 .gal-shell { position: relative; min-height: 100vh; overflow: hidden; }
 .gal-shell__glow {
@@ -450,4 +423,26 @@ img, video { display: block; max-width: 100%; }
   .gal-card, .gal-skel, .gal-eyebrow, .gal-rail__arrow { transition: none; animation: none; }
   .gal-back:hover { transform: none; }
   .gal-card:hover { transform: none; }
+}
+
+/* ── In-page view ───────────────────────────────────────────────────────────
+   The Hall mounted over the landing page. Fixed and scrolling internally, so
+   the page behind it keeps its scroll position and, crucially, its <audio>. */
+.gal-root--view {
+  position: fixed;
+  inset: 0;
+  z-index: 165;                 /* above the site nav (160) */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--bg);
+  animation: gal-view-in 0.28s ease-out;
+}
+.gal-root--view .gal-shell { min-height: 100%; padding-top: var(--gal-top, 0px); }
+.gal-root--view .gal-shell__glow,
+.gal-root--view .gal-light { position: fixed; }
+
+@keyframes gal-view-in { from { opacity: 0; } to { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .gal-root--view { animation: none; }
 }

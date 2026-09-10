@@ -4030,3 +4030,21 @@ ul { list-style: none; }
     white-space: nowrap;
   }
 }
+
+/* ════════════════════════════════════════
+   HALL OF POWER (in-page view)
+   ════════════════════════════════════════ */
+/* The Hall sits above the nav, so lift the CA and anthem circles above the
+   Hall — they are meant to stay reachable there, and the soundtrack keeps
+   playing because no document was ever unloaded. */
+body.hall-open { overflow: hidden; }
+body.hall-open .hero__ca,
+body.hall-open .hero__anthem { z-index: 200; }
+/* The CA panel opens leftward over the Hall; keep it legible there. */
+body.hall-open .hero__ca-panel { backdrop-filter: blur(6px); }
+
+/* Standalone /gallery.html: no hero timeline runs there, so the circles never
+   get their GSAP reveal. Show them straight away. */
+body.hall-page { overflow-x: hidden; }
+body.hall-page .hero__ca,
+body.hall-page .hero__anthem { opacity: 1; transform: none; }
