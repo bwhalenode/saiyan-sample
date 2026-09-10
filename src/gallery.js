@@ -18,8 +18,9 @@ initHeroAnthem()
 
 /* The landing page's preloader, subclassed for its wording and its exit. It
    also carries the tap that lets the soundtrack play, which a freshly loaded
-   document cannot do on its own. */
+   document cannot do on its own. Plays the anthem, exactly as the landing page
+   does on its own tap — no saved position, nothing remembered. */
 new HallPreloader({
-  onAwaken: () => audioPlayer.resumeWhereItLeftOff(ANTHEM_SRC),
+  onAwaken: () => audioPlayer.play(ANTHEM_SRC),
   onComplete: () => {},
 }).start()

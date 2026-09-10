@@ -44,8 +44,5 @@ export function initHeroAnthem() {
 // Called from the preloader tap (a user gesture) so the track plays out loud.
 export function startHeroAnthem() {
   audioPlayer.setPlaylistIfEmpty?.([ANTHEM_SRC])
-  // Continue rather than restart if this tab was already playing — coming back
-  // from a loaded /gallery.html should not rewind the track to the beginning.
-  // A first visit has nothing saved and so starts the anthem from the top.
-  audioPlayer.resumeWhereItLeftOff(ANTHEM_SRC)
+  audioPlayer.play(ANTHEM_SRC)
 }
