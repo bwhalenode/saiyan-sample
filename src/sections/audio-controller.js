@@ -22,6 +22,32 @@ function nextTrackSrc() {
   return playlist[(i + 1) % playlist.length]
 }
 
+/* Where the soundtrack had got to, remembered per tab so a real page load
+   (a shared /gallery.html link, say) can pick the same track up at the same
+   spot rather than starting over. sessionStorage, not localStorage: this is
+   about one continuous visit, not about following someone between sessions. */
+const MEMORY_KEY = 'saiyan:audio'
+
+function remember() {
+  if (!audio?.src) return
+  try {
+    sessionStorage.setItem(MEMORY_KEY, JSON.stringify({
+      src: audio.src,
+      time: audio.currentTime,
+      muted: audio.muted,
+    }))
+  } catch { /* private mode, or storage full — playback still works */ }
+}
+
+function recall() {
+  try {
+    const raw = sessionStorage.getItem(MEMORY_KEY)
+    return raw ? JSON.parse(raw) : null
+  } catch {
+    return null
+  }
+}
+
 function ensure() {
   if (audio) return audio
   audio = new Audio()
@@ -30,12 +56,13 @@ function ensure() {
   audio.addEventListener('play', emit)
   audio.addEventListener('pause', emit)
   audio.addEventListener('timeupdate', emit)
+  audio.addEventListener('timeupdate', remember)
   audio.addEventListener('ended', () => {
     const next = nextTrackSrc()
     if (next) playSrc(next).catch(() => emit())
     emit()
   })
-  window.addEventListener('pagehide', () => audio.pause(), { once: true })
+  window.addEventListener('pagehide', () => { remember(); audio.pause() }, { once: true })
   return audio
 }
 
@@ -60,6 +87,25 @@ export const audioPlayer = {
 
   play(src) {
     playSrc(src).catch(() => emit())
+  },
+
+  /* Continue this tab's soundtrack, or start `fallbackSrc` if there is nothing
+     to continue. MUST be called inside a user gesture (a tap, a click) — that
+     is the whole reason the site gates the anthem behind TAP TO AWAKEN. */
+  resumeWhereItLeftOff(fallbackSrc) {
+    const saved = recall()
+    const a = ensure()
+    if (!saved?.src) return this.play(fallbackSrc)
+
+    if (a.src !== saved.src) a.src = saved.src
+    a.muted = !!saved.muted
+    const seek = () => {
+      try { a.currentTime = saved.time || 0 } catch { /* not seekable yet */ }
+    }
+    if (a.readyState > 0) seek()
+    else a.addEventListener('loadedmetadata', seek, { once: true })
+    a.play().catch(() => emit())
+    emit()
   },
 
   playMuted(src) {
