@@ -1,20 +1,20 @@
 import * as THREE from 'three'
-import { EffectComposer }  from 'three/addons/postprocessing/EffectComposer.js'
-import { RenderPass }      from 'three/addons/postprocessing/RenderPass.js'
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
-import { OutputPass }      from 'three/addons/postprocessing/OutputPass.js'
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
 
-import auraVert    from './shaders/aura.vert?raw'
-import auraFrag    from './shaders/aura.frag?raw'
+import auraVert from './shaders/aura.vert?raw'
+import auraFrag from './shaders/aura.frag?raw'
 import crystalVert from './shaders/crystal.vert?raw'
 import crystalFrag from './shaders/crystal.frag?raw'
 
 import { Lightning } from './Lightning.js'
 
 // WebP feature detection, resolves before textures load
-const supportsWebP = await new Promise(resolve => {
+const supportsWebP = await new Promise((resolve) => {
   const img = new Image()
-  img.onload  = () => resolve(img.width === 1)
+  img.onload = () => resolve(img.width === 1)
   img.onerror = () => resolve(false)
   img.src = 'data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAQAcJZQCdAEO/gHOAAA='
 })
@@ -27,14 +27,14 @@ const FINAL_CAM_Z = 4
 
 export class HeroScene {
   constructor(canvas) {
-    this._canvas      = canvas
-    this._mouseNorm   = { x: 0, y: 0 }
+    this._canvas = canvas
+    this._mouseNorm = { x: 0, y: 0 }
     this._cameraTarget = new THREE.Vector3()
     this._imageAspect = null
-    this._plane       = null
-    this._auraMat     = null
-    this._crystal     = null
-    this._crystalMat  = null
+    this._plane = null
+    this._auraMat = null
+    this._crystal = null
+    this._crystalMat = null
 
     this._initRenderer()
     this._initScene()
@@ -47,16 +47,16 @@ export class HeroScene {
   /* Renderer */
   _initRenderer() {
     this._renderer = new THREE.WebGLRenderer({
-      canvas:      this._canvas,
-      antialias:   !isMobile(),
-      alpha:       false,
+      canvas: this._canvas,
+      antialias: !isMobile(),
+      alpha: false,
       powerPreference: 'high-performance',
     })
     this._renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this._renderer.setSize(window.innerWidth, window.innerHeight)
-    this._renderer.toneMapping         = THREE.ACESFilmicToneMapping
-    this._renderer.toneMappingExposure  = 1.0
-    this._renderer.outputColorSpace    = THREE.SRGBColorSpace
+    this._renderer.toneMapping = THREE.ACESFilmicToneMapping
+    this._renderer.toneMappingExposure = 1.0
+    this._renderer.outputColorSpace = THREE.SRGBColorSpace
     this._renderer.setClearColor(0x050306, 1)
   }
 
@@ -100,9 +100,9 @@ export class HeroScene {
     if (!isMobile()) {
       this._bloom = new UnrealBloomPass(
         new THREE.Vector2(window.innerWidth, window.innerHeight),
-        0.4,   // strength
-        0.4,   // radius
-        0.95,  // threshold
+        0.4, // strength
+        0.4, // radius
+        0.95, // threshold
       )
       this._composer.addPass(this._bloom)
     }
@@ -113,14 +113,18 @@ export class HeroScene {
   /* Hero texture URL for the given mobile/desktop state (WebP w/ jpg fallback) */
   _texUrl(mob) {
     return mob
-      ? (supportsWebP ? '/images/hero-1-mobile.webp' : '/images/hero-1.jpg')
-      : (supportsWebP ? '/images/hero-1.webp'        : '/images/hero-1.jpg')
+      ? supportsWebP
+        ? '/images/hero-1-mobile.webp'
+        : '/images/hero-1.jpg'
+      : supportsWebP
+        ? '/images/hero-1.webp'
+        : '/images/hero-1.jpg'
   }
 
   async load() {
-    this._loader      = new THREE.TextureLoader()
+    this._loader = new THREE.TextureLoader()
     this._isMobileTex = isMobile()
-    const texUrl      = this._texUrl(this._isMobileTex)
+    const texUrl = this._texUrl(this._isMobileTex)
 
     let tex
     try {
@@ -143,29 +147,29 @@ export class HeroScene {
 
   /* Plane: 1×1 unit geo scaled to fill viewport (cover logic) */
   _buildCharacterPlane(tex) {
-    const iw = tex.image?.naturalWidth  || tex.image?.width  || 512
+    const iw = tex.image?.naturalWidth || tex.image?.width || 512
     const ih = tex.image?.naturalHeight || tex.image?.height || 900
     this._imageAspect = iw / ih
 
     const geo = new THREE.PlaneGeometry(1, 1, 1, 1)
     const mat = new THREE.ShaderMaterial({
       uniforms: {
-        uTexture:      { value: tex },
-        uTime:         { value: 0 },
-        uMouseDist:    { value: 0 },
+        uTexture: { value: tex },
+        uTime: { value: 0 },
+        uMouseDist: { value: 0 },
         uAuraStrength: { value: 0.4 },
-        uResolution:   { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+        uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
         uMotionStrength: { value: prefersReducedMotion() ? 0 : 1 },
-        uMobileAmbient:  { value: isMobile() ? 1 : 0 },
+        uMobileAmbient: { value: isMobile() ? 1 : 0 },
       },
-      vertexShader:   auraVert,
+      vertexShader: auraVert,
       fragmentShader: auraFrag,
       transparent: true,
-      depthWrite:  false,
+      depthWrite: false,
       side: THREE.FrontSide,
     })
 
-    this._plane   = new THREE.Mesh(geo, mat)
+    this._plane = new THREE.Mesh(geo, mat)
     this._auraMat = mat
     this._scene.add(this._plane)
 
@@ -176,10 +180,10 @@ export class HeroScene {
   _updatePlaneSizing() {
     if (!this._plane || !this._imageAspect) return
 
-    const fovRad     = THREE.MathUtils.degToRad(this._camera.fov)
-    const visH       = 2 * Math.tan(fovRad / 2) * FINAL_CAM_Z
+    const fovRad = THREE.MathUtils.degToRad(this._camera.fov)
+    const visH = 2 * Math.tan(fovRad / 2) * FINAL_CAM_Z
     const viewAspect = window.innerWidth / window.innerHeight
-    const visW       = visH * viewAspect
+    const visW = visH * viewAspect
 
     if (isMobile()) {
       // Portrait phones: the ETH crystal now sits at the character's waist, so
@@ -187,25 +191,25 @@ export class HeroScene {
       // Scale to ~90% of cover and keep a modest downward offset so the head
       // clears the title but there's little dead space up top. Anchored on the
       // CHARACTER (not the right edge) so the full figure stays in frame.
-      const SIZE       = 0.90
+      const SIZE = 0.9
       const coverScale = Math.max(visW / (visH * this._imageAspect), 1)
-      const planeH     = visH * 1.04 * coverScale * SIZE
-      const planeW     = planeH * this._imageAspect
+      const planeH = visH * 1.04 * coverScale * SIZE
+      const planeW = planeH * this._imageAspect
       this._plane.scale.set(planeW, planeH, 1)
 
-      this._plane.position.x = planeW * 0.03     // nudge right toward the right side
-      this._plane.position.y = -visH * 0.07      // slight drop, head below title
+      this._plane.position.x = planeW * 0.03 // nudge right toward the right side
+      this._plane.position.y = -visH * 0.07 // slight drop, head below title
     } else {
       // Desktop: fit by HEIGHT (landscape art always covers width), then pin the
       // right edge so the figure + crystal stay framed and only the left
       // negative space (where the title lives) is cropped.
-      const OVERSCALE  = 1.04
-      const planeH     = visH * OVERSCALE
-      const planeW     = planeH * this._imageAspect
+      const OVERSCALE = 1.04
+      const planeH = visH * OVERSCALE
+      const planeW = planeH * this._imageAspect
       this._plane.scale.set(planeW, planeH, 1)
 
       const rightInset = visW * 0.015
-      this._plane.position.x = (visW - planeW) / 2 - rightInset   // same right-edge anchor
+      this._plane.position.x = (visW - planeW) / 2 - rightInset // same right-edge anchor
       this._plane.position.y = 0
     }
 
@@ -221,17 +225,17 @@ export class HeroScene {
     const geo = new THREE.IcosahedronGeometry(0.38, 0)
     const mat = new THREE.ShaderMaterial({
       uniforms: {
-        uTime:      { value: 0 },
+        uTime: { value: 0 },
         uCameraPos: { value: this._camera.position },
       },
-      vertexShader:   crystalVert,
+      vertexShader: crystalVert,
       fragmentShader: crystalFrag,
       transparent: true,
-      depthWrite:  false,
+      depthWrite: false,
       side: THREE.DoubleSide,
     })
 
-    this._crystal    = new THREE.Mesh(geo, mat)
+    this._crystal = new THREE.Mesh(geo, mat)
     this._crystal.position.set(-2.0, 1.2, -0.5)
     this._scene.add(this._crystal)
     this._crystalMat = mat
@@ -239,14 +243,14 @@ export class HeroScene {
 
   /* Placeholder for missing texture */
   _makePlaceholderTexture() {
-    const cv  = document.createElement('canvas')
-    cv.width  = 512
+    const cv = document.createElement('canvas')
+    cv.width = 512
     cv.height = 900
     const ctx = cv.getContext('2d')
-    const g   = ctx.createRadialGradient(256, 450, 60, 256, 450, 300)
-    g.addColorStop(0,   'rgba(255,210,48,0.9)')
+    const g = ctx.createRadialGradient(256, 450, 60, 256, 450, 300)
+    g.addColorStop(0, 'rgba(255,210,48,0.9)')
     g.addColorStop(0.5, 'rgba(255,168,0,0.5)')
-    g.addColorStop(1,   'rgba(5,3,6,0)')
+    g.addColorStop(1, 'rgba(5,3,6,0)')
     ctx.fillStyle = g
     ctx.fillRect(0, 0, 512, 900)
     const tex = new THREE.CanvasTexture(cv)
@@ -260,17 +264,25 @@ export class HeroScene {
     const ro = new ResizeObserver(() => this._onResize())
     ro.observe(document.documentElement)
 
-    window.addEventListener('mousemove', (e) => {
-      this._mouseNorm.x = e.clientX / window.innerWidth  - 0.5
-      this._mouseNorm.y = e.clientY / window.innerHeight - 0.5
-    }, { passive: true })
+    window.addEventListener(
+      'mousemove',
+      (e) => {
+        this._mouseNorm.x = e.clientX / window.innerWidth - 0.5
+        this._mouseNorm.y = e.clientY / window.innerHeight - 0.5
+      },
+      { passive: true },
+    )
 
     // Device orientation fallback for mobile parallax
     if (isMobile()) {
-      window.addEventListener('deviceorientation', (e) => {
-        this._mouseNorm.x =  (e.gamma || 0) / 30
-        this._mouseNorm.y = -(e.beta  || 0) / 30
-      }, { passive: true })
+      window.addEventListener(
+        'deviceorientation',
+        (e) => {
+          this._mouseNorm.x = (e.gamma || 0) / 30
+          this._mouseNorm.y = -(e.beta || 0) / 30
+        },
+        { passive: true },
+      )
     }
   }
 
@@ -302,7 +314,7 @@ export class HeroScene {
       tex.colorSpace = THREE.SRGBColorSpace
       const prev = this._auraMat.uniforms.uTexture.value
       this._auraMat.uniforms.uTexture.value = tex
-      const iw = tex.image?.naturalWidth  || tex.image?.width  || 512
+      const iw = tex.image?.naturalWidth || tex.image?.width || 512
       const ih = tex.image?.naturalHeight || tex.image?.height || 900
       this._imageAspect = iw / ih
       prev?.dispose?.()
@@ -313,14 +325,14 @@ export class HeroScene {
   }
 
   /* Expose camera for GSAP dolly in hero.js */
-  getCamera() { return this._camera }
+  getCamera() {
+    return this._camera
+  }
 
   /* Main update */
   update(t) {
-    const dist = 1.0 - Math.min(
-      Math.sqrt(this._mouseNorm.x ** 2 + this._mouseNorm.y ** 2) * 1.6,
-      1.0,
-    )
+    const dist =
+      1.0 - Math.min(Math.sqrt(this._mouseNorm.x ** 2 + this._mouseNorm.y ** 2) * 1.6, 1.0)
 
     // Camera X/Y drift (GSAP owns Z during the dolly)
     const targetX = this._cameraBase.x + this._mouseNorm.x * 0.25
@@ -331,7 +343,7 @@ export class HeroScene {
 
     // Aura uniforms
     if (this._auraMat) {
-      this._auraMat.uniforms.uTime.value      = t
+      this._auraMat.uniforms.uTime.value = t
       this._auraMat.uniforms.uMouseDist.value = dist
     }
 
@@ -340,7 +352,7 @@ export class HeroScene {
       this._crystal.rotation.y += 0.004
       this._crystal.rotation.x += 0.002
       if (this._crystalMat) {
-        this._crystalMat.uniforms.uTime.value      = t
+        this._crystalMat.uniforms.uTime.value = t
         this._crystalMat.uniforms.uCameraPos.value = this._camera.position
       }
     }

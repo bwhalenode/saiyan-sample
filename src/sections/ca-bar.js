@@ -24,7 +24,9 @@ export function initCaBar() {
   btn?.addEventListener('click', () => {
     navigator.clipboard.writeText(CA).then(() => {
       if (label) label.textContent = 'COPIED'
-      setTimeout(() => { if (label) label.textContent = 'COPY' }, 1400)
+      setTimeout(() => {
+        if (label) label.textContent = 'COPY'
+      }, 1400)
     })
   })
 }

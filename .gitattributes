@@ -1,0 +1,10 @@
+# Keep formatted source consistent across Windows and Unix checkouts.
+*.js text eol=lf
+*.css text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+.editorconfig text eol=lf
+.gitattributes text eol=lf
+.gitignore text eol=lf
+.prettierignore text eol=lf
+.env.example text eol=lf

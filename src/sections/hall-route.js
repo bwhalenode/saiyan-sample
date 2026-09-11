@@ -1,19 +1,10 @@
-/* Opens the Hall of Power in place instead of navigating to /gallery.html.
-
-   Why: the soundtrack is a single <audio> element owned by this document. Any
-   link to another page tears that document down and the music stops — and a
-   fresh document cannot start it again on its own, because browsers require a
-   user gesture before playing sound. Keeping the visitor in this document is
-   the only way the music genuinely continues, and it keeps the CA and anthem
-   circles on screen for free, since both are position: fixed.
-
-   /gallery.html still exists and still works as a real page for direct links;
-   this only intercepts in-site clicks. */
+/* Mount the Hall within the landing page to preserve the shared soundtrack
+   and fixed controls. Direct links still use the standalone gallery page. */
 
 const HALL_PATH = '/gallery.html'
 
 export function initHallRoute(lenis) {
-  let view = null   // the mounted Hall, while open
+  let view = null // the mounted Hall, while open
   let host = null
 
   const isHallLink = (a) => a && new URL(a.href, location.origin).pathname === HALL_PATH
@@ -29,7 +20,10 @@ export function initHallRoute(lenis) {
     // The disclaimer strip stays above the Hall (it is a legal notice, and it
     // wraps to two lines on narrow screens) so measure it rather than guessing.
     const bar = document.querySelector('.disclaimer-bar')
-    host.style.setProperty('--gal-top', `${bar ? Math.ceil(bar.getBoundingClientRect().height) : 0}px`)
+    host.style.setProperty(
+      '--gal-top',
+      `${bar ? Math.ceil(bar.getBoundingClientRect().height) : 0}px`,
+    )
     // Lenis drives the landing page's smooth scroll and swallows wheel/touch
     // globally; it has to stand down while the Hall owns the viewport.
     lenis?.stop()
@@ -56,7 +50,8 @@ export function initHallRoute(lenis) {
 
   document.addEventListener('click', (e) => {
     // Let modified clicks (new tab, download, middle-click) behave normally.
-    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)
+      return
     const a = e.target.closest?.('a')
     if (!isHallLink(a) || a.target === '_blank') return
     e.preventDefault()

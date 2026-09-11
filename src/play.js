@@ -21,7 +21,8 @@ function setSoundState(playing) {
 
 function playRandomTrack() {
   audio.src = tracks[Math.floor(Math.random() * tracks.length)]
-  audio.play()
+  audio
+    .play()
     .then(() => setSoundState(true))
     .catch(() => setSoundState(false))
 }
@@ -38,7 +39,8 @@ toggle.addEventListener('click', () => {
     return
   }
 
-  audio.play()
+  audio
+    .play()
     .then(() => setSoundState(true))
     .catch(() => setSoundState(false))
 })

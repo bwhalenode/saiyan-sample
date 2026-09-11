@@ -1,8 +1,5 @@
-/* SAIYAN CREATOR — service layer. The ONE seam between the UI and generation.
-   POST /api/ai/generate on our backend -> poll /api/ai/status until the job
-   finishes -> resolve with the asset URL. The provider keys live only on that
-   server; the browser never sees them. No demo fallback: if the backend is
-   unreachable the caller gets a real, retryable error. */
+/* Start a generation job on the backend, poll its status, and return the asset
+   URL. Provider credentials stay on the server. Errors propagate to the UI. */
 import { AI_CONFIG } from './config.js'
 import { authHeaders } from './token.js'
 
@@ -33,7 +30,10 @@ export async function generate(mode, payload) {
   })
   const started = await res.json().catch(() => ({}))
   if (!res.ok || !started.ok) {
-    throw new GenError(started.error || `http_${res.status}`, { status: res.status, joinUrl: started.joinUrl })
+    throw new GenError(started.error || `http_${res.status}`, {
+      status: res.status,
+      joinUrl: started.joinUrl,
+    })
   }
 
   // Poll until done. Videos take minutes; images usually well under a minute.

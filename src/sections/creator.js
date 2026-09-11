@@ -11,10 +11,10 @@ import { authHeaders } from './ai/token.js'
 const forge = document.querySelector('[data-forge]')
 
 if (forge) {
-  const wait = ms => new Promise(r => setTimeout(r, ms))
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms))
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  const $ = sel => forge.querySelector(sel)
+  const $ = (sel) => forge.querySelector(sel)
   const labelEl = $('[data-prompt-label]')
   const inputEl = $('[data-input]')
   const hintEl = $('[data-hint]')
@@ -34,9 +34,17 @@ if (forge) {
   const MODE_UI = {
     motivation: {
       label: 'HOW ARE YOU FEELING?',
-      placeholder: 'Your mood, a problem, a goal… e.g. “I keep delaying my launch”. Empty = surprise me.',
+      placeholder:
+        'Your mood, a problem, a goal… e.g. “I keep delaying my launch”. Empty = surprise me.',
       hint: 'Your Saiyan responds to you',
-      loading: ['BUILD STARTED…', 'IMAGINATION RUNNING…', 'SCENES TAKING SHAPE…', 'FRAMES RENDERING…', 'VOICE AND SOUND SYNCING…', 'READY SHORTLY…'],
+      loading: [
+        'BUILD STARTED…',
+        'IMAGINATION RUNNING…',
+        'SCENES TAKING SHAPE…',
+        'FRAMES RENDERING…',
+        'VOICE AND SOUND SYNCING…',
+        'READY SHORTLY…',
+      ],
       ms: 4000,
       cycleMs: 4200,
       note: 'Video generation takes 1 to 2 minutes',
@@ -44,9 +52,15 @@ if (forge) {
     },
     pfp: {
       label: 'AWAKEN YOUR SAIYAN PFP',
-      placeholder: 'Describe your PFP… e.g. “cyber samurai with a scar”. Add a photo or pick a character.',
+      placeholder:
+        'Describe your PFP… e.g. “cyber samurai with a scar”. Add a photo or pick a character.',
       hint: 'Prompt, photo or character → PFP',
-      loading: ['SHAPING YOUR WARRIOR…', 'CHARGING THE AURA…', 'POWERING UP…', 'FORGING THE FINAL FORM…'],
+      loading: [
+        'SHAPING YOUR WARRIOR…',
+        'CHARGING THE AURA…',
+        'POWERING UP…',
+        'FORGING THE FINAL FORM…',
+      ],
       ms: 2600,
       cycleMs: 1100,
       note: 'Usually ready in under a minute',
@@ -71,20 +85,36 @@ if (forge) {
     'The fire you feel is your power waking up.',
   ]
 
-  const state = { mode: DEFAULT_MODE, aura: 'rh', character: 'meketa', captions: true, transform: 'rh', scene: 'motivation', voice: 'spoken', voiceTouched: false, uploadData: null, uploadPromise: null }
+  const state = {
+    mode: DEFAULT_MODE,
+    aura: 'rh',
+    character: 'meketa',
+    captions: true,
+    transform: 'rh',
+    scene: 'motivation',
+    voice: 'spoken',
+    voiceTouched: false,
+    uploadData: null,
+    uploadPromise: null,
+  }
   let loadingTimer = null
 
-  const pick = arr => arr[Math.floor(Math.random() * arr.length)]
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)]
 
   /* ── STYLE panel: the secondary options every user can safely ignore.
      Collapsed by default with a summary of the current picks, so the default
      screen carries one line instead of three headings and eight pills. ── */
   const STYLE_LABELS = {
     transform: { rh: 'Saiyan green', golden: 'Golden', electric: 'Electric-blue' },
-    scene:     { motivation: 'Motivation', fight: 'Fight', transform: 'Transformation' },
-    voice:     { spoken: 'Spoken', silent: 'Silent' },
-    aura:      { rh: 'Saiyan green', golden: 'Golden', emerald: 'Emerald-blue',
-                 electric: 'Electric-blue', dark: 'Dark warrior' },
+    scene: { motivation: 'Motivation', fight: 'Fight', transform: 'Transformation' },
+    voice: { spoken: 'Spoken', silent: 'Silent' },
+    aura: {
+      rh: 'Saiyan green',
+      golden: 'Golden',
+      emerald: 'Emerald-blue',
+      electric: 'Electric-blue',
+      dark: 'Dark warrior',
+    },
   }
 
   const styleEl = $('[data-style]')
@@ -94,11 +124,16 @@ if (forge) {
 
   // Only summarise what the current mode actually exposes.
   function refreshStyleSummary() {
-    const parts = state.mode === 'motivation'
-      ? [STYLE_LABELS.transform[state.transform], STYLE_LABELS.scene[state.scene], STYLE_LABELS.voice[state.voice]]
-      : state.mode === 'pfp'
-        ? [STYLE_LABELS.aura[state.aura]]
-        : [state.captions ? 'With caption' : 'Image only']
+    const parts =
+      state.mode === 'motivation'
+        ? [
+            STYLE_LABELS.transform[state.transform],
+            STYLE_LABELS.scene[state.scene],
+            STYLE_LABELS.voice[state.voice],
+          ]
+        : state.mode === 'pfp'
+          ? [STYLE_LABELS.aura[state.aura]]
+          : [state.captions ? 'With caption' : 'Image only']
     styleSummaryEl.textContent = parts.filter(Boolean).join(' · ')
   }
 
@@ -125,7 +160,7 @@ if (forge) {
     forge.dataset.mode = mode
     forge.dataset.state = 'input'
 
-    forge.querySelectorAll('[data-mode-btn]').forEach(b => {
+    forge.querySelectorAll('[data-mode-btn]').forEach((b) => {
       const on = b.dataset.modeBtn === mode
       b.classList.toggle('is-active', on)
       b.setAttribute('aria-selected', String(on))
@@ -146,32 +181,35 @@ if (forge) {
 
   function selectCharacter(id) {
     state.character = id
-    forge.querySelectorAll('[data-char-btn]').forEach(b =>
-      b.classList.toggle('is-active', b.dataset.charBtn === id))
+    forge
+      .querySelectorAll('[data-char-btn]')
+      .forEach((b) => b.classList.toggle('is-active', b.dataset.charBtn === id))
     refreshGenerateLabel()
   }
 
-  forge.querySelectorAll('[data-mode-btn]').forEach(btn => {
+  forge.querySelectorAll('[data-mode-btn]').forEach((btn) => {
     btn.addEventListener('click', () => setMode(btn.dataset.modeBtn))
   })
 
   /* ── Guided: aura chips ── */
-  forge.querySelectorAll('[data-aura-btn]').forEach(btn => {
+  forge.querySelectorAll('[data-aura-btn]').forEach((btn) => {
     btn.addEventListener('click', () => {
       state.aura = btn.dataset.auraBtn
       refreshStyleSummary()
-      forge.querySelectorAll('[data-aura-btn]').forEach(b =>
-        b.classList.toggle('is-active', b === btn))
+      forge
+        .querySelectorAll('[data-aura-btn]')
+        .forEach((b) => b.classList.toggle('is-active', b === btn))
     })
   })
 
   /* ── Guided: super form. The power-up hair colour the user wants. ── */
-  forge.querySelectorAll('[data-transform-btn]').forEach(btn => {
+  forge.querySelectorAll('[data-transform-btn]').forEach((btn) => {
     btn.addEventListener('click', () => {
       state.transform = btn.dataset.transformBtn
       refreshStyleSummary()
-      forge.querySelectorAll('[data-transform-btn]').forEach(b =>
-        b.classList.toggle('is-active', b === btn))
+      forge
+        .querySelectorAll('[data-transform-btn]')
+        .forEach((b) => b.classList.toggle('is-active', b === btn))
     })
   })
 
@@ -180,45 +218,49 @@ if (forge) {
      backend still honours a typed "FIGHT:" or "SILENT:" prefix as a shortcut.
      Scene and voice are deliberately independent: a fight can close on a
      spoken line, a motivation film can run wordless. ── */
-  forge.querySelectorAll('[data-scene-btn]').forEach(btn => {
+  forge.querySelectorAll('[data-scene-btn]').forEach((btn) => {
     btn.addEventListener('click', () => {
       state.scene = btn.dataset.sceneBtn
-      forge.querySelectorAll('[data-scene-btn]').forEach(b =>
-        b.classList.toggle('is-active', b === btn))
+      forge
+        .querySelectorAll('[data-scene-btn]')
+        .forEach((b) => b.classList.toggle('is-active', b === btn))
       // Fights and transformations read better wordless, so follow the scene
       // unless the user has already expressed a preference.
       if (!state.voiceTouched) {
         state.voice = state.scene === 'motivation' ? 'spoken' : 'silent'
-        forge.querySelectorAll('[data-voice-btn]').forEach(b =>
-          b.classList.toggle('is-active', b.dataset.voiceBtn === state.voice))
+        forge
+          .querySelectorAll('[data-voice-btn]')
+          .forEach((b) => b.classList.toggle('is-active', b.dataset.voiceBtn === state.voice))
       }
       refreshStyleSummary()
     })
   })
 
-  forge.querySelectorAll('[data-voice-btn]').forEach(btn => {
+  forge.querySelectorAll('[data-voice-btn]').forEach((btn) => {
     btn.addEventListener('click', () => {
       state.voice = btn.dataset.voiceBtn
       state.voiceTouched = true
-      forge.querySelectorAll('[data-voice-btn]').forEach(b =>
-        b.classList.toggle('is-active', b === btn))
+      forge
+        .querySelectorAll('[data-voice-btn]')
+        .forEach((b) => b.classList.toggle('is-active', b === btn))
       refreshStyleSummary()
     })
   })
 
   /* ── Guided: meme caption on/off. Burned-in text can bury a strong image,
      so the user decides before generating. ── */
-  forge.querySelectorAll('[data-captions-btn]').forEach(btn => {
+  forge.querySelectorAll('[data-captions-btn]').forEach((btn) => {
     btn.addEventListener('click', () => {
       state.captions = btn.dataset.captionsBtn === 'on'
       refreshStyleSummary()
-      forge.querySelectorAll('[data-captions-btn]').forEach(b =>
-        b.classList.toggle('is-active', b === btn))
+      forge
+        .querySelectorAll('[data-captions-btn]')
+        .forEach((b) => b.classList.toggle('is-active', b === btn))
     })
   })
 
   /* ── Guided: team character (video: Meketa default; PFP: Custom default) ── */
-  forge.querySelectorAll('[data-char-btn]').forEach(btn => {
+  forge.querySelectorAll('[data-char-btn]').forEach((btn) => {
     btn.addEventListener('click', () => selectCharacter(btn.dataset.charBtn))
   })
 
@@ -270,10 +312,12 @@ if (forge) {
   async function run() {
     const ui = MODE_UI[state.mode]
     const text = inputEl.value.trim()
-    if (ui.requireInput && !text) { inputEl.focus(); return }
+    if (ui.requireInput && !text) {
+      inputEl.focus()
+      return
+    }
 
-    // Telegram login + Saiyan membership gate. No-op (returns true) until the
-    // backend is configured, so the demo keeps working without secrets.
+    // Verify Telegram access when configured, before starting generation.
     const allowed = await ensureAccess()
     if (!allowed) return
 
@@ -281,7 +325,17 @@ if (forge) {
     // silently dropped from the request.
     if (state.mode === 'pfp' && state.uploadPromise) await state.uploadPromise
 
-    const payload = { input: text, opts: { aura: state.aura, character: state.character, captions: state.captions, transform: state.transform, scene: state.scene, voice: state.voice } }
+    const payload = {
+      input: text,
+      opts: {
+        aura: state.aura,
+        character: state.character,
+        captions: state.captions,
+        transform: state.transform,
+        scene: state.scene,
+        voice: state.voice,
+      },
+    }
     if (state.mode === 'pfp' && state.uploadData) payload.image = state.uploadData
 
     startLoading(ui)
@@ -310,12 +364,14 @@ if (forge) {
     }, ui.cycleMs || 1200)
   }
 
-  // Friendly copy for live-generation errors. Nothing is spent on a failure.
+  // User-facing generation errors. Credit accounting is owned by the backend.
   const ERROR_COPY = {
-    insufficient_credits: 'You are out of credits, warrior. Top up on Telegram and come back stronger.',
+    insufficient_credits:
+      'You are out of credits, warrior. Top up on Telegram and come back stronger.',
     daily_limit: 'You hit the daily limit. Rest up and return stronger tomorrow.',
     job_in_progress: 'One creation at a time. Your last one is still charging.',
-    blocked_by_safety: 'That wording did not pass the content check. Nothing was spent. Try saying it a different way.',
+    blocked_by_safety:
+      'That wording did not pass the content check. Nothing was spent. Try saying it a different way.',
     not_logged_in: 'Connect your Telegram to power up.',
     not_member: 'Join the Saiyan Telegram to unlock creations.',
     timed_out: 'The forge took too long. Nothing was spent. Try again.',
@@ -330,7 +386,8 @@ if (forge) {
     if (result.error) {
       forge.dataset.output = 'concept'
       if (conceptTagEl) conceptTagEl.textContent = 'POWER CHECK'
-      conceptPromptEl.textContent = ERROR_COPY[result.error] || 'The forge misfired. Nothing was spent. Try again in a moment.'
+      conceptPromptEl.textContent =
+        ERROR_COPY[result.error] || 'The forge misfired. Nothing was spent. Try again in a moment.'
       captionEl.textContent = 'Not this time'
       resultHintEl.textContent = 'Nothing was spent'
       /* Only an empty balance is worth a purchase prompt. ?start=buy is a
@@ -350,9 +407,8 @@ if (forge) {
       playVideo(result.asset)
     } else if (result.output === 'image' && result.asset) {
       forge.dataset.output = 'image'
-      captionEl.textContent = state.mode === 'pfp'
-        ? 'Your Saiyan PFP is awakened.'
-        : 'Your $SAIYAN meme is ready.'
+      captionEl.textContent =
+        state.mode === 'pfp' ? 'Your Saiyan PFP is awakened.' : 'Your $SAIYAN meme is ready.'
       resultHintEl.textContent = `${result.meta?.character ? result.meta.character + ' · ' : ''}${result.free ? 'Generated · free creation' : 'Generated'}`
       showImage(result.asset)
     } else {
@@ -373,7 +429,10 @@ if (forge) {
     soundBtn.hidden = true
     if (downloadEl) {
       downloadEl.setAttribute('href', src)
-      downloadEl.setAttribute('download', state.mode === 'pfp' ? 'saiyan-pfp.png' : 'saiyan-meme.png')
+      downloadEl.setAttribute(
+        'download',
+        state.mode === 'pfp' ? 'saiyan-pfp.png' : 'saiyan-meme.png',
+      )
     }
     if (!imageEl) return
     imageEl.onload = () => forge.classList.add('has-image')
@@ -400,14 +459,25 @@ if (forge) {
 
     video.onloadeddata = () => {
       forge.classList.add('has-video')
-      video.muted = false                       // the GENERATE click is the gesture
+      video.muted = false // the GENERATE click is the gesture
       const p = video.play()
       if (p && p.then) {
-        p.then(() => { setSound(false); soundBtn.hidden = false })
-         .catch(() => { setSound(true); video.play().catch(() => {}); soundBtn.hidden = false })
-      } else { setSound(false); soundBtn.hidden = false }
+        p.then(() => {
+          setSound(false)
+          soundBtn.hidden = false
+        }).catch(() => {
+          setSound(true)
+          video.play().catch(() => {})
+          soundBtn.hidden = false
+        })
+      } else {
+        setSound(false)
+        soundBtn.hidden = false
+      }
     }
-    video.onerror = () => { forge.classList.remove('has-video') }  // missing file -> placeholder
+    video.onerror = () => {
+      forge.classList.remove('has-video')
+    } // missing file -> placeholder
     video.load()
   }
 
@@ -435,7 +505,7 @@ if (forge) {
       a.click()
       a.remove()
       setTimeout(() => URL.revokeObjectURL(url), 4000)
-    } catch (err) {
+    } catch {
       // Fallback: let the browser open it normally.
       window.open(href, '_blank', 'noopener')
     } finally {
@@ -446,7 +516,9 @@ if (forge) {
   /* ── Reset ── */
   function reset() {
     clearInterval(loadingTimer)
-    try { video && video.pause() } catch (e) {}
+    try {
+      video && video.pause()
+    } catch {}
     forge.classList.remove('has-video', 'has-image')
     forge.dataset.state = 'input'
     inputEl.focus()
@@ -508,7 +580,9 @@ if (forge) {
 
     const overlay = document.createElement('div')
     overlay.className = 'saiyan-gate'
-    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove() })
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.remove()
+    })
     const card = document.createElement('div')
     card.className = 'saiyan-gate__card saiyan-gate__card--gallery'
     card.setAttribute('role', 'dialog')
@@ -526,12 +600,16 @@ if (forge) {
 
     const grid = card.querySelector('.creator__gallery-grid')
     try {
-      const res = await fetch(`${base}/api/ai/history`, { credentials: 'include', headers: authHeaders() })
+      const res = await fetch(`${base}/api/ai/history`, {
+        credentials: 'include',
+        headers: authHeaders(),
+      })
       const data = await res.json()
       if (!res.ok || !data.ok) throw new Error(data.error || 'failed')
       grid.textContent = ''
       if (!data.items.length) {
-        grid.innerHTML = '<p class="saiyan-gate__text">Nothing here yet. Generate your first creation.</p>'
+        grid.innerHTML =
+          '<p class="saiyan-gate__text">Nothing here yet. Generate your first creation.</p>'
         return
       }
       for (const item of data.items) {
@@ -547,7 +625,10 @@ if (forge) {
           v.playsInline = true
           v.preload = 'metadata'
           v.addEventListener('mouseenter', () => v.play().catch(() => {}))
-          v.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0 })
+          v.addEventListener('mouseleave', () => {
+            v.pause()
+            v.currentTime = 0
+          })
           tile.appendChild(v)
         } else {
           const img = document.createElement('img')
@@ -570,7 +651,8 @@ if (forge) {
         grid.appendChild(cell)
       }
     } catch {
-      grid.innerHTML = '<p class="saiyan-gate__text">Could not load your creations. Connect Telegram and try again.</p>'
+      grid.innerHTML =
+        '<p class="saiyan-gate__text">Could not load your creations. Connect Telegram and try again.</p>'
     }
   }
 
@@ -578,7 +660,7 @@ if (forge) {
 
   $('[data-generate]')?.addEventListener('click', run)
   $('[data-again]')?.addEventListener('click', reset)
-  inputEl.addEventListener('keydown', e => {
+  inputEl.addEventListener('keydown', (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') run()
   })
 

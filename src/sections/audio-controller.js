@@ -2,17 +2,19 @@
    the soundtrack list act as remotes for the SAME playback. Nothing ever plays
    over anything else, and every surface stays in sync via subscribe(). */
 let audio = null
-let playlist = []            // ordered absolute srcs, used for auto-advance
+let playlist = [] // ordered absolute srcs, used for auto-advance
 const subs = new Set()
 
-const abs = src => new URL(src, location.origin).href
-const emit = () => subs.forEach(fn => fn())
+const abs = (src) => new URL(src, location.origin).href
+const emit = () => subs.forEach((fn) => fn())
 
 function playSrc(src) {
   const a = ensure()
   const next = abs(src)
   if (a.src !== next) a.src = next
-  try { a.currentTime = 0 } catch {}
+  try {
+    a.currentTime = 0
+  } catch {}
   return a.play()
 }
 
@@ -36,13 +38,15 @@ function remember() {
   if (!audio?.src) return
   try {
     sessionStorage.setItem(MEMORY_KEY, JSON.stringify({ src: audio.src, time: audio.currentTime }))
-  } catch { /* private mode or storage full — playback is unaffected */ }
+  } catch {
+    /* private mode or storage full — playback is unaffected */
+  }
 }
 
 function ensure() {
   if (audio) return audio
   audio = new Audio()
-  audio.preload = 'none'     // only fetch a track once it's actually played
+  audio.preload = 'none' // only fetch a track once it's actually played
   audio.volume = 0.7
   audio.addEventListener('play', emit)
   audio.addEventListener('pause', emit)
@@ -53,28 +57,56 @@ function ensure() {
     if (next) playSrc(next).catch(() => emit())
     emit()
   })
-  window.addEventListener('pagehide', () => { remember(); audio.pause() }, { once: true })
+  window.addEventListener(
+    'pagehide',
+    () => {
+      remember()
+      audio.pause()
+    },
+    { once: true },
+  )
   return audio
 }
 
 export const audioPlayer = {
   /* Register the ordered tracklist so finished songs auto-advance. */
-  setPlaylist(srcs) { playlist = srcs.map(abs) },
+  setPlaylist(srcs) {
+    playlist = srcs.map(abs)
+  },
 
   /* Seed a fallback playlist only if the soundtrack list hasn't set one. */
-  setPlaylistIfEmpty(srcs) { if (!playlist.length) playlist = srcs.map(abs) },
+  setPlaylistIfEmpty(srcs) {
+    if (!playlist.length) playlist = srcs.map(abs)
+  },
 
   /* fn() runs on every play / pause / seek / time tick. Returns an unsubscribe. */
-  subscribe(fn) { subs.add(fn); return () => subs.delete(fn) },
+  subscribe(fn) {
+    subs.add(fn)
+    return () => subs.delete(fn)
+  },
 
-  get playing()     { return !!audio && !audio.paused },
-  get muted()       { return !!audio && audio.muted },
-  get hasTrack()    { return !!audio && !!audio.src },
-  get currentTime() { return audio?.currentTime || 0 },
-  get duration()    { return audio?.duration || 0 },
+  get playing() {
+    return !!audio && !audio.paused
+  },
+  get muted() {
+    return !!audio && audio.muted
+  },
+  get hasTrack() {
+    return !!audio && !!audio.src
+  },
+  get currentTime() {
+    return audio?.currentTime || 0
+  },
+  get duration() {
+    return audio?.duration || 0
+  },
 
-  isCurrent(src) { return !!audio && audio.src === abs(src) },
-  isPlaying(src) { return this.isCurrent(src) && this.playing },
+  isCurrent(src) {
+    return !!audio && audio.src === abs(src)
+  },
+  isPlaying(src) {
+    return this.isCurrent(src) && this.playing
+  },
 
   play(src) {
     playSrc(src).catch(() => emit())
@@ -90,17 +122,23 @@ export const audioPlayer = {
     try {
       const raw = sessionStorage.getItem(MEMORY_KEY)
       saved = raw ? JSON.parse(raw) : null
-    } catch { /* unreadable storage — start from the top */ }
+    } catch {
+      /* unreadable storage — start from the top */
+    }
 
     if (!saved?.src) return this.play(src)
 
     const a = ensure()
-    a.muted = false            // entering is a request for sound
+    a.muted = false // entering is a request for sound
     if (a.src !== saved.src) a.src = saved.src
     const seek = () => {
       // Landing on the last moment of a track would look like nothing playing.
       const t = saved.time || 0
-      try { a.currentTime = a.duration && t >= a.duration - 1.5 ? 0 : t } catch { /* not seekable yet */ }
+      try {
+        a.currentTime = a.duration && t >= a.duration - 1.5 ? 0 : t
+      } catch {
+        /* not seekable yet */
+      }
     }
     if (a.readyState > 0) seek()
     else a.addEventListener('loadedmetadata', seek, { once: true })
@@ -116,9 +154,13 @@ export const audioPlayer = {
     emit()
   },
 
-  pause() { audio?.pause() },
+  pause() {
+    audio?.pause()
+  },
 
-  resume() { audio?.play().catch(() => emit()) },
+  resume() {
+    audio?.play().catch(() => emit())
+  },
 
   unmute() {
     const a = ensure()
@@ -134,7 +176,7 @@ export const audioPlayer = {
 
   toggle(src) {
     const a = ensure()
-    if (this.isCurrent(src)) (a.paused ? a.play().catch(() => {}) : a.pause())
+    if (this.isCurrent(src)) a.paused ? a.play().catch(() => {}) : a.pause()
     else this.play(src)
   },
 

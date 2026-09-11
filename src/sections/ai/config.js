@@ -1,10 +1,8 @@
-/* SAIYAN CREATOR — central config. No secrets here: the provider keys live on
-   the backend server; the browser only ever calls our own API. */
+// Public browser configuration. Provider credentials belong on the backend.
 
-// Access gate (Telegram login + Saiyan group membership). Every value here is
-// PUBLIC and safe to ship in the browser bundle. The bot TOKEN is never here.
+// Telegram login and community membership settings.
 const AUTH = {
-  apiBase: import.meta.env.VITE_AUTH_API_BASE || '',          // e.g. http://localhost:8787
+  apiBase: import.meta.env.VITE_AUTH_API_BASE || '', // e.g. http://localhost:8787
   botUsername: import.meta.env.VITE_TELEGRAM_BOT_USERNAME || '',
   joinUrl: import.meta.env.VITE_SAIYAN_JOIN_URL || '',
 }
@@ -16,9 +14,7 @@ AUTH.enabled = Boolean(AUTH.apiBase && AUTH.botUsername)
 const GEN_BASE = import.meta.env.VITE_AI_API_BASE || import.meta.env.VITE_AUTH_API_BASE || ''
 
 export const AI_CONFIG = {
-  // Our server endpoint. The browser calls THIS, never a provider directly,
-  // so no key is ever exposed client-side. Unset -> generation shows a real
-  // "creator offline" error; there is no demo fallback.
+  // An unset endpoint makes generation report that the service is offline.
   apiBase: GEN_BASE,
 
   // Telegram login + membership gate in front of generation (see ai/auth.js).

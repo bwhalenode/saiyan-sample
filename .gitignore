@@ -3,17 +3,15 @@ dist
 .DS_Store
 *.local
 
-# Private infrastructure lives in E:\saiyan-ai-infra, not the public website repo
+# Backend services are maintained in the separate saiyan-ai-infra repository.
 bots/
 server/
 shared/
 saiyan-ai-infra/
 
-# Env files — never commit real secrets (keep the .env.example files)
-.env
-.env.local
-**/.env
-**/.env.local
+# Local environment values; commit only the empty configuration example.
+.env*
+!.env.example
 
 # Local Claude Code settings & machine-specific tool permissions
 .claude/
@@ -28,4 +26,3 @@ saiyan-ai-infra/
 # Local source-staging for build assets (shipped copies live in public/)
 build-assets/
 .vercel
-.env*

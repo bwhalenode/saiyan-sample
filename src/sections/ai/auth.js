@@ -1,11 +1,7 @@
-/* SAIYAN AI — access gate (browser side).
-   No phone number, no login widget. Flow:
-     1) "Connect Telegram" opens t.me/<bot>?start=<nonce> in a new tab.
-     2) The user taps Start in their Telegram app; the bot confirms to our backend.
-     3) We poll the backend until linked, then check Saiyan group membership.
-   Talks ONLY to our own backend (AI_CONFIG.auth.apiBase) — never sees the bot
-   token. When the backend isn't configured the gate is a no-op so the demo keeps
-   working; nothing here can crash the site. */
+/* Browser access gate: connect through the Telegram bot, poll for the linked
+   session, then verify group membership. The backend owns the bot token.
+   An unconfigured gate allows the UI to proceed; generation handles its own
+   service configuration and errors. */
 
 import './auth.css'
 import { AI_CONFIG } from './config.js'
@@ -82,7 +78,9 @@ function finish(ok) {
 export function ensureAccess() {
   if (!cfg.enabled) {
     if (import.meta.env.DEV) {
-      console.info('[saiyan-auth] gate disabled (set VITE_AUTH_API_BASE + VITE_TELEGRAM_BOT_USERNAME to enable).')
+      console.info(
+        '[saiyan-auth] gate disabled (set VITE_AUTH_API_BASE + VITE_TELEGRAM_BOT_USERNAME to enable).',
+      )
     }
     return Promise.resolve(true)
   }
@@ -99,7 +97,9 @@ async function begin() {
       showChip(session.user)
       const m = await apiGet('/api/membership')
       if (m && m.isMember) return finish(true)
-      return openJoin(session.user, m && m.joinUrl, () => apiGet('/api/membership').then((r) => r && r.isMember))
+      return openJoin(session.user, m && m.joinUrl, () =>
+        apiGet('/api/membership').then((r) => r && r.isMember),
+      )
     }
     openConnect()
   } catch {
@@ -139,7 +139,9 @@ function showWaiting(nonce, joinUrl) {
       'We opened the Saiyan bot in a new tab. Tap Start there — this updates automatically.',
     )
     card.appendChild(spinner())
-    const retry = telegramButton('Reopen Telegram', () => window.open(`https://t.me/${cfg.botUsername}?start=${nonce}`, '_blank', 'noopener'))
+    const retry = telegramButton('Reopen Telegram', () =>
+      window.open(`https://t.me/${cfg.botUsername}?start=${nonce}`, '_blank', 'noopener'),
+    )
     card.appendChild(wrapRow(retry))
   })
 
@@ -150,7 +152,9 @@ function showWaiting(nonce, joinUrl) {
       stopPoll()
       return openConnectExpired()
     }
-    const res = await apiGet(`/api/link/status?nonce=${encodeURIComponent(nonce)}`).catch(() => null)
+    const res = await apiGet(`/api/link/status?nonce=${encodeURIComponent(nonce)}`).catch(
+      () => null,
+    )
     if (!res) return
     if (res.expired) {
       stopPoll()
@@ -171,7 +175,12 @@ function showWaiting(nonce, joinUrl) {
 
 function openConnectExpired() {
   openModal((card) => {
-    heading(card, 'SAIYAN CREATOR', 'Connection timed out', 'No worries — start the connection again.')
+    heading(
+      card,
+      'SAIYAN CREATOR',
+      'Connection timed out',
+      'No worries — start the connection again.',
+    )
     card.appendChild(wrapRow(telegramButton('Connect Telegram', startConnect)))
   })
 }

@@ -19,9 +19,7 @@
   padding: 30px 26px 26px;
   border-radius: 18px;
   border: 1px solid rgba(255, 210, 48, 0.28);
-  background:
-    radial-gradient(circle at 50% 0%, rgba(255, 210, 48, 0.1), transparent 70%),
-    #0b0709;
+  background: radial-gradient(circle at 50% 0%, rgba(255, 210, 48, 0.1), transparent 70%), #0b0709;
   box-shadow: 0 28px 70px rgba(0, 0, 0, 0.6);
   text-align: center;
   animation: saiyan-gate-pop 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -42,7 +40,9 @@
   cursor: pointer;
   transition: color 0.2s;
 }
-.saiyan-gate__close:hover { color: var(--gold, #ffd230); }
+.saiyan-gate__close:hover {
+  color: var(--gold, #ffd230);
+}
 
 .saiyan-gate__kicker {
   margin: 0 0 6px;
@@ -93,17 +93,36 @@
   letter-spacing: 0.12em;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.15s;
 }
-.saiyan-gate__btn:hover { background: rgba(255, 210, 48, 0.14); border-color: var(--gold, #ffd230); }
+.saiyan-gate__btn:hover {
+  background: rgba(255, 210, 48, 0.14);
+  border-color: var(--gold, #ffd230);
+}
 
 .saiyan-gate__btn--primary {
   border-color: transparent;
-  background: linear-gradient(135deg, var(--gold-white, #fff5c2), var(--gold, #ffd230) 40%, var(--gold-hot, #ffa800));
+  background: linear-gradient(
+    135deg,
+    var(--gold-white, #fff5c2),
+    var(--gold, #ffd230) 40%,
+    var(--gold-hot, #ffa800)
+  );
   color: #080507;
   font-weight: 700;
 }
-.saiyan-gate__btn--primary:hover { filter: brightness(1.05); background: linear-gradient(135deg, var(--gold-white, #fff5c2), var(--gold, #ffd230) 40%, var(--gold-hot, #ffa800)); }
+.saiyan-gate__btn--primary:hover {
+  filter: brightness(1.05);
+  background: linear-gradient(
+    135deg,
+    var(--gold-white, #fff5c2),
+    var(--gold, #ffd230) 40%,
+    var(--gold-hot, #ffa800)
+  );
+}
 
 /* Official-style Telegram button: blue with the white paper-plane logo */
 .saiyan-gate__btn--tg {
@@ -121,9 +140,15 @@
   background: linear-gradient(180deg, #36b3f0, #1f95cf);
   box-shadow: 0 8px 22px rgba(34, 158, 217, 0.35);
 }
-.saiyan-gate__btn--tg svg { width: 18px; height: 18px; flex: none; }
+.saiyan-gate__btn--tg svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
 
-.saiyan-gate__btn--shake { animation: saiyan-gate-shake 0.45s ease; }
+.saiyan-gate__btn--shake {
+  animation: saiyan-gate-shake 0.45s ease;
+}
 
 /* Waiting-for-Telegram spinner */
 .saiyan-gate__spinner {
@@ -166,19 +191,56 @@
   font-size: 13px;
   line-height: 1;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
-.creator__tg-chip-x:hover { background: var(--electric, #4ad8ff); color: #061015; }
+.creator__tg-chip-x:hover {
+  background: var(--electric, #4ad8ff);
+  color: #061015;
+}
 
-@keyframes saiyan-gate-fade { from { opacity: 0; } to { opacity: 1; } }
-@keyframes saiyan-gate-pop { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: none; } }
-@keyframes saiyan-gate-spin { to { transform: rotate(360deg); } }
+@keyframes saiyan-gate-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes saiyan-gate-pop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes saiyan-gate-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 @keyframes saiyan-gate-shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  75% { transform: translateX(6px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .saiyan-gate, .saiyan-gate__card, .saiyan-gate__btn--shake, .saiyan-gate__spinner { animation: none; }
+  .saiyan-gate,
+  .saiyan-gate__card,
+  .saiyan-gate__btn--shake,
+  .saiyan-gate__spinner {
+    animation: none;
+  }
 }

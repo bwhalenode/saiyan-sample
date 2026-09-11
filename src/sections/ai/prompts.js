@@ -1,21 +1,16 @@
-/* SAIYAN AI — prompt builders. Pure functions: mode + user input -> a structured
-   prompt object ready for a future generation API. Kept free of any DOM/UI so the
-   service layer (or a server) can call them directly.
-
-   NOTE: AURAS mirrors the backend table in saiyan-ai-infra
-   shared/services/prompts.js. The backend builds the real provider prompt and
-   ignores anything sent from here, so keep the ids in sync when adding options.
-   'rh' is the house green (--gold: #9EE84B) and the default. */
+/* Client-side prompt builders and aura options. Live provider prompts are built
+   by the backend in saiyan-ai-infra/shared/services/prompts.js; keep aura IDs
+   aligned when adding options. The default 'rh' aura uses the site's green. */
 
 export const AURAS = {
-  rh:       { id: 'rh',       label: 'Saiyan green aura',  light: 'radiant lime green' },
-  golden:   { id: 'golden',   label: 'Golden aura',        light: 'radiant gold' },
-  emerald:  { id: 'emerald',  label: 'Emerald-blue aura',  light: 'emerald and deep blue' },
+  rh: { id: 'rh', label: 'Saiyan green aura', light: 'radiant lime green' },
+  golden: { id: 'golden', label: 'Golden aura', light: 'radiant gold' },
+  emerald: { id: 'emerald', label: 'Emerald-blue aura', light: 'emerald and deep blue' },
   electric: { id: 'electric', label: 'Electric-blue aura', light: 'electric cyan-blue' },
-  dark:     { id: 'dark',     label: 'Dark warrior',       light: 'shadowed gold rim light' },
+  dark: { id: 'dark', label: 'Dark warrior', light: 'shadowed gold rim light' },
 }
 
-const auraLight = id => (AURAS[id] || AURAS.rh).light
+const auraLight = (id) => (AURAS[id] || AURAS.rh).light
 
 /* MULTI-MOTIVATION (primary): a short emotional mood -> a cinematic Super Saiyan
    comeback video concept. Intense and motivational, never cringe. */
@@ -28,7 +23,8 @@ export function buildMotivationPrompt(mood, opts = {}) {
     format: { ratio: '9:16', duration: '6-10s', style: 'cinematic vertical short' },
     aura,
     tone: 'intense, cinematic, motivational, sincere — never cringe',
-    emotionalArc: 'hits a low / falls -> spark of will -> power-up -> rises stronger -> ready to fight another day',
+    emotionalArc:
+      'hits a low / falls -> spark of will -> power-up -> rises stronger -> ready to fight another day',
     subject: 'a lone Super Saiyan-style warrior (silhouetted, heroic)',
     userMood: text,
     prompt:
@@ -62,7 +58,7 @@ export function buildPfpPrompt(opts = {}) {
 }
 
 /* MEME: a user idea -> a funny $SAIYAN / Super Saiyan / crypto meme concept. */
-export function buildMemePrompt(idea, opts = {}) {
+export function buildMemePrompt(idea, _opts = {}) {
   const text = (idea || '').trim()
   return {
     mode: 'meme',

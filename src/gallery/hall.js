@@ -56,9 +56,19 @@ export function mountHall(root, { mode = 'page', onClose } = {}) {
     listeners.push(() => target.removeEventListener(type, fn, opt))
   }
 
-  const state = Object.fromEntries(RAILS.map((r) => [r.key, {
-    items: [], nextBefore: null, done: false, loading: false, failed: false, started: false,
-  }]))
+  const state = Object.fromEntries(
+    RAILS.map((r) => [
+      r.key,
+      {
+        items: [],
+        nextBefore: null,
+        done: false,
+        loading: false,
+        failed: false,
+        started: false,
+      },
+    ]),
+  )
 
   /* ── Shell ──────────────────────────────────────────────────────────────── */
 
@@ -92,10 +102,18 @@ export function mountHall(root, { mode = 'page', onClose } = {}) {
   // the document, which would take the soundtrack down with it.
   if (mode === 'view') {
     on(back, 'click', () => onClose?.())
-    on(brand, 'click', (e) => { e.preventDefault(); onClose?.() })
-    on(cta, 'click', (e) => { e.preventDefault(); onClose?.('#creator') })
+    on(brand, 'click', (e) => {
+      e.preventDefault()
+      onClose?.()
+    })
+    on(cta, 'click', (e) => {
+      e.preventDefault()
+      onClose?.('#creator')
+    })
   } else {
-    on(back, 'click', () => { location.href = '/' })
+    on(back, 'click', () => {
+      location.href = '/'
+    })
   }
 
   const main = el('main', 'gal-main')
@@ -247,7 +265,10 @@ export function mountHall(root, { mode = 'page', onClose } = {}) {
         // Preview on hover only. Autoplaying a wall of video would cost the
         // visitor real bandwidth and drown the page.
         on(node, 'mouseenter', () => v.play().catch(() => {}))
-        on(node, 'mouseleave', () => { v.pause(); v.currentTime = 0 })
+        on(node, 'mouseleave', () => {
+          v.pause()
+          v.currentTime = 0
+        })
       }
       node.appendChild(v)
       node.appendChild(el('span', 'gal-card__play', '▶'))
@@ -261,7 +282,9 @@ export function mountHall(root, { mode = 'page', onClose } = {}) {
     }
 
     const d = new Date(item.createdAt)
-    node.appendChild(el('span', 'gal-card__tag', `${rail.tag} · ${d.getDate()}/${d.getMonth() + 1}`))
+    node.appendChild(
+      el('span', 'gal-card__tag', `${rail.tag} · ${d.getDate()}/${d.getMonth() + 1}`),
+    )
     on(node, 'click', () => openLightbox(rail.key, index))
     return node
   }
@@ -336,8 +359,11 @@ export function mountHall(root, { mode = 'page', onClose } = {}) {
     // already visible in the asset itself, so nothing new is exposed here.
     const line = item.meta?.line || item.meta?.caption
     if (line || item.meta?.character) {
-      const cap = el('figcaption', 'gal-light__cap',
-        [item.meta?.character?.toUpperCase(), line].filter(Boolean).join(' — '))
+      const cap = el(
+        'figcaption',
+        'gal-light__cap',
+        [item.meta?.character?.toUpperCase(), line].filter(Boolean).join(' — '),
+      )
       stage.appendChild(cap)
     }
 
@@ -367,7 +393,9 @@ export function mountHall(root, { mode = 'page', onClose } = {}) {
   on(close, 'click', closeLightbox)
   on(navPrev, 'click', () => step(-1))
   on(navNext, 'click', () => step(1))
-  on(lightbox, 'click', (e) => { if (e.target === lightbox) closeLightbox() })
+  on(lightbox, 'click', (e) => {
+    if (e.target === lightbox) closeLightbox()
+  })
 
   on(document, 'keydown', (e) => {
     if (lightbox.hidden) {
@@ -381,13 +409,25 @@ export function mountHall(root, { mode = 'page', onClose } = {}) {
 
   // Swipe the lightbox on touch, the way a phone gallery is expected to behave.
   let touchX = null
-  on(lightbox, 'touchstart', (e) => { touchX = e.changedTouches[0].clientX }, { passive: true })
-  on(lightbox, 'touchend', (e) => {
-    if (touchX === null) return
-    const dx = e.changedTouches[0].clientX - touchX
-    if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1)
-    touchX = null
-  }, { passive: true })
+  on(
+    lightbox,
+    'touchstart',
+    (e) => {
+      touchX = e.changedTouches[0].clientX
+    },
+    { passive: true },
+  )
+  on(
+    lightbox,
+    'touchend',
+    (e) => {
+      if (touchX === null) return
+      const dx = e.changedTouches[0].clientX - touchX
+      if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1)
+      touchX = null
+    },
+    { passive: true },
+  )
 
   /* ── Boot ───────────────────────────────────────────────────────────────── */
 
@@ -397,21 +437,26 @@ export function mountHall(root, { mode = 'page', onClose } = {}) {
   // not pull three categories at once.
   let io = null
   if ('IntersectionObserver' in window) {
-    io = new IntersectionObserver((entries) => {
-      for (const en of entries) {
-        if (!en.isIntersecting) continue
-        const key = en.target.dataset.rail
-        if (!state[key].started) loadPage(key)
-        io.unobserve(en.target)
-      }
-    }, { root: mode === 'view' ? root : null, rootMargin: '300px' })
+    io = new IntersectionObserver(
+      (entries) => {
+        for (const en of entries) {
+          if (!en.isIntersecting) continue
+          const key = en.target.dataset.rail
+          if (!state[key].started) loadPage(key)
+          io.unobserve(en.target)
+        }
+      },
+      { root: mode === 'view' ? root : null, rootMargin: '300px' },
+    )
     for (const rail of RAILS) io.observe(state[rail.key].el)
   } else {
     for (const rail of RAILS) loadPage(rail.key)
   }
 
   return {
-    focus() { back.focus() },
+    focus() {
+      back.focus()
+    },
     destroy() {
       io?.disconnect()
       for (const off of listeners) off()

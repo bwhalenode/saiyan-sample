@@ -33,16 +33,20 @@ export function initBuy() {
     lastFocused?.focus?.()
   }
 
-  document.querySelectorAll('[data-buy]').forEach(trigger => {
-    trigger.addEventListener('click', event => {
-      event.preventDefault()   // the href stays as a no-JS fallback
+  document.querySelectorAll('[data-buy]').forEach((trigger) => {
+    trigger.addEventListener('click', (event) => {
+      event.preventDefault() // the href stays as a no-JS fallback
       open()
     })
   })
 
   closeBtn?.addEventListener('click', close)
-  modal.addEventListener('click', event => { if (event.target === modal) close() })
-  window.addEventListener('keydown', event => { if (event.key === 'Escape' && !modal.hidden) close() })
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) close()
+  })
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !modal.hidden) close()
+  })
 
   phantomBtn?.addEventListener('click', () => {
     if (coarsePointer) {

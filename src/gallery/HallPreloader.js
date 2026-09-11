@@ -1,14 +1,5 @@
-/* The Hall's preloader: the landing page's AsciiPreloader, subclassed.
-
-   Same crystal, same reveal, same HUD, same prompt styling — inherited, not
-   copied. Only two things differ, and both are overrides here so that
-   preloader/AsciiPreloader.js stays exactly as the landing page needs it:
-
-     - the prompt reads ENTER THE HALL
-     - it exits by rushing the crystal at the viewer instead of the hero's
-       transformation blast
-
-   Nothing in this file runs on the landing page. */
+/* Reuse the landing preloader with a Hall-specific prompt and zoom exit.
+   This subclass is used only by the standalone gallery page. */
 
 import { AsciiPreloader } from '../preloader/AsciiPreloader.js'
 
@@ -24,13 +15,7 @@ export class HallPreloader extends AsciiPreloader {
     if (!armedBefore && this._armed) this._prompt.textContent = 'ENTER THE HALL'
   }
 
-  /* _onTap() calls this._burst(), so overriding it is enough to change how the
-     preloader leaves — no need to touch the tap handling itself.
-
-     Nothing from the landing page's exit is reused: no flare, no shockwave, no
-     flash, no shake, and no delay before anything happens. On the tap the image
-     starts zooming and fading in the same frame, and the Hall is there when it
-     has gone. */
+  // The inherited tap handler calls this override; zoom and fade start together.
   async _burst() {
     this._prompt.classList.remove('is-ready')
 
