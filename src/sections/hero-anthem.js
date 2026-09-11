@@ -8,7 +8,7 @@ const ANTHEM_SRC = '/music/awaken-the-saiyan.mp3'
 
 export function initHeroAnthem() {
   const wrap = document.getElementById('hero-anthem-wrap')
-  const btn  = document.getElementById('hero-anthem')
+  const btn = document.getElementById('hero-anthem')
   if (!wrap || !btn) return
 
   const nameEl = wrap.querySelector('.hero__anthem-name')
@@ -17,11 +17,14 @@ export function initHeroAnthem() {
   audioPlayer.setPlaylistIfEmpty?.([ANTHEM_SRC])
 
   function render() {
-    const on = audioPlayer.playing && !audioPlayer.muted   // sound audible
+    const on = audioPlayer.playing && !audioPlayer.muted // sound audible
     wrap.classList.toggle('is-on', on)
     wrap.classList.toggle('is-muted', !on)
     btn.setAttribute('aria-pressed', String(on))
-    btn.setAttribute('aria-label', on ? 'Mute the $SAIYAN soundtrack' : 'Unmute the $SAIYAN soundtrack')
+    btn.setAttribute(
+      'aria-label',
+      on ? 'Mute the $SAIYAN soundtrack' : 'Unmute the $SAIYAN soundtrack',
+    )
     if (nameEl) nameEl.textContent = on ? 'TAP TO MUTE' : 'TAP FOR SOUND'
   }
 

@@ -1,10 +1,10 @@
 import Lenis from 'lenis'
-import gsap  from 'gsap'
+import gsap from 'gsap'
 
 export function initLenis() {
   const lenis = new Lenis({
     duration: 1.2,
-    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     touchMultiplier: 1.8,
     infinite: false,
   })

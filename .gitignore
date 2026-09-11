@@ -3,8 +3,21 @@ dist
 .DS_Store
 *.local
 
+# Backend services are maintained in the separate saiyan-ai-infra repository.
+bots/
+server/
+shared/
+saiyan-ai-infra/
+
+# Local environment values; commit only the empty configuration example.
+.env*
+!.env.example
+
 # Local Claude Code settings & machine-specific tool permissions
 .claude/
+
+# Local agent/IDE scratch captures
+.codex-remote-attachments/
 
 # Throwaway QA/screenshot captures (root-level only)
 /desktop-*.png
@@ -12,3 +25,4 @@ dist
 
 # Local source-staging for build assets (shipped copies live in public/)
 build-assets/
+.vercel

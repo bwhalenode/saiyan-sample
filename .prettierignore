@@ -1,0 +1,7 @@
+node_modules/
+dist/
+public/
+image-src/
+build-assets/
+package-lock.json
+mood-sample/

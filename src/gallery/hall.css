@@ -1,0 +1,617 @@
+/* Hall of Power — shared by the standalone /gallery.html page and the in-page
+   overlay on the landing page. Everything is scoped under .gal-root: no global
+   reset and no :root tokens, so mounting this inside index.html cannot disturb
+   the landing page styles. */
+
+.gal-root {
+  --bg: #050306;
+  --gold: #9ee84b;
+  --gold-hot: #5fb800;
+  --gold-white: #eaffc0;
+  --ink: #fff7e0;
+  --line: rgba(158, 232, 75, 0.2);
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+  --display: 'Bebas Neue', 'Arial Black', sans-serif;
+  --brand: 'Zen Dots', sans-serif;
+}
+
+/* :where() keeps these at zero specificity. Scoping a plain `a { }` reset under
+   .gal-root would otherwise outrank component classes like .gal-cta and repaint
+   them — which is exactly what happened to the AWAKEN YOURS button once. */
+:where(.gal-root *, .gal-root *::before, .gal-root *::after) {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.gal-root {
+  color: var(--ink);
+  font-family: var(--mono);
+  -webkit-font-smoothing: antialiased;
+}
+:where(.gal-root a) {
+  color: inherit;
+  text-decoration: none;
+}
+:where(.gal-root img, .gal-root video) {
+  display: block;
+  max-width: 100%;
+}
+
+.gal-shell {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+.gal-shell__glow {
+  position: fixed;
+  inset: -30vh 0 auto;
+  height: 70vh;
+  background: radial-gradient(60% 60% at 50% 0%, rgba(158, 232, 75, 0.16), transparent 70%);
+  pointer-events: none;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+.gal-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px clamp(16px, 4vw, 48px);
+}
+/* Brand lockup copied from the landing nav so the two pages read as one site:
+   Zen Dots in lime with the same glow, not the cream used elsewhere here. */
+.gal-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.gal-brand img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 14px rgba(158, 232, 75, 0.4))
+    drop-shadow(0 0 18px rgba(60, 220, 130, 0.16));
+}
+.gal-brand__text {
+  font-family: var(--brand);
+  font-size: 20px;
+  letter-spacing: 0.05em;
+  color: var(--gold);
+  text-shadow:
+    0 0 20px rgba(158, 232, 75, 0.6),
+    0 0 28px rgba(60, 220, 130, 0.12);
+  transition: text-shadow 0.3s;
+}
+.gal-brand:hover .gal-brand__text {
+  text-shadow:
+    0 0 30px rgba(158, 232, 75, 0.9),
+    0 0 38px rgba(60, 220, 130, 0.2);
+}
+
+.gal-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.gal-cta {
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(158, 232, 75, 0.05);
+  color: var(--gold);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  white-space: nowrap;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+.gal-cta:hover {
+  background: rgba(158, 232, 75, 0.13);
+  border-color: var(--gold);
+}
+
+/* Way back to the main page. */
+.gal-back {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(158, 232, 75, 0.05);
+  color: var(--gold);
+  font-size: 19px;
+  line-height: 1;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.2s;
+}
+.gal-back:hover {
+  background: rgba(158, 232, 75, 0.14);
+  border-color: var(--gold);
+  transform: rotate(90deg);
+}
+
+/* ── Head matter ────────────────────────────────────────────────────────── */
+.gal-main {
+  position: relative;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: clamp(16px, 4vw, 40px) clamp(16px, 4vw, 48px) 80px;
+}
+/* Eyebrow + headline use the hero's treatments so this page sits in the same
+   world as the landing page: lime gradient over mono, metallic gold over Bebas. */
+.gal-eyebrow {
+  font-family: var(--mono);
+  font-size: clamp(10px, 1.1vw, 14px);
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  line-height: 1;
+  text-align: center;
+  background: linear-gradient(90deg, var(--gold-hot) 0%, var(--gold) 52%, var(--gold-white) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 12px rgba(158, 232, 75, 0.36));
+  animation: gal-pulse 3.8s ease-in-out infinite;
+}
+@keyframes gal-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px rgba(158, 232, 75, 0.28));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(158, 232, 75, 0.64));
+  }
+}
+
+.gal-title {
+  margin-top: 8px;
+  font-family: var(--display);
+  font-size: clamp(46px, 9vw, 104px);
+  line-height: 0.9;
+  letter-spacing: 0.035em;
+  text-align: center;
+  color: var(--ink);
+  background: linear-gradient(180deg, #fffaf0 0%, #fff5c2 28%, #e4bd58 62%, #a8771d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-text-stroke: 0.7px rgba(185, 151, 68, 0.78);
+  text-shadow:
+    0 1px 0 rgba(255, 250, 240, 0.24),
+    0 3px 0 rgba(5, 3, 6, 0.52),
+    0 5px 12px rgba(5, 3, 6, 0.56),
+    0 0 18px rgba(255, 210, 48, 0.12);
+}
+.gal-sub {
+  margin: 14px auto 0;
+  max-width: 52ch;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 247, 224, 0.55);
+}
+
+/* ── Rails ──────────────────────────────────────────────────────────────────
+   One horizontal, snapping rail per category. The track scrolls natively, so
+   trackpad, wheel-tilt, swipe and keyboard all work without a carousel library
+   and without JS deciding where the scroll position should be. */
+.gal-rails {
+  margin-top: 44px;
+  display: flex;
+  flex-direction: column;
+  gap: 46px;
+}
+
+.gal-rail__head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 clamp(4px, 1vw, 10px);
+  margin-bottom: 14px;
+}
+.gal-rail__title {
+  font-family: var(--display);
+  font-size: clamp(22px, 3vw, 34px);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--gold-white);
+}
+.gal-rail__note {
+  max-width: 68ch;
+  font-size: 9.5px;
+  line-height: 1.7;
+  letter-spacing: 0.05em;
+  color: rgba(255, 247, 224, 0.42);
+}
+
+.gal-rail__viewport {
+  position: relative;
+}
+
+.gal-rail__track {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-padding: 0 clamp(4px, 1vw, 10px);
+  padding: 4px clamp(4px, 1vw, 10px) 14px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+.gal-rail__track::-webkit-scrollbar {
+  display: none;
+}
+.gal-rail__track:focus-visible {
+  outline: 1px solid var(--line);
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
+/* Arrows: pointer affordance only. Hidden until the rail actually overflows,
+   and never shown on touch, where the natural gesture is a swipe. */
+.gal-rail__arrow {
+  position: absolute;
+  top: calc(50% - 7px);
+  transform: translateY(-50%);
+  z-index: 2;
+  display: none;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(5, 3, 6, 0.86);
+  backdrop-filter: blur(4px);
+  color: var(--gold);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity 0.22s,
+    background 0.22s,
+    border-color 0.22s;
+}
+.gal-rail.has-overflow .gal-rail__arrow {
+  display: grid;
+}
+.gal-rail:hover .gal-rail__arrow,
+.gal-rail__arrow:focus-visible {
+  opacity: 1;
+}
+.gal-rail__arrow:hover {
+  background: rgba(158, 232, 75, 0.16);
+  border-color: var(--gold);
+}
+.gal-rail__arrow:disabled {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+.gal-rail__arrow--prev {
+  left: -8px;
+}
+.gal-rail__arrow--next {
+  right: -8px;
+}
+
+@media (pointer: coarse) {
+  .gal-rail__arrow {
+    display: none !important;
+  }
+  .gal-rail__track {
+    scroll-snap-type: x mandatory;
+  }
+}
+
+/* ── Cards ──────────────────────────────────────────────────────────────── */
+.gal-card {
+  position: relative;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: clamp(170px, 22vw, 250px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #020104;
+  padding: 0;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+/* Portrait for video (the director renders vertical), square for stills. */
+.gal-card--video {
+  aspect-ratio: 9 / 16;
+  width: clamp(150px, 17vw, 208px);
+}
+.gal-card--meme,
+.gal-card--pfp {
+  aspect-ratio: 1 / 1;
+}
+
+.gal-card:hover,
+.gal-card:focus-visible {
+  border-color: var(--gold);
+  transform: translateY(-4px);
+  box-shadow:
+    0 10px 30px rgba(5, 3, 6, 0.6),
+    0 0 22px rgba(158, 232, 75, 0.12);
+  outline: none;
+}
+.gal-card img,
+.gal-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gal-card__tag {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(5, 3, 6, 0.82);
+  color: var(--gold);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+}
+.gal-card__play {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(5, 3, 6, 0.75);
+  color: var(--gold);
+  font-size: 9px;
+}
+
+/* Closing card, so a rail ends on purpose rather than just stopping. */
+.gal-card--end {
+  display: grid;
+  place-items: center;
+  cursor: default;
+  border-style: dashed;
+  border-color: rgba(158, 232, 75, 0.16);
+  background: transparent;
+}
+.gal-card--end span {
+  font-family: var(--mono);
+  font-size: 9px;
+  line-height: 1.9;
+  letter-spacing: 0.16em;
+  text-align: center;
+  color: rgba(255, 247, 224, 0.32);
+}
+.gal-card--end:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: rgba(158, 232, 75, 0.16);
+}
+
+.gal-skel {
+  border-color: rgba(158, 232, 75, 0.1);
+  cursor: default;
+  background: linear-gradient(100deg, #0a0710 30%, #140f1c 50%, #0a0710 70%);
+  background-size: 220% 100%;
+  animation: gal-shimmer 1.3s linear infinite;
+}
+.gal-skel:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: rgba(158, 232, 75, 0.1);
+}
+@keyframes gal-shimmer {
+  to {
+    background-position: -220% 0;
+  }
+}
+
+.gal-msg {
+  padding: 40px 10px;
+  font-size: 11px;
+  line-height: 2;
+  letter-spacing: 0.08em;
+  color: rgba(255, 247, 224, 0.5);
+}
+.gal-msg a {
+  color: var(--gold);
+  border-bottom: 1px solid rgba(158, 232, 75, 0.4);
+}
+
+/* ── Lightbox ───────────────────────────────────────────────────────────────
+   One centring flex box at every width. The nav buttons are absolutely
+   positioned against the overlay itself, so they sit on the vertical centre of
+   the screen on a phone as well as a desktop. */
+.gal-light {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(56px, 8vw, 72px) clamp(12px, 4vw, 80px);
+  background: rgba(2, 1, 4, 0.94);
+  backdrop-filter: blur(6px);
+}
+.gal-light[hidden] {
+  display: none;
+}
+
+.gal-light__stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+}
+.gal-light__stage img,
+.gal-light__stage video {
+  max-width: 100%;
+  max-height: calc(100vh - 150px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+}
+.gal-light__cap {
+  max-width: 46ch;
+  text-align: center;
+  font-size: 10px;
+  line-height: 1.7;
+  letter-spacing: 0.12em;
+  color: rgba(255, 247, 224, 0.5);
+}
+
+.gal-light__close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(5, 3, 6, 0.72);
+  color: var(--gold);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+.gal-light__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(5, 3, 6, 0.72);
+  backdrop-filter: blur(4px);
+  color: var(--gold);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    opacity 0.2s;
+}
+.gal-light__nav--prev {
+  left: clamp(8px, 2vw, 26px);
+}
+.gal-light__nav--next {
+  right: clamp(8px, 2vw, 26px);
+}
+.gal-light__nav:disabled {
+  opacity: 0.25;
+  pointer-events: none;
+}
+.gal-light__nav:hover,
+.gal-light__close:hover {
+  border-color: var(--gold);
+  background: rgba(158, 232, 75, 0.14);
+}
+
+@media (max-width: 640px) {
+  .gal-rails {
+    gap: 34px;
+    margin-top: 32px;
+  }
+  .gal-card {
+    width: clamp(140px, 44vw, 190px);
+  }
+  .gal-card--video {
+    width: clamp(126px, 38vw, 168px);
+  }
+  /* Arrows sit clear of the media on a narrow screen, low enough to reach. */
+  .gal-light {
+    padding: 56px 10px 96px;
+  }
+  .gal-light__stage img,
+  .gal-light__stage video {
+    max-height: calc(100vh - 190px);
+  }
+  .gal-light__nav {
+    top: auto;
+    bottom: 22px;
+    transform: none;
+  }
+  .gal-light__nav--prev {
+    left: 22%;
+  }
+  .gal-light__nav--next {
+    right: 22%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gal-card,
+  .gal-skel,
+  .gal-eyebrow,
+  .gal-rail__arrow {
+    transition: none;
+    animation: none;
+  }
+  .gal-back:hover {
+    transform: none;
+  }
+  .gal-card:hover {
+    transform: none;
+  }
+}
+
+/* ── In-page view ───────────────────────────────────────────────────────────
+   The Hall mounted over the landing page. Fixed and scrolling internally, so
+   the page behind it keeps its scroll position and, crucially, its <audio>. */
+.gal-root--view {
+  position: fixed;
+  inset: 0;
+  z-index: 165; /* above the site nav (160) */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--bg);
+  animation: gal-view-in 0.28s ease-out;
+}
+.gal-root--view .gal-shell {
+  min-height: 100%;
+  padding-top: var(--gal-top, 0px);
+}
+.gal-root--view .gal-shell__glow,
+.gal-root--view .gal-light {
+  position: fixed;
+}
+
+@keyframes gal-view-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gal-root--view {
+    animation: none;
+  }
+}

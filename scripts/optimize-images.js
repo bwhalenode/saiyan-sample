@@ -4,12 +4,12 @@ import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-const ROOT      = join(__dirname, '..')
-const OUT_DIR   = join(ROOT, 'public', 'images')   // published, web-facing images
+const ROOT = join(__dirname, '..')
+const OUT_DIR = join(ROOT, 'public', 'images') // published, web-facing images
 
 const MAX_WIDTH = 1600
-const JPG_Q     = 82
-const WEBP_Q    = 80
+const JPG_Q = 82
+const WEBP_Q = 80
 
 /*
  * Explicit build manifest — we only generate the derivatives the site actually
@@ -20,28 +20,31 @@ const WEBP_Q    = 80
  * (logo, pre-loader) stay in public/images/ and just get a WebP companion.
  */
 const TASKS = [
-  { src: 'image-src/hero-1.png',         name: 'hero-1',     jpg: true,  webp: true,  mobileCrop: true },
-  { src: 'image-src/mid-page.png',       name: 'mid-page',   jpg: false, webp: true },
-  { src: 'public/images/logo.png',       name: 'logo',       jpg: false, webp: true, alpha: true },
+  { src: 'image-src/hero-1.png', name: 'hero-1', jpg: true, webp: true, mobileCrop: true },
+  { src: 'image-src/mid-page.png', name: 'mid-page', jpg: false, webp: true },
+  { src: 'public/images/logo.png', name: 'logo', jpg: false, webp: true, alpha: true },
   { src: 'public/images/pre-loader.png', name: 'pre-loader', jpg: false, webp: true, alpha: true },
 ]
 
-const fmtKB = b => (b / 1024).toFixed(1) + ' KB'
+const fmtKB = (b) => (b / 1024).toFixed(1) + ' KB'
 
 async function build(task) {
-  const srcPath  = join(ROOT, task.src)
+  const srcPath = join(ROOT, task.src)
   const pipeline = sharp(srcPath).resize({ width: MAX_WIDTH, withoutEnlargement: true })
   console.log(`\n  ${task.name}  (${task.src})`)
 
   if (task.jpg) {
     const out = join(OUT_DIR, task.name + '.jpg')
-    await pipeline.clone().jpeg({ quality: JPG_Q, mozjpeg: true }).toFile(out + '.tmp')
+    await pipeline
+      .clone()
+      .jpeg({ quality: JPG_Q, mozjpeg: true })
+      .toFile(out + '.tmp')
     await rename(out + '.tmp', out)
     console.log(`    JPG          ${fmtKB((await stat(out)).size).padStart(9)}`)
   }
 
   if (task.webp) {
-    const out  = join(OUT_DIR, task.name + '.webp')
+    const out = join(OUT_DIR, task.name + '.webp')
     const opts = task.alpha ? { quality: WEBP_Q, alphaQuality: 90 } : { quality: WEBP_Q }
     await pipeline.clone().webp(opts).toFile(out)
     console.log(`    WebP         ${fmtKB((await stat(out)).size).padStart(9)}`)
@@ -52,7 +55,7 @@ async function build(task) {
   if (task.mobileCrop) {
     const meta = await sharp(srcPath).metadata()
     const left = Math.floor(meta.width * 0.58)
-    const out  = join(OUT_DIR, task.name + '-mobile.webp')
+    const out = join(OUT_DIR, task.name + '-mobile.webp')
     await sharp(srcPath)
       .extract({ left, top: 0, width: meta.width - left, height: meta.height })
       .webp({ quality: WEBP_Q })
@@ -67,4 +70,7 @@ async function run() {
   console.log('\nDone.\n')
 }
 
-run().catch(err => { console.error(err); process.exit(1) })
+run().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})

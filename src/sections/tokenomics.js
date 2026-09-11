@@ -1,6 +1,6 @@
 export function initTokenomics() {
   // Expose the static cards to AT as focusable buttons (scroll/hover FX live in CSS + timeline.js).
-  document.querySelectorAll('.token-card').forEach(card => {
+  document.querySelectorAll('.token-card').forEach((card) => {
     if (card.tagName === 'A') return
     card.setAttribute('tabindex', '0')
     card.setAttribute('role', 'button')
@@ -13,7 +13,9 @@ export function initTokenomics() {
 }
 
 function setBurnStatPending() {
-  document.querySelectorAll('[data-burn-pct]').forEach(el => { el.textContent = 'N/A' })
+  document.querySelectorAll('[data-burn-pct]').forEach((el) => {
+    el.textContent = 'N/A'
+  })
   const avail = document.querySelector('[data-burn-available]')
   if (avail) avail.textContent = 'VIEW EXPLORER'
 }
@@ -24,8 +26,8 @@ const DEXSCREENER_PAIR_URL = `https://api.dexscreener.com/latest/dex/pairs/robin
 const CHART_DELAY = 620
 
 function initOrbPress() {
-  document.querySelectorAll('.token-card').forEach(card => {
-    const run = event => {
+  document.querySelectorAll('.token-card').forEach((card) => {
+    const run = (event) => {
       if (card.classList.contains('is-bursting')) return
 
       const isTokenLink = card.matches('a.token-card')
@@ -48,7 +50,7 @@ function initOrbPress() {
     }
 
     card.addEventListener('click', run)
-    card.addEventListener('keydown', event => {
+    card.addEventListener('keydown', (event) => {
       if (event.key !== 'Enter' && event.key !== ' ') return
       run(event)
     })
@@ -72,11 +74,11 @@ function initMarketPulse() {
   }
 
   fetch(DEXSCREENER_PAIR_URL, { headers: { Accept: 'application/json' } })
-    .then(response => {
+    .then((response) => {
       if (!response.ok) throw new Error(`DexScreener ${response.status}`)
       return response.json()
     })
-    .then(data => {
+    .then((data) => {
       const pair = pickBestPair(data?.pairs)
       if (!pair) throw new Error('No token pair returned')
 
@@ -86,7 +88,7 @@ function initMarketPulse() {
       liquidity.textContent = formatUsd(pair.liquidity?.usd)
       setStatus('LIVE')
     })
-    .catch(error => {
+    .catch((error) => {
       console.warn('[SAIYAN] Market pulse unavailable:', error)
       setStatus('UNAVAILABLE', true)
     })
@@ -94,7 +96,11 @@ function initMarketPulse() {
 
 function pickBestPair(pairs = []) {
   return pairs
-    .filter(pair => pair?.chainId === 'robinhood' && pair?.baseToken?.address?.toLowerCase() === TOKEN_ADDRESS.toLowerCase())
+    .filter(
+      (pair) =>
+        pair?.chainId === 'robinhood' &&
+        pair?.baseToken?.address?.toLowerCase() === TOKEN_ADDRESS.toLowerCase(),
+    )
     .sort((a, b) => (b?.liquidity?.usd || 0) - (a?.liquidity?.usd || 0))[0]
 }
 
