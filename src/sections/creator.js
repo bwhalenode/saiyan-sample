@@ -254,7 +254,7 @@ if (forge) {
   }
 
   /* ── Guided: scene type and voice. Both travel as real options, like aura
-     and super form - no keywords eating into the 200-character brief. The
+     and super form - no keywords eating into the 600-character brief. The
      backend still honours a typed "FIGHT:" or "SILENT:" prefix as a shortcut.
      Scene and voice are deliberately independent: a fight can close on a
      spoken line, a motivation film can run wordless. ── */

@@ -501,7 +501,10 @@
 
 .creator__input {
   width: 100%;
-  resize: none;
+  /* Briefs can run to a few sentences, so the box is draggable rather than a
+     fixed slot the user has to scroll inside. */
+  resize: vertical;
+  max-height: 40vh;
   padding: 13px 15px;
   border: 1px solid rgba(74, 216, 255, 0.2);
   border-radius: 14px;
