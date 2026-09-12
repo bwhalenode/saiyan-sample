@@ -5,8 +5,11 @@ import { ensureAccess } from './ai/auth.js'
 import { authHeaders } from './ai/token.js'
 
 /* SAIYAN CREATOR panel controller.
-   Mood -> Power Up is the centrepiece (a chosen team character answers the
-   user's situation in a cinematic video); Meme and PFP ride the same flow.
+   Four tabs: Mood (a chosen team character answers the user's situation in a
+   cinematic comeback video), Fight (the same video engine staging a battle the
+   user describes), PFP and Meme. Mood and Fight share one backend mode and
+   differ by the scene they request, so each tab asks its own question instead
+   of hiding the choice in a STYLE chip.
    All generation goes through ai/service.js to our own backend. */
 const forge = document.querySelector('[data-forge]')
 
@@ -43,6 +46,24 @@ if (forge) {
         'SCENES TAKING SHAPE…',
         'FRAMES RENDERING…',
         'VOICE AND SOUND SYNCING…',
+        'READY SHORTLY…',
+      ],
+      ms: 4000,
+      cycleMs: 4200,
+      note: 'Video generation takes 1 to 2 minutes',
+      requireInput: false,
+    },
+    fight: {
+      label: 'ENTER FIGHT PROMPT',
+      placeholder:
+        'Who is fighting, and where… e.g. “My Saiyan vs a giant shadow beast on a crumbling rooftop”. Empty = surprise me.',
+      hint: 'Set the battle, your Saiyan takes it',
+      loading: [
+        'BUILD STARTED…',
+        'OPPONENT INCOMING…',
+        'CHOREOGRAPHING THE CLASH…',
+        'FRAMES RENDERING…',
+        'IMPACT AND SOUND SYNCING…',
         'READY SHORTLY…',
       ],
       ms: 4000,
@@ -101,6 +122,14 @@ if (forge) {
 
   const pick = (arr) => arr[Math.floor(Math.random() * arr.length)]
 
+  /* Mood and Fight are two tabs over the same video endpoint: same character,
+     super form and voice controls, different scene and different prompt copy.
+     Everything that used to test for 'motivation' asks this instead. */
+  const isVideoMode = (mode) => mode === 'motivation' || mode === 'fight'
+  // The scene the backend is asked for. Fight is fixed by the tab; Mood keeps
+  // its own choice (a motivation film or a transformation).
+  const sceneFor = (mode) => (mode === 'fight' ? 'fight' : state.scene)
+
   /* ── STYLE panel: the secondary options every user can safely ignore.
      Collapsed by default with a summary of the current picks, so the default
      screen carries one line instead of three headings and eight pills. ── */
@@ -124,16 +153,15 @@ if (forge) {
 
   // Only summarise what the current mode actually exposes.
   function refreshStyleSummary() {
-    const parts =
-      state.mode === 'motivation'
-        ? [
-            STYLE_LABELS.transform[state.transform],
-            STYLE_LABELS.scene[state.scene],
-            STYLE_LABELS.voice[state.voice],
-          ]
-        : state.mode === 'pfp'
-          ? [STYLE_LABELS.aura[state.aura]]
-          : [state.captions ? 'With caption' : 'Image only']
+    const parts = isVideoMode(state.mode)
+      ? [
+          STYLE_LABELS.transform[state.transform],
+          STYLE_LABELS.scene[sceneFor(state.mode)],
+          STYLE_LABELS.voice[state.voice],
+        ]
+      : state.mode === 'pfp'
+        ? [STYLE_LABELS.aura[state.aura]]
+        : [state.captions ? 'With caption' : 'Image only']
     styleSummaryEl.textContent = parts.filter(Boolean).join(' · ')
   }
 
@@ -173,7 +201,12 @@ if (forge) {
 
     // PFP defaults to Custom (own subject/photo); video needs a real character.
     if (mode === 'pfp' && state.character !== 'custom') selectCharacter('custom')
-    if (mode === 'motivation' && state.character === 'custom') selectCharacter('meketa')
+    if (isVideoMode(mode) && state.character === 'custom') selectCharacter('meketa')
+
+    // A fight reads better wordless, a mood piece better spoken - unless the
+    // user has already said otherwise.
+    if (isVideoMode(mode) && !state.voiceTouched)
+      setVoice(sceneFor(mode) === 'motivation' ? 'spoken' : 'silent')
 
     refreshStyleSummary()
     refreshGenerateLabel()
@@ -213,6 +246,13 @@ if (forge) {
     })
   })
 
+  function setVoice(voice) {
+    state.voice = voice
+    forge
+      .querySelectorAll('[data-voice-btn]')
+      .forEach((b) => b.classList.toggle('is-active', b.dataset.voiceBtn === voice))
+  }
+
   /* ── Guided: scene type and voice. Both travel as real options, like aura
      and super form - no keywords eating into the 200-character brief. The
      backend still honours a typed "FIGHT:" or "SILENT:" prefix as a shortcut.
@@ -224,25 +264,17 @@ if (forge) {
       forge
         .querySelectorAll('[data-scene-btn]')
         .forEach((b) => b.classList.toggle('is-active', b === btn))
-      // Fights and transformations read better wordless, so follow the scene
-      // unless the user has already expressed a preference.
-      if (!state.voiceTouched) {
-        state.voice = state.scene === 'motivation' ? 'spoken' : 'silent'
-        forge
-          .querySelectorAll('[data-voice-btn]')
-          .forEach((b) => b.classList.toggle('is-active', b.dataset.voiceBtn === state.voice))
-      }
+      // Transformations read better wordless, so follow the scene unless the
+      // user has already expressed a preference.
+      if (!state.voiceTouched) setVoice(state.scene === 'motivation' ? 'spoken' : 'silent')
       refreshStyleSummary()
     })
   })
 
   forge.querySelectorAll('[data-voice-btn]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      state.voice = btn.dataset.voiceBtn
       state.voiceTouched = true
-      forge
-        .querySelectorAll('[data-voice-btn]')
-        .forEach((b) => b.classList.toggle('is-active', b === btn))
+      setVoice(btn.dataset.voiceBtn)
       refreshStyleSummary()
     })
   })
@@ -332,7 +364,7 @@ if (forge) {
         character: state.character,
         captions: state.captions,
         transform: state.transform,
-        scene: state.scene,
+        scene: sceneFor(state.mode),
         voice: state.voice,
       },
     }
@@ -341,7 +373,8 @@ if (forge) {
     startLoading(ui)
     let result
     try {
-      ;[result] = await Promise.all([generate(state.mode, payload), wait(reduced ? 400 : ui.ms)])
+      const apiMode = AI_CONFIG.modes[state.mode]?.api || state.mode
+      ;[result] = await Promise.all([generate(apiMode, payload), wait(reduced ? 400 : ui.ms)])
     } catch (e) {
       // Real error, real retry. The prompt, mode and character stay as they are.
       result = { error: e?.code || 'generation_failed', mode: state.mode }
@@ -453,7 +486,10 @@ if (forge) {
     soundBtn.hidden = true
     if (downloadEl) {
       downloadEl.setAttribute('href', src)
-      downloadEl.setAttribute('download', 'saiyan-motivation.mp4')
+      downloadEl.setAttribute(
+        'download',
+        state.mode === 'fight' ? 'saiyan-fight.mp4' : 'saiyan-motivation.mp4',
+      )
     }
     video.setAttribute('src', src)
 

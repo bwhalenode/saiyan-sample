@@ -426,7 +426,7 @@
 /* ── Mode tabs: one segmented control, three segments, never wraps ── */
 .creator__modes {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   gap: 4px;
   padding: 4px;
   border: 1px solid rgba(158, 232, 75, 0.18);
@@ -536,16 +536,20 @@
   display: flex;
 }
 .creator__forge[data-mode='motivation'] [data-guided='character'],
+.creator__forge[data-mode='fight'] [data-guided='character'],
 .creator__forge[data-mode='pfp'] [data-guided='character'] {
   display: flex;
 }
-/* Super form (power-up hair colour) is a motivation-only choice. */
-.creator__forge[data-mode='motivation'] [data-guided='transform'] {
+/* Super form (power-up hair colour) is a video-only choice. */
+.creator__forge[data-mode='motivation'] [data-guided='transform'],
+.creator__forge[data-mode='fight'] [data-guided='transform'] {
   display: flex;
 }
-/* Scene type and voice are video-only choices. */
+/* Voice is a video-only choice. Scene stays with Mood alone: Fight has its own
+   tab, so offering it again as a chip is the duplication it replaced. */
 .creator__forge[data-mode='motivation'] [data-guided='scene'],
-.creator__forge[data-mode='motivation'] [data-guided='voice'] {
+.creator__forge[data-mode='motivation'] [data-guided='voice'],
+.creator__forge[data-mode='fight'] [data-guided='voice'] {
   display: flex;
 }
 /* Captions can crowd a strong meme image, so meme mode gets the choice. */
@@ -799,7 +803,8 @@
 }
 
 /* Videos take 1-2 minutes: the pulse slows down so it reads calm, not stuck. */
-.creator__forge[data-mode='motivation'] .creator__ki-logo {
+.creator__forge[data-mode='motivation'] .creator__ki-logo,
+.creator__forge[data-mode='fight'] .creator__ki-logo {
   animation-duration: 3.6s;
 }
 

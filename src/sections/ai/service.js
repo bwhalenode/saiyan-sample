@@ -15,7 +15,8 @@ class GenError extends Error {
 }
 
 /**
- * @param {'motivation'|'pfp'|'meme'} mode
+ * @param {'motivation'|'pfp'|'meme'} mode - backend mode; the Fight tab sends
+ *   'motivation' with opts.scene = 'fight'.
  * @param {{ input:string, opts:{aura:string, character:string}, image?:string }} payload
  */
 export async function generate(mode, payload) {

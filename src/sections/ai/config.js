@@ -21,10 +21,13 @@ export const AI_CONFIG = {
   auth: AUTH,
 
   // Output direction is product-controlled, not decided by the model.
+  // `api` is the mode the backend knows; Mood and Fight are two front-end tabs
+  // over the same video endpoint, separated only by the scene they request.
   modes: {
-    motivation: { label: 'MOOD → POWER UP', output: 'video' },
-    pfp: { label: 'PFP', output: 'image' },
-    meme: { label: 'MEME', output: 'image' },
+    motivation: { label: 'MOOD', output: 'video', api: 'motivation', scene: 'motivation' },
+    fight: { label: 'FIGHT', output: 'video', api: 'motivation', scene: 'fight' },
+    pfp: { label: 'PFP', output: 'image', api: 'pfp' },
+    meme: { label: 'MEME', output: 'image', api: 'meme' },
   },
 }
 
